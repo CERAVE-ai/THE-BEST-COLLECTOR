@@ -3482,15 +3482,22 @@
         <button class="sell-all-btn" id="sellAllBtn">Vender Todo 💰</button>
     </div>
     <!-- MUSIC INDICATOR -->
-    <div id="musicBar" style="display:none;align-items:center;gap:10px;margin-bottom:16px;padding:10px 16px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
-        <div style="display:flex;gap:3px;align-items:flex-end;height:16px;">
+    <div id="musicBar" style="display:none;align-items:center;gap:8px;margin-bottom:16px;padding:9px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
+        <!-- Barras animadas -->
+        <div style="display:flex;gap:3px;align-items:flex-end;height:16px;flex-shrink:0;">
             <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar1 0.8s ease-in-out infinite;"></div>
             <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar2 0.8s ease-in-out infinite 0.15s;"></div>
             <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar1 0.8s ease-in-out infinite 0.3s;"></div>
             <div class="music-bar-dot" style="width:3px;background:var(--theme);border-radius:2px;animation:musicBar2 0.8s ease-in-out infinite 0.45s;"></div>
         </div>
+        <!-- Controles -->
+        <button onclick="musicPrev()" title="Anterior" style="font-size:14px;background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px;line-height:1;transition:color 0.2s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#475569'">⏮</button>
+        <button id="musicToggle" onclick="toggleMusic()" title="Play / Pausa" style="font-size:14px;background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px;line-height:1;transition:color 0.2s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#475569'">⏸</button>
+        <button onclick="musicNext()" title="Siguiente" style="font-size:14px;background:none;border:none;cursor:pointer;color:#475569;padding:2px 4px;line-height:1;transition:color 0.2s;" onmouseover="this.style.color='#94a3b8'" onmouseout="this.style.color='#475569'">⏭</button>
+        <!-- Nombre canción -->
         <div id="musicName" style="font-size:11px;font-weight:700;letter-spacing:1px;color:#475569;text-transform:uppercase;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">Cargando música...</div>
-        <button id="musicToggle" style="font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:6px 12px;background:rgba(255,255,255,0.05);color:#475569;border:1px solid rgba(255,255,255,0.07);border-radius:8px;cursor:pointer;">⏸ PAUSA</button>
+        <!-- Contador pista -->
+        <div id="musicTrackNum" style="font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:#334155;flex-shrink:0;letter-spacing:1px;">1 / 13</div>
     </div>
     <div class="inv-grid" id="inventory"></div>
 
@@ -5565,7 +5572,7 @@
     let lastSpinEndTime  = 0;
     const GHOST_RAPID_MS = 4000;  // clics en menos de 4s tras fin de giro = "frenético"
     const GHOST_THRESHOLD = 5;    // mínimo de clics rápidos antes de que empiece la trampa
-    const GHOST_PENALTY   = 1000000;
+    const GHOST_PENALTY   = 5000000;
 
     function enableSpinBtn() {
         const now = Date.now();
@@ -5590,7 +5597,7 @@
     function activateGhostTrap() {
         ghostTrapActive = true;
         spinBtn.disabled = false;
-        spinBtn.textContent = '💸 DONAR 1.000.000$ A LA BANCA';
+        spinBtn.textContent = '💸 DONAR 5.000.000$ A LA BANCA';
         spinBtn.classList.add('ghost-trap');
         ghostTrapTimer = setTimeout(() => deactivateGhostTrap(false), 2000);
     }
@@ -5609,11 +5616,11 @@
                 saveGame();
             }
             const msgs = [
-                '👻 ¡CLIC FANTASMA! -1.000.000$ donados a la banca por ir a lo loco',
-                '💸 ¡Sin atención! La banca agradece tu generosa donación de 1.000.000$',
-                '🤖 ¿Autoclicker? La banca cobra por eso. -1.000.000$',
-                '👻 ¡PILLADO! Clic sin pensar = 1.000.000$ menos en tu bolsillo',
-                '💀 La banca cobra el Impuesto del Clic Frenético. -1.000.000$'
+                '👻 ¡CLIC FANTASMA! -5.000.000$ donados a la banca por ir a lo loco',
+                '💸 ¡Sin atención! La banca agradece tu generosa donación de 5.000.000$',
+                '🤖 ¿Autoclicker? La banca cobra por eso. -5.000.000$',
+                '👻 ¡PILLADO! Clic sin pensar = 5.000.000$ menos en tu bolsillo',
+                '💀 La banca cobra el Impuesto del Clic Frenético. -5.000.000$'
             ];
             const el = document.createElement('div');
             el.className = 'ghost-toast';
@@ -6109,18 +6116,36 @@
 
     // MUSIC PLAYER
     const tracks = [
-        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A469902882',
-        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2125617234',
-        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A1620316506'
-    ];
-    const trackNames = [
-        'The Living Tombstone - My Ordinary Life',
-        'M4rkim - Trio Da Criação (Pokémon)',
-        'É Hora de Brincar | Poppy Playtime'
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A1762987374',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2280978995',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2247893900',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2164219476',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2308276571',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2278472414',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2304674996',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2295691085',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2186564363',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2117755392',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2209136699',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2311830842',
+        'https://api.soundcloud.com/tracks/soundcloud%3Atracks%3A2291765546'
     ];
     let currentTrack = 0;
     let scWidget = null;
     let musicPaused = false;
+
+    function updateMusicDisplay() {
+        const numEl = document.getElementById('musicTrackNum');
+        if (numEl) numEl.textContent = `${currentTrack + 1} / ${tracks.length}`;
+        if (!scWidget) return;
+        // Espera un instante para que el widget tenga la pista cargada
+        setTimeout(() => {
+            scWidget.getCurrentSound(sound => {
+                const nameEl = document.getElementById('musicName');
+                if (nameEl && sound && sound.title) nameEl.textContent = sound.title;
+            });
+        }, 800);
+    }
 
     function initMusic() {
         const iframe = document.createElement('iframe');
@@ -6139,12 +6164,22 @@
             scWidget.bind(SC.Widget.Events.READY, () => {
                 scWidget.play();
                 document.getElementById('musicBar').style.display = 'flex';
-                document.getElementById('musicName').textContent = trackNames[0];
+                updateMusicDisplay();
+            });
+            scWidget.bind(SC.Widget.Events.PLAY, () => {
+                musicPaused = false;
+                document.getElementById('musicToggle').textContent = '⏸';
+                document.querySelectorAll('.music-bar-dot').forEach(d => d.style.animationPlayState = 'running');
+                updateMusicDisplay();
+            });
+            scWidget.bind(SC.Widget.Events.PAUSE, () => {
+                musicPaused = true;
+                document.getElementById('musicToggle').textContent = '▶';
+                document.querySelectorAll('.music-bar-dot').forEach(d => d.style.animationPlayState = 'paused');
             });
             scWidget.bind(SC.Widget.Events.FINISH, () => {
                 currentTrack = (currentTrack + 1) % tracks.length;
                 scWidget.load(tracks[currentTrack], { auto_play: true });
-                document.getElementById('musicName').textContent = trackNames[currentTrack];
             });
         };
         document.head.appendChild(scScript);
@@ -6154,15 +6189,27 @@
         if (!scWidget) return;
         if (musicPaused) {
             scWidget.play();
-            musicPaused = false;
-            document.getElementById('musicToggle').textContent = '⏸ PAUSA';
-            document.querySelectorAll('.music-bar-dot').forEach(d => d.style.animationPlayState = 'running');
         } else {
             scWidget.pause();
-            musicPaused = true;
-            document.getElementById('musicToggle').textContent = '▶ PLAY';
-            document.querySelectorAll('.music-bar-dot').forEach(d => d.style.animationPlayState = 'paused');
         }
+    };
+
+    window.musicNext = () => {
+        if (!scWidget) return;
+        currentTrack = (currentTrack + 1) % tracks.length;
+        scWidget.load(tracks[currentTrack], { auto_play: !musicPaused });
+        const nameEl = document.getElementById('musicName');
+        if (nameEl) nameEl.textContent = 'Cargando...';
+        updateMusicDisplay();
+    };
+
+    window.musicPrev = () => {
+        if (!scWidget) return;
+        currentTrack = (currentTrack - 1 + tracks.length) % tracks.length;
+        scWidget.load(tracks[currentTrack], { auto_play: !musicPaused });
+        const nameEl = document.getElementById('musicName');
+        if (nameEl) nameEl.textContent = 'Cargando...';
+        updateMusicDisplay();
     };
 
     // POCIONES
