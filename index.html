@@ -4604,7 +4604,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, unlockedSkills:[], };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, };
     const WIN_GOAL = 500000000000;
 
     const reel = document.getElementById('caseReel');
@@ -5915,8 +5915,7 @@
                 xp: state.xp||0,
                 level: state.level||1,
                 skillPoints: state.skillPoints||0,
-                blackMarket: state.blackMarket,
-                unlockedSkills: state.unlockedSkills||[]
+                blackMarket: state.blackMarket
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -6404,7 +6403,7 @@
         if (type === 'flash'  && flashPotionActive)  return;
         if (type === 'cerave' && ceravePotionActive) return;
 
-        const prices = { luck: 300000, speed: 330000, money: 360000, dark: 1800000, flash: 1500000, cerave: 30000000, silence: 450000 };
+        const prices = { luck: 50000, speed: 55000, money: 60000, dark: 300000, flash: 250000, cerave: 5000000, silence: 75000 };
         const price = prices[type];
         if (state.balance < price) {
             playSound('click');
@@ -9301,7 +9300,7 @@
     function openBlackMarket() {
         if (state.over || !state.blackMarket?.isOpen) return;
         playSound('click');
-        const ov = document.�getElementById('bmOverlay');
+        const ov = document.getElementById('bmOverlay');
         ov.classList.add('open');
         renderBMContent();
     }
@@ -9456,11 +9455,11 @@
 
     // ═══════════════════ PRÉSTAMOS ═══════════════════
     const LOAN_MAX = 50000000000;
-    const LOAN_INTERE�ST = 0.20;
+    const LOAN_INTEREST = 0.20;
     let loanTimerInterval = null;
 
     function loanCalcTime(amount) {
-        return 7 + Math.round((Math.min(amount, LOAN_MAX) / LOAN_MAX) * 8);
+        return 20 + Math.round((Math.min(amount, LOAN_MAX) / LOAN_MAX) * 10);
     }
 
     function loanFmt(n) {
@@ -9658,7 +9657,7 @@
             const debt = Math.ceil(state.loan.remaining);
             state.balance = Math.max(0, state.balance - debt);
             state.loan = null;
-�            document.getElementById('loanIndicator').style.display = 'none';
+            document.getElementById('loanIndicator').style.display = 'none';
             if (!state.over) {
                 clearSave();
                 state.over = true;
@@ -9815,7 +9814,7 @@
         const high=cards.filter(c=>c.v>=12).map(c=>c.v);
         if(high.length>0) return cards.reduce((a,c,i)=>{if(!high.includes(c.v))a.push(i);return a;},[]).slice(0,5-high.length);
         // Bad hand: discard lowest 3
-        return [...ca�rds].map((c,i)=>({...c,i})).sort((a,b)=>a.v-b.v).slice(0,3).map(c=>c.i);
+        return [...cards].map((c,i)=>({...c,i})).sort((a,b)=>a.v-b.v).slice(0,3).map(c=>c.i);
     }
 
     function pkCardHTML(card, idx, clickable) {
@@ -9983,7 +9982,7 @@
                 } else {
                     state.balance-=pks.bet;
                     if(state.balance<0) state.balance=0;
-                    state.pokerProfit=(state.pokerProfit||0)�-pks.bet;
+                    state.pokerProfit=(state.pokerProfit||0)-pks.bet;
                     banner.className='poker-result-banner lose';
                     rtitle.textContent=POKER_BOT_NAMES[winnerBotIdx]+' GANA';
                     ramt.textContent='-'+pks.bet.toLocaleString()+' $';
