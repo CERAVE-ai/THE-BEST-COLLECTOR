@@ -3581,7 +3581,7 @@
     <div class="subasta-section">
         <div class="subasta-header">
             <div class="subasta-title">⚔️ BATALLAS DE SUBASTAS EN VIVO</div>
-            <div class="subasta-subtitle">Objeto 100% secreto · Solo Épico / Legendario / Mítico</div>
+        <div class="subasta-subtitle">Objeto 100% secreto · Calidad mejorada +35% · Épico / Legendario / Mítico</div>
         </div>
         <!-- WAITING STATE (between battles) -->
         <div id="battleWaiting" class="battle-waiting-info" style="display:none">
@@ -3762,7 +3762,7 @@
     <!-- VISTA: SIN PRÉSTAMO ACTIVO -->
     <div id="loanRequestView">
       <div class="loan-warning">
-        ⚠️ Al solicitar un préstamo tienes entre <strong>20 y 30 minutos</strong> para devolver el dinero.<br>
+        ⚠️ Al solicitar un préstamo tienes entre <strong>5 y 15 minutos</strong> para devolver el dinero.<br>
         Siempre debes pagar el <strong>20% más</strong> de lo prestado.<br>
         Si el tiempo expira, el banco te cobrará de tu balance automáticamente.
       </div>
@@ -3795,7 +3795,7 @@
         </div>
         <div class="loan-info-card">
           <div class="loan-info-label">Tiempo Límite</div>
-          <div class="loan-info-val yellow" id="lpTime">20 min</div>
+          <div class="loan-info-val yellow" id="lpTime">5 min</div>
         </div>
       </div>
 
@@ -3917,7 +3917,7 @@
 <div id="pokerOverlay">
   <div id="pokerBox">
     <div class="poker-title">🃏 POKER</div>
-    <div class="poker-subtitle">5-CARD DRAW · GANA A LOS 3 BOTS · x65 TU APUESTA</div>
+    <div class="poker-subtitle">5-CARD DRAW · GANA A LOS 3 BOTS · x45 TU APUESTA</div>
 
     <!-- Bots -->
     <div class="poker-bots-row">
@@ -6338,34 +6338,35 @@
         const dBtn = document.getElementById('buyDarkPotion');
         const fBtn = document.getElementById('buyFlashPotion');
         if (!lBtn) return;
+        const loanBlocksPotions = !!state.loan;
         if (luckPotionActive) {
             lBtn.disabled = true;
             lBtn.textContent = '⏳ En uso';
         } else {
-            lBtn.disabled = false;
-            lBtn.textContent = '50.000 $';
+            lBtn.disabled = loanBlocksPotions;
+            lBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '50.000 $';
         }
         if (speedPotionActive) {
             sBtn.disabled = true;
             sBtn.textContent = '⏳ En uso';
         } else {
-            sBtn.disabled = false;
-            sBtn.textContent = '55.000 $';
+            sBtn.disabled = loanBlocksPotions;
+            sBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '55.000 $';
         }
         if (moneyPotionActive) {
             mBtn.disabled = true;
             mBtn.textContent = '⏳ En uso';
         } else {
-            mBtn.disabled = false;
-            mBtn.textContent = '60.000 $';
+            mBtn.disabled = loanBlocksPotions;
+            mBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '60.000 $';
         }
         if (dBtn) {
             if (darkPotionActive) {
                 dBtn.disabled = true;
                 dBtn.textContent = '⏳ En uso';
             } else {
-                dBtn.disabled = false;
-                dBtn.textContent = '300.000 $';
+                dBtn.disabled = loanBlocksPotions;
+                dBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '300.000 $';
             }
         }
         if (fBtn) {
@@ -6373,8 +6374,8 @@
                 fBtn.disabled = true;
                 fBtn.textContent = '⏳ En uso';
             } else {
-                fBtn.disabled = false;
-                fBtn.textContent = '250.000 $';
+                fBtn.disabled = loanBlocksPotions;
+                fBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '250.000 $';
             }
         }
         const crvBtn = document.getElementById('buyCeravePotion');
@@ -6383,18 +6384,30 @@
                 crvBtn.disabled = true;
                 crvBtn.textContent = '⏳ En uso';
             } else {
-                crvBtn.disabled = false;
-                crvBtn.textContent = '5.000.000 $';
+                crvBtn.disabled = loanBlocksPotions;
+                crvBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '5.000.000 $';
             }
         }
         const silBtn = document.getElementById('buySilencePotion');
         if (silBtn) {
-            silBtn.disabled = false;
-            silBtn.textContent = '75.000 $';
+            silBtn.disabled = loanBlocksPotions;
+            silBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '75.000 $';
         }
     }
 
     function buyPotion(type) {
+        // No se puede comprar ni activar ninguna poción mientras haya deuda.
+        if (state.loan) {
+            playSound('click');
+            const message = document.createElement('div');
+            message.className = 'ghost-toast';
+            message.textContent = '💳 Debes pagar el préstamo antes de usar pociones.';
+            document.body.appendChild(message);
+            setTimeout(() => message.remove(), 3600);
+            refreshShopPotionBtns();
+            return;
+        }
+
         // Bloquear si la poción ya está activa
         if (type === 'luck'   && luckPotionActive)   return;
         if (type === 'speed'  && speedPotionActive)  return;
@@ -7593,6 +7606,8 @@
     let battleWaitInterval = null;
     let botTimers = [null, null, null]; // per-bot bid timers
     let battleFrozenUntil = 0;  // timestamp for silence freeze
+    const AUCTION_QUALITY_BOOST = 0.35;
+    const AUCTION_RARITY_SCORE = { epico: 0, legendario: 0.5, mitico: 1 };
 
     function getBattlePool() {
         const allowed = ['epico', 'legendario', 'mitico'];
@@ -7605,12 +7620,36 @@
         return pool;
     }
 
+    function pickAuctionItem(pool) {
+        if (!pool.length) return null;
+
+        const maxPrice = Math.max(...pool.map(item => item.price || 0), 1);
+        const weighted = pool.map(item => {
+            const rarityScore = AUCTION_RARITY_SCORE[item.rarity] || 0;
+            const priceScore = Math.min(1, (item.price || 0) / maxPrice);
+            // La rareza pesa más que el precio, pero ambos mejoran la selección.
+            const qualityScore = rarityScore * 0.7 + priceScore * 0.3;
+            return {
+                item,
+                weight: 1 + AUCTION_QUALITY_BOOST * qualityScore
+            };
+        });
+
+        const totalWeight = weighted.reduce((sum, entry) => sum + entry.weight, 0);
+        let roll = Math.random() * totalWeight;
+        for (const entry of weighted) {
+            roll -= entry.weight;
+            if (roll <= 0) return entry.item;
+        }
+        return weighted[weighted.length - 1].item;
+    }
+
     function startNewBattle() {
         const pool = getBattlePool();
         if (!pool.length) return;
 
-        // Pick random item (100% secret)
-        const item = pool[Math.floor(Math.random() * pool.length)];
+        // Sorteo ponderado: los objetos raros y valiosos aparecen más.
+        const item = pickAuctionItem(pool);
         const realValue = item.price;
 
         // Assign each bot a max budget (they know real value)
@@ -9458,8 +9497,10 @@
     const LOAN_INTEREST = 0.20;
     let loanTimerInterval = null;
 
+    // El tiempo del préstamo depende de la cantidad:
+    // mínimo 5 minutos y máximo 15 minutos.
     function loanCalcTime(amount) {
-        return 20 + Math.round((Math.min(amount, LOAN_MAX) / LOAN_MAX) * 10);
+        return 5 + Math.round((Math.min(Math.max(amount, 0), LOAN_MAX) / LOAN_MAX) * 10);
     }
 
     function loanFmt(n) {
@@ -9531,6 +9572,7 @@
 
         state.loan = { amount, repay, remaining: repay, deadline, totalMs: timeMins * 60 * 1000 };
         state.balance += amount;
+        refreshShopPotionBtns();
 
         updateStats();
         saveGame();
@@ -9552,6 +9594,7 @@
         state.loan = null;
         clearInterval(loanTimerInterval); loanTimerInterval = null;
         document.getElementById('loanIndicator').style.display = 'none';
+        refreshShopPotionBtns();
         updateStats(); saveGame();
         closeLoans();
         playSound('win');
@@ -9573,6 +9616,7 @@
             state.loan = null;
             clearInterval(loanTimerInterval); loanTimerInterval = null;
             document.getElementById('loanIndicator').style.display = 'none';
+            refreshShopPotionBtns();
             updateStats(); saveGame();
             closeLoans();
             playSound('win');
@@ -9742,6 +9786,8 @@
     const POKER_RED = new Set(['♥','♦']);
     const POKER_BOT_NAMES = ['El Tiburón 🦈','La Sombra 🎭','El Maestro ♟️'];
     const POKER_BOT_AVAT  = ['🦈','🎭','♟️'];
+    const POKER_WIN_MULTIPLIER = 45;
+    const POKER_BAD_LUCK_CHANCE = 0.35;
 
     let pks = { deck:[], player:[], bots:[[],[],[]], sel:new Set(), phase:'bet', bet:0 };
 
@@ -9750,6 +9796,21 @@
         for(const s of POKER_SUITS) for(const r of POKER_RANKS) d.push({s,r,v:POKER_RV[r]});
         for(let i=d.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[d[i],d[j]]=[d[j],d[i]];}
         return d;
+    }
+
+    // El jugador tiene un 35% de mala suerte en cada extracción:
+    // en vez de recibir la carta superior, recibe una de las más bajas
+    // que todavía quedan disponibles en el mazo.
+    function pkTakePlayerCard() {
+        if (!pks.deck.length) return null;
+        if (Math.random() < POKER_BAD_LUCK_CHANCE) {
+            let worstIndex = 0;
+            for (let i = 1; i < pks.deck.length; i++) {
+                if (pks.deck[i].v < pks.deck[worstIndex].v) worstIndex = i;
+            }
+            return pks.deck.splice(worstIndex, 1)[0];
+        }
+        return pks.deck.shift();
     }
 
     function pkEval(cards) {
@@ -9888,7 +9949,7 @@
             return;
         }
         pks.bet=bet; pks.deck=pkCreateDeck(); pks.sel=new Set(); pks.phase='draw';
-        pks.player=pks.deck.splice(0,5);
+        pks.player=Array.from({length:5},()=>pkTakePlayerCard());
         for(let b=0;b<3;b++) pks.bots[b]=pks.deck.splice(0,5);
 
         // Update UI
@@ -9897,7 +9958,7 @@
         document.getElementById('pokerDrawBtn').style.display='inline-block';
         document.getElementById('pokerInfoRow').style.display='flex';
         document.getElementById('pkBetAmt').textContent=bet.toLocaleString()+' $';
-        document.getElementById('pkWinAmt').textContent=(bet*65).toLocaleString()+' $';
+        document.getElementById('pkWinAmt').textContent=(bet*POKER_WIN_MULTIPLIER).toLocaleString()+' $';
 
         // Bot cards face-down
         for(let b=0;b<3;b++){
@@ -9916,7 +9977,7 @@
         document.getElementById('pokerDiscardHint').textContent='Los bots están pensando...';
 
         // Replace selected player cards
-        pks.sel.forEach(i=>{pks.player[i]=pks.deck.shift();});
+        pks.sel.forEach(i=>{pks.player[i]=pkTakePlayerCard();});
         pks.sel=new Set();
         pkRenderPlayer(false);
 
@@ -9967,7 +10028,7 @@
 
                 state.pokerPlayed=(state.pokerPlayed||0)+1;
                 if(playerWins){
-                    const gain=pks.bet*65;
+                    const gain=pks.bet*POKER_WIN_MULTIPLIER;
                     state.balance+=gain;
                     state.pokerWon=(state.pokerWon||0)+1;
                     addXP(30);
