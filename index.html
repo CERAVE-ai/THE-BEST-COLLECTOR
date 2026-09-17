@@ -3286,14 +3286,14 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Cambios de balance: El poker se le ha aumentado un 35% la dificultad y ahora pasa de dar un x65 a un x45. Las subastas las hemos mejorado un 35% para que den mejores objetos.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Cambios de balance: El poker se le ha aumentado un 35% la dificultad y ahora pasa de dar un x65 a un x45. Las subastas las hemos mejorado un 35% para que den mejores objetos. Mas una nueva mascota.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;28/ 09 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #51</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;21/ 09 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #50</div>
     </div>
 </div>
 
@@ -4594,12 +4594,21 @@
         { id:'dragon',           icon:'🐉', name:'Dragón',                        price:35000000,        moneyBonus:0.15, luckBonus:0.20, speedBonus:0,    desc:'+15% dinero · +20% suerte' },
         { id:'dragon_rojo',      icon:'🔥', name:'Dragón Rojo',                   price:100000000,       moneyBonus:0.50, luckBonus:0.20, speedBonus:0,    desc:'+50% dinero · +20% suerte' },
         { id:'dragon_fantasma',  icon:'👻', name:'Dragón Fantasma',               price:250000000,       moneyBonus:0.40, luckBonus:0.40, speedBonus:0,    desc:'+40% dinero · +40% suerte' },
-        { id:'dragon_segador',   icon:'☠️', name:'Dragón Segador De La Muerte',   price:100000000000,    moneyBonus:2.50, luckBonus:2.00, speedBonus:2.50, desc:'+250% dinero · +200% suerte · +250% ruleta' }
+        { id:'dragon_segador',   icon:'☠️', name:'Dragón Segador De La Muerte',   price:100000000000,    moneyBonus:2.50, luckBonus:2.00, speedBonus:2.50, desc:'+250% dinero · +200% suerte · +250% ruleta' },
+        { id:'erlantz_calvo_definitivo', icon:'👑', name:'Erlantz Calvo Definitivo', price:250000000000, currency:'€', moneyBonus:5.00, luckBonus:4.50, speedBonus:3.00, desc:'+500% dinero · +450% suerte · +300% ruleta' }
     ];
 
     function getEquippedPet() {
         if (!state.equippedPet) return null;
         return PETS_DATA.find(p => p.id === state.equippedPet) || null;
+    }
+
+    function applyPetSpinSpeed(duration) {
+        const pet = getEquippedPet();
+        if (pet && pet.speedBonus > 0) {
+            return Math.round(duration / (1 + pet.speedBonus));
+        }
+        return duration;
     }
 
     let currentKey = 'tech';
@@ -4762,8 +4771,7 @@
         if (flashPotionActive)  spinDuration = Math.round(spinDuration * 0.50);
         if (ceravePotionActive) spinDuration = Math.round(spinDuration * 0.333);
         // Mascota: bonus de velocidad de ruleta
-        const _petSpeed = getEquippedPet();
-        if (_petSpeed && _petSpeed.speedBonus > 0) spinDuration = Math.round(spinDuration / (1 + _petSpeed.speedBonus));
+        spinDuration = applyPetSpinSpeed(spinDuration);
         reel.style.transition = `transform ${spinDuration/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const caseW = caseEl.offsetWidth;
@@ -6885,7 +6893,8 @@
         caseEl.style.boxShadow = '0 0 60px rgba(251,191,36,0.25), inset 0 1px 0 rgba(255,255,255,0.05)';
 
         const reel = document.getElementById('ruletaReel');
-        const ruletaMSpinDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        const ruletaMSpinBaseDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        const ruletaMSpinDur = applyPetSpinSpeed(ruletaMSpinBaseDur);
         reel.style.transition = `transform ${ruletaMSpinDur/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
@@ -7055,7 +7064,8 @@
         caseEl.style.boxShadow = '0 0 60px rgba(168,85,247,0.4), inset 0 1px 0 rgba(255,255,255,0.05)';
 
         const reel = document.getElementById('superRuletaReel');
-        const superSpinDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        const superSpinBaseDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        const superSpinDur = applyPetSpinSpeed(superSpinBaseDur);
         reel.style.transition = `transform ${superSpinDur/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
@@ -7209,7 +7219,8 @@
         caseEl.style.boxShadow = '0 0 60px rgba(249,115,22,0.5), inset 0 1px 0 rgba(255,255,255,0.05)';
 
         const reel = document.getElementById('hyperRuletaReel');
-        const hyperSpinDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        const hyperSpinBaseDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        const hyperSpinDur = applyPetSpinSpeed(hyperSpinBaseDur);
         reel.style.transition = `transform ${hyperSpinDur/1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
@@ -9129,7 +9140,7 @@
                 <div class="mascota-icon">${p.icon}</div>
                 <div class="mascota-name">${p.name}</div>
                 <div class="mascota-benefit ${p.desc!=='Sin beneficios'?'has-benefit':''}">${p.desc}</div>
-                <div class="mascota-price">${p.price.toLocaleString('es-ES')} $</div>
+                <div class="mascota-price">${p.price.toLocaleString('es-ES')} ${p.currency || '$'}</div>
                 ${btnHtml}
             `;
             grid.appendChild(card);
