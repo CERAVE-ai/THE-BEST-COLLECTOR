@@ -1151,6 +1151,80 @@
             box-shadow: 0 0 20px rgba(74,222,128,0.3);
         }
 
+        .inventory-toolbar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 10px;
+            margin: -4px 0 16px;
+            padding: 14px;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid var(--border);
+            border-radius: 14px;
+        }
+        .inventory-control {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            min-width: 0;
+        }
+        .inventory-control > span {
+            color: #64748b;
+            font-size: 9px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .inventory-control select,
+        .inventory-control input {
+            width: 100%;
+            min-width: 0;
+            padding: 9px 10px;
+            color: #e2e8f0;
+            background: #0a0f1e;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 8px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 13px;
+            font-weight: 700;
+        }
+        .inventory-control option { background: #0a0f1e; }
+        .inventory-price-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+        .quick-sell-actions {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .quick-sell-actions .inventory-control { width: 150px; }
+        .quick-sell-btn {
+            min-height: 37px;
+            padding: 8px 12px;
+            color: #052e16;
+            background: #4ade80;
+            border: 1px solid rgba(74,222,128,0.45);
+            border-radius: 8px;
+            font: 700 11px 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        .quick-sell-btn:hover { filter: brightness(1.08); }
+        .quick-sell-btn.preserve-mythics {
+            color: #fbbf24;
+            background: rgba(251,191,36,0.08);
+            border-color: rgba(251,191,36,0.35);
+        }
+        .inventory-results-count {
+            align-self: center;
+            margin-left: auto;
+            color: #64748b;
+            font: 11px 'JetBrains Mono', monospace;
+        }
+
         .inv-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -1367,6 +1441,7 @@
 
         /* Shake */
         .shake { animation: shakeAnim 0.4s; }
+        .no-screen-shake .shake { animation: none !important; transform: none !important; }
         @keyframes shakeAnim {
             0%, 100% { transform: translateX(0); }
             20%, 60% { transform: translateX(-6px); }
@@ -1748,6 +1823,105 @@
             transition:all 0.2s;
         }
         .stats-close-btn:hover{background:rgba(255,255,255,0.1);color:#94a3b8;}
+
+        .chest-stat-details {
+            margin: 0 0 7px;
+            overflow: hidden;
+            background: rgba(255,255,255,0.025);
+            border: 1px solid rgba(255,255,255,0.07);
+            border-radius: 9px;
+        }
+        .chest-stat-details summary {
+            padding: 10px 12px;
+            color: #cbd5e1;
+            font: 700 11px 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+            cursor: pointer;
+        }
+        .chest-stat-details summary::marker { color: #818cf8; }
+        .chest-stat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 5px;
+            padding: 0 9px 9px;
+        }
+        .chest-stat-cell {
+            display: flex;
+            justify-content: space-between;
+            gap: 6px;
+            padding: 6px 8px;
+            background: rgba(0,0,0,0.18);
+            border-radius: 6px;
+            color: #64748b;
+            font-size: 9px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .chest-stat-cell b { color: #e2e8f0; font: 11px 'JetBrains Mono', monospace; }
+
+        .qol-settings-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 9900;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 18px;
+            background: rgba(0,0,0,0.88);
+            backdrop-filter: blur(16px);
+        }
+        .qol-settings-overlay.open { display: flex; }
+        .qol-settings-box {
+            width: min(560px, 100%);
+            padding: 24px;
+            background: linear-gradient(145deg,#0a0c1a,#111426);
+            border: 1px solid rgba(251,191,36,0.25);
+            border-radius: 20px;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+        }
+        .qol-settings-heading {
+            margin: 0 0 4px;
+            color: #fbbf24;
+            font: 28px 'Bebas Neue', sans-serif;
+            letter-spacing: 4px;
+            text-align: center;
+        }
+        .qol-settings-caption {
+            margin: 0 0 20px;
+            color: #64748b;
+            font-size: 10px;
+            letter-spacing: 1.5px;
+            text-align: center;
+            text-transform: uppercase;
+        }
+        .qol-setting-row {
+            display: grid;
+            grid-template-columns: minmax(0,1fr) auto;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 0;
+            border-top: 1px solid rgba(255,255,255,0.07);
+        }
+        .qol-setting-title { display: block; color: #e2e8f0; font: 700 14px 'Rajdhani', sans-serif; }
+        .qol-setting-hint { display: block; margin-top: 3px; color: #64748b; font-size: 10px; line-height: 1.5; }
+        .qol-volume-control { display: flex; align-items: center; gap: 9px; }
+        .qol-volume-control input { width: 150px; accent-color: #fbbf24; }
+        .qol-volume-control output { min-width: 38px; color: #fbbf24; font: 11px 'JetBrains Mono', monospace; text-align: right; }
+        .qol-toggle { width: 19px; height: 19px; accent-color: #fbbf24; cursor: pointer; }
+        .qol-settings-close {
+            width: 100%;
+            margin-top: 18px;
+            padding: 11px;
+            color: #cbd5e1;
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            font: 700 13px 'Rajdhani', sans-serif;
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+        .qol-settings-close:hover { background: rgba(255,255,255,0.1); }
 
         /* ══════════ POKER ══════════ */
         #pokerOverlay {
@@ -3415,8 +3589,9 @@
     </div>
 
     <!-- BOTÓN ESTADÍSTICAS DETALLADAS -->
-    <div style="text-align:center;margin:6px 0 20px;">
+    <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;margin:6px 0 20px;">
         <button onclick="openStats()" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:10px 28px;border:1px solid rgba(99,102,241,0.4);border-radius:10px;background:rgba(99,102,241,0.1);color:#a5b4fc;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='rgba(99,102,241,0.1)'">📊 &nbsp;ESTADÍSTICAS DETALLADAS</button>
+        <button onclick="openSettings()" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:10px 28px;border:1px solid rgba(251,191,36,0.35);border-radius:10px;background:rgba(251,191,36,0.08);color:#fbbf24;cursor:pointer;transition:all 0.2s;">⚙️ &nbsp;AJUSTES</button>
     </div>
 
     <!-- HISTORIAL DE PARTIDAS -->
@@ -3480,6 +3655,56 @@
     <div class="inventory-header">
         <div class="inventory-title">Inventario</div>
         <button class="sell-all-btn" id="sellAllBtn">Vender Todo 💰</button>
+    </div>
+    <div class="inventory-toolbar" aria-label="Filtros, orden y venta rápida del inventario">
+        <label class="inventory-control">
+            <span>Filtrar por rareza</span>
+            <select id="inventoryRarityFilter" onchange="renderInventory()">
+                <option value="all">Todas las rarezas</option>
+                <option value="comun">Común</option>
+                <option value="especial">Especial</option>
+                <option value="epico">Épico</option>
+                <option value="legendario">Legendario</option>
+                <option value="mitico">Mítico</option>
+            </select>
+        </label>
+        <label class="inventory-control">
+            <span>Filtrar por mutación</span>
+            <select id="inventoryMutationFilter" onchange="renderInventory()">
+                <option value="all">Todas las mutaciones</option>
+                <option value="normal">Normal</option>
+                <option value="roto">Roto</option>
+                <option value="radiactivo">Radiactivo</option>
+                <option value="cosmico">Cósmico</option>
+                <option value="universal">Universal</option>
+            </select>
+        </label>
+        <div class="inventory-control">
+            <span>Filtrar por precio</span>
+            <div class="inventory-price-range">
+                <input id="inventoryMinPrice" type="number" min="0" placeholder="Mínimo" aria-label="Precio mínimo" oninput="renderInventory()">
+                <input id="inventoryMaxPrice" type="number" min="0" placeholder="Máximo" aria-label="Precio máximo" oninput="renderInventory()">
+            </div>
+        </div>
+        <label class="inventory-control">
+            <span>Ordenar</span>
+            <select id="inventorySort" onchange="renderInventory()">
+                <option value="newest">Más recientes</option>
+                <option value="rarity">Rareza: mayor primero</option>
+                <option value="price-desc">Precio: mayor primero</option>
+                <option value="price-asc">Precio: menor primero</option>
+                <option value="mutation">Mutación</option>
+            </select>
+        </label>
+        <div class="quick-sell-actions">
+            <label class="inventory-control">
+                <span>Cantidad rápida (vacío = todos)</span>
+                <input id="quickSellCount" type="number" min="1" step="1" placeholder="Todos los filtrados">
+            </label>
+            <button class="quick-sell-btn" id="quickSellFilteredBtn" type="button" onclick="sellQuickFiltered()">Vender selección</button>
+            <button class="quick-sell-btn preserve-mythics" id="sellExceptMythicBtn" type="button" onclick="sellAllExceptMythic()">Vender todo menos míticos</button>
+            <span class="inventory-results-count" id="inventoryResultsCount" aria-live="polite"></span>
+        </div>
     </div>
     <!-- MUSIC INDICATOR -->
     <div id="musicBar" style="display:none;align-items:center;gap:8px;margin-bottom:16px;padding:9px 14px;background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.07);border-radius:12px;">
@@ -3868,6 +4093,12 @@
       </div>
     </div>
 
+    <div class="stats-section">
+      <div class="stats-section-title">🎁 RAREZAS POR COFRE</div>
+      <div style="margin:0 0 8px;color:#64748b;font-size:9px;line-height:1.5;">El desglose empieza a contar desde esta versión; las partidas antiguas no guardaban estadísticas por cofre.</div>
+      <div id="chestRarityStats"></div>
+    </div>
+
     <!-- DINERO -->
     <div class="stats-section">
       <div class="stats-section-title">💰 DINERO</div>
@@ -3911,6 +4142,54 @@
 
     <button class="stats-close-btn" onclick="closeStats()">✕ CERRAR</button>
   </div>
+</div>
+
+<!-- ══════════════ AJUSTES DE CALIDAD DE VIDA ══════════════ -->
+<div class="qol-settings-overlay" id="qolSettingsOverlay" role="presentation">
+  <section class="qol-settings-box" role="dialog" aria-modal="true" aria-labelledby="qolSettingsTitle">
+    <h2 class="qol-settings-heading" id="qolSettingsTitle">⚙️ AJUSTES</h2>
+    <p class="qol-settings-caption">Preferencias guardadas en tu partida</p>
+
+    <label class="qol-setting-row" for="musicVolumeSlider">
+      <span>
+        <span class="qol-setting-title">Volumen de música</span>
+        <span class="qol-setting-hint">Controla la música de fondo.</span>
+      </span>
+      <span class="qol-volume-control">
+        <input id="musicVolumeSlider" type="range" min="0" max="100" value="100" aria-label="Volumen de música" oninput="previewQolVolume('musicVolume', this.value)" onchange="setQolSetting('musicVolume', this.value)">
+        <output id="musicVolumeOutput" for="musicVolumeSlider">100%</output>
+      </span>
+    </label>
+
+    <label class="qol-setting-row" for="effectsVolumeSlider">
+      <span>
+        <span class="qol-setting-title">Volumen de efectos</span>
+        <span class="qol-setting-hint">Controla los sonidos de acciones y recompensas.</span>
+      </span>
+      <span class="qol-volume-control">
+        <input id="effectsVolumeSlider" type="range" min="0" max="100" value="100" aria-label="Volumen de efectos" oninput="previewQolVolume('effectsVolume', this.value)" onchange="setQolSetting('effectsVolume', this.value)">
+        <output id="effectsVolumeOutput" for="effectsVolumeSlider">100%</output>
+      </span>
+    </label>
+
+    <label class="qol-setting-row" for="parasitesEnabled">
+      <span>
+        <span class="qol-setting-title">Parásitos del juego</span>
+        <span class="qol-setting-hint">Evita nuevas infecciones y detiene los parásitos activos.</span>
+      </span>
+      <input class="qol-toggle" id="parasitesEnabled" type="checkbox" checked onchange="setQolSetting('parasitesEnabled', this.checked)">
+    </label>
+
+    <label class="qol-setting-row" for="screenShakeEnabled">
+      <span>
+        <span class="qol-setting-title">Sacudida de pantalla</span>
+        <span class="qol-setting-hint">Desactiva las sacudidas visuales de las recompensas.</span>
+      </span>
+      <input class="qol-toggle" id="screenShakeEnabled" type="checkbox" checked onchange="setQolSetting('screenShakeEnabled', this.checked)">
+    </label>
+
+    <button class="qol-settings-close" type="button" onclick="closeSettings()">GUARDAR Y CERRAR</button>
+  </section>
 </div>
 
 <!-- ══════════════ POKER MODAL ══════════════ -->
@@ -4358,12 +4637,14 @@
 
     // AUDIO
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const effectsMasterGain = audioCtx.createGain();
+    effectsMasterGain.connect(audioCtx.destination);
 
     function playSound(type) {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
         osc.connect(gain);
-        gain.connect(audioCtx.destination);
+        gain.connect(effectsMasterGain);
         const now = audioCtx.currentTime;
         switch(type) {
             case 'click':
@@ -4377,7 +4658,7 @@
             case 'win':
                 [0, 0.1, 0.2, 0.3].forEach(d => {
                     const o = audioCtx.createOscillator(), g = audioCtx.createGain();
-                    o.connect(g); g.connect(audioCtx.destination);
+                    o.connect(g); g.connect(effectsMasterGain);
                     o.type = 'triangle';
                     o.frequency.setValueAtTime(440 + d * 220, now + d);
                     o.frequency.exponentialRampToValueAtTime(880 + d * 220, now + d + 0.25);
@@ -4613,7 +4894,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
     const WIN_GOAL = 500000000000;
 
     const reel = document.getElementById('caseReel');
@@ -4651,7 +4932,7 @@
         document.getElementById('boxBadge').style.borderColor = b.color;
         document.getElementById('boxBadge').style.color = b.color;
         document.getElementById('boxTitle').textContent = b.title;
-        document.getElementById('boxCost').textContent = `Costo: ${b.cost.toLocaleString()} $`;
+        document.getElementById('boxCost').textContent = `Costo: ${collectorCrateCost(b.cost).toLocaleString()} $`;
         Object.keys(boxes).forEach(k => {
             const el = document.getElementById(`tab-${k}`);
             el.classList.toggle('active', k === key);
@@ -4714,6 +4995,7 @@
             if (luckPotionActive && k !== 'comun') chance *= 1.4;
             if (darkPotionActive && k !== 'comun') chance *= 1.55;
             if (ceravePotionActive && k !== 'comun') chance *= 3.0;
+            if (k !== 'comun') chance *= 1 + getCollectorSkillLevel('luck') * 0.08;
             // Mascota: bonus de suerte
             const _petLuck = getEquippedPet();
             if (_petLuck && _petLuck.luckBonus > 0 && k !== 'comun') chance *= (1 + _petLuck.luckBonus);
@@ -4736,8 +5018,7 @@
 
     function spin() {
         if (state.over || state.spinning) return;
-        let cost = boxes[currentKey].cost;
-        if (currentEvent && currentEvent.id === 'suerte_max') cost = Math.round(cost * 0.5);
+        let cost = collectorCrateCost(boxes[currentKey].cost);
         if (state.balance < cost) {
             playSound('click');
             document.getElementById('balance').parentElement.classList.add('shake');
@@ -4818,6 +5099,10 @@
 
     function finalize(winner) {
         state.opened++;
+        recordCollectorMissionAction('crate', currentKey);
+        state.chestRarityStats = state.chestRarityStats || {};
+        state.chestRarityStats[currentKey] = state.chestRarityStats[currentKey] || {};
+        state.chestRarityStats[currentKey][winner.rarity] = (Number(state.chestRarityStats[currentKey][winner.rarity]) || 0) + 1;
         let finalPrice = bonusActive ? winner.price * 2 : winner.price;
 
         // Aplicar evento activo al precio
@@ -4835,7 +5120,8 @@
         // Aplicar mutación
         const mutation = getMutation();
         finalPrice = Math.round(finalPrice * mutation.mult);
-        const isInfected = Math.random() < 0.10;
+        finalPrice = Math.round(finalPrice * (1 + getCollectorSkillLevel('money') * 0.05));
+        const isInfected = isParasitesEnabled() && Math.random() < 0.10;
         const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id,
             _id: Date.now() + Math.floor(Math.random()*99999),
             ...(isInfected ? { infected: true, infectedSince: Date.now(), parasiteUsed: false } : {}) };
@@ -5069,11 +5355,52 @@
         }
     }
 
+    function getInventoryViewEntries() {
+        const rarityFilter = document.getElementById('inventoryRarityFilter')?.value || 'all';
+        const mutationFilter = document.getElementById('inventoryMutationFilter')?.value || 'all';
+        const minRaw = document.getElementById('inventoryMinPrice')?.value || '';
+        const maxRaw = document.getElementById('inventoryMaxPrice')?.value || '';
+        const minPrice = minRaw === '' ? null : Math.max(0, Number(minRaw));
+        const maxPrice = maxRaw === '' ? null : Math.max(0, Number(maxRaw));
+        const sortMode = document.getElementById('inventorySort')?.value || 'newest';
+        const rarityOrder = Object.keys(rarities);
+        const entries = inventory.map((item, origIdx) => ({ item, origIdx })).filter(({ item }) => {
+            if (rarityFilter !== 'all' && item.rarity !== rarityFilter) return false;
+            if (mutationFilter !== 'all' && (item.mutation || 'normal') !== mutationFilter) return false;
+            const price = Number(item.price) || 0;
+            if (minPrice !== null && price < minPrice) return false;
+            if (maxPrice !== null && price > maxPrice) return false;
+            return true;
+        });
+        entries.sort((a, b) => {
+            const newestFirst = () => b.origIdx - a.origIdx;
+            if (sortMode === 'price-desc') return (Number(b.item.price) || 0) - (Number(a.item.price) || 0) || newestFirst();
+            if (sortMode === 'price-asc') return (Number(a.item.price) || 0) - (Number(b.item.price) || 0) || newestFirst();
+            if (sortMode === 'rarity') {
+                return rarityOrder.indexOf(b.item.rarity) - rarityOrder.indexOf(a.item.rarity) || newestFirst();
+            }
+            if (sortMode === 'mutation') {
+                const mutationA = (mutations[a.item.mutation] || mutations.normal).label;
+                const mutationB = (mutations[b.item.mutation] || mutations.normal).label;
+                return mutationA.localeCompare(mutationB, 'es') || newestFirst();
+            }
+            return newestFirst();
+        });
+        return entries;
+    }
+
     function renderInventory() {
         const c = document.getElementById('inventory');
+        if (!c) return;
         c.innerHTML = '';
-        const reversed = [...inventory].map((item, origIdx) => ({ item, origIdx })).reverse();
-        reversed.forEach(({ item, origIdx }) => {
+        const entries = getInventoryViewEntries();
+        const count = document.getElementById('inventoryResultsCount');
+        if (count) count.textContent = `${entries.length} / ${inventory.length} objetos`;
+        if (!entries.length) {
+            c.innerHTML = '<div class="inventory-empty">No hay objetos que coincidan con estos filtros.</div>';
+            return;
+        }
+        entries.forEach(({ item, origIdx }) => {
             const salePrice = item.price;
             const isFav = !!item.favorite;
             const d = document.createElement('div');
@@ -5136,27 +5463,48 @@
         }, 350);
     }
 
-    function sellAll() {
-        if (!inventory.length || state.over) return;
-        const nonFavItems = inventory.filter(item => !item.favorite);
-        if (!nonFavItems.length) return;
+    function sellInventoryItems(items) {
+        if (!items || !items.length || state.over || state.spinning) return;
+        const itemsToSell = [...new Set(items)].filter(item => inventory.includes(item) && !item.favorite);
+        if (!itemsToSell.length) return;
         playSound('money');
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
-        const sellValue = nonFavItems.reduce((sum, item) => sum + item.price, 0);
-        nonFavItems.forEach(item => { if (item._id) cleanMuseumSlot(item._id); });
+        const sellValue = itemsToSell.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
+        itemsToSell.forEach(item => { if (item._id) cleanMuseumSlot(item._id); });
         const _sellAmt = Math.floor(sellValue * prestigeMult());
         state.balance += _sellAmt;
         state.earned = (state.earned||0) + _sellAmt;
-        state.sold = (state.sold||0) + nonFavItems.length;
+        state.sold = (state.sold||0) + itemsToSell.length;
         addXP(Math.max(5, Math.floor(sellValue / 20000) * 5));
         state.invValue -= sellValue;
         if (state.invValue < 0) state.invValue = 0;
-        inventory = inventory.filter(item => item.favorite);
+        const soldItems = new Set(itemsToSell);
+        inventory = inventory.filter(item => !soldItems.has(item));
         renderInventory();
         updateStats();
         checkAchievements();
         saveGame();
         checkEnd();
+    }
+
+    function sellQuickFiltered() {
+        const candidates = getInventoryViewEntries()
+            .map(entry => entry.item)
+            .filter(item => !item.favorite);
+        if (!candidates.length) return;
+        const quantityField = document.getElementById('quickSellCount');
+        const rawQuantity = quantityField ? quantityField.value.trim() : '';
+        const quantity = rawQuantity === '' ? candidates.length : Math.max(1, Math.floor(Number(rawQuantity) || 1));
+        sellInventoryItems(candidates.slice(0, quantity));
+        if (quantityField) quantityField.value = '';
+    }
+
+    function sellAllExceptMythic() {
+        sellInventoryItems(inventory.filter(item => item.rarity !== 'mitico'));
+    }
+
+    function sellAll() {
+        sellInventoryItems(inventory);
     }
 
     function updateStats() {
@@ -5441,6 +5789,8 @@
     }
 
     function playLoseSound() {
+        const effectVolume = getQolSettings().effectsVolume / 100;
+        if (effectVolume <= 0) return;
         const ctx3 = new (window.AudioContext || window.webkitAudioContext)();
         const now = ctx3.currentTime;
         // Notas bajando dramáticamente
@@ -5450,8 +5800,8 @@
             o.connect(g); g.connect(ctx3.destination);
             o.type = 'triangle';
             o.frequency.setValueAtTime(freq, now + i * 0.18);
-            g.gain.setValueAtTime(0.18, now + i * 0.18);
-            g.gain.exponentialRampToValueAtTime(0.01, now + i * 0.18 + 0.3);
+            g.gain.setValueAtTime(0.18 * effectVolume, now + i * 0.18);
+            g.gain.exponentialRampToValueAtTime(0.01 * effectVolume, now + i * 0.18 + 0.3);
             o.start(now + i * 0.18);
             o.stop(now + i * 0.18 + 0.3);
         });
@@ -5462,8 +5812,8 @@
         o2.type = 'sine';
         o2.frequency.setValueAtTime(80, now + 1.0);
         o2.frequency.exponentialRampToValueAtTime(30, now + 1.6);
-        g2.gain.setValueAtTime(0.4, now + 1.0);
-        g2.gain.exponentialRampToValueAtTime(0.01, now + 1.6);
+        g2.gain.setValueAtTime(0.4 * effectVolume, now + 1.0);
+        g2.gain.exponentialRampToValueAtTime(0.01 * effectVolume, now + 1.6);
         o2.start(now + 1.0);
         o2.stop(now + 1.6);
     }
@@ -5498,11 +5848,20 @@
     }
 
     function shakeScreen() {
+        if (!getQolSettings().screenShakeEnabled) {
+            document.body.style.transform = '';
+            return;
+        }
         const body = document.body;
         let t = 0;
         const duration = 80;
         const interval = 30;
         const shakeInterval = setInterval(() => {
+            if (!getQolSettings().screenShakeEnabled) {
+                clearInterval(shakeInterval);
+                body.style.transform = '';
+                return;
+            }
             const x = (Math.random() - 0.5) * 30;
             const y = (Math.random() - 0.5) * 30;
             body.style.transform = `translate(${x}px, ${y}px)`;
@@ -5515,6 +5874,8 @@
     }
 
     function playScream() {
+        const effectVolume = getQolSettings().effectsVolume / 100;
+        if (effectVolume <= 0) return;
         const ctx2 = new (window.AudioContext || window.webkitAudioContext)();
         const duration = 1.8;
         const now = ctx2.currentTime;
@@ -5536,9 +5897,9 @@
 
         const gainNode = ctx2.createGain();
         gainNode.gain.setValueAtTime(0, now);
-        gainNode.gain.linearRampToValueAtTime(1.8, now + 0.05);
-        gainNode.gain.setValueAtTime(1.8, now + 0.5);
-        gainNode.gain.exponentialRampToValueAtTime(0.01, now + duration);
+        gainNode.gain.linearRampToValueAtTime(1.8 * effectVolume, now + 0.05);
+        gainNode.gain.setValueAtTime(1.8 * effectVolume, now + 0.5);
+        gainNode.gain.exponentialRampToValueAtTime(0.01 * effectVolume, now + duration);
 
         noise.connect(filter); filter.connect(gainNode); gainNode.connect(ctx2.destination);
         noise.start(now); noise.stop(now + duration);
@@ -5557,8 +5918,8 @@
 
         const g2 = ctx2.createGain();
         g2.gain.setValueAtTime(0, now);
-        g2.gain.linearRampToValueAtTime(0.6, now + 0.08);
-        g2.gain.exponentialRampToValueAtTime(0.01, now + duration);
+        g2.gain.linearRampToValueAtTime(0.6 * effectVolume, now + 0.08);
+        g2.gain.exponentialRampToValueAtTime(0.01 * effectVolume, now + duration);
 
         osc.connect(distortion); distortion.connect(g2); g2.connect(ctx2.destination);
         osc.start(now); osc.stop(now + duration);
@@ -5923,7 +6284,12 @@
                 xp: state.xp||0,
                 level: state.level||1,
                 skillPoints: state.skillPoints||0,
-                blackMarket: state.blackMarket
+                blackMarket: state.blackMarket,
+                collectorSkillLevels: state.collectorSkillLevels||{},
+                collectorMissionProgress: state.collectorMissionProgress||null,
+                collectorPotionEnds: state.collectorPotionEnds||{},
+                qolSettings: state.qolSettings||{},
+                chestRarityStats: state.chestRarityStats||{}
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -6056,6 +6422,8 @@
 
         
         const hasSave = loadGame();
+        initializeCollectorSystems();
+        initializeQolSettings();
         resumeLoanTimer();
         initBlackMarket();
         updateLevelDisplay();
@@ -6089,6 +6457,7 @@
 
         // Guardar cada 15 segundos automáticamente
         setInterval(saveGame, 15000);
+        startCollectorBridge();
     }
 
     function showSaveNotice() {
@@ -6176,6 +6545,7 @@
             scWidget = SC.Widget(iframe);
             scWidget.bind(SC.Widget.Events.READY, () => {
                 scWidget.play();
+                applyQolSettings();
                 document.getElementById('musicBar').style.display = 'flex';
                 updateMusicDisplay();
             });
@@ -6826,7 +7196,7 @@
             checkEnd();
             document.getElementById('coinCloseBtn').classList.add('visible');
             // Start 180s cooldown
-            coinCooldown = 180;
+            coinCooldown = Math.max(30, 180 - getCollectorSkillLevel('coinflip-cooldown') * 20);
             const btn = document.getElementById('coinBtn');
             btn.disabled = true;
         }, 2100);
@@ -7411,6 +7781,7 @@
             if (ceravePotionActive) finalPrice *= 2.5;
             const mut = getMutation();
             finalPrice = Math.round(finalPrice * mut.mult);
+            finalPrice = Math.round(finalPrice * (1 + getCollectorSkillLevel('money') * 0.05));
             const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mut.id, source:'hyper' };
             inventory.push(wonItem);
             state.invValue += wonItem.price;
@@ -8014,6 +8385,7 @@
             state.opened++;
             if (mut.id === 'universal') state.universalCount++;
             state.auctionWins++;
+            recordCollectorMissionAction('auction');
             addXP(50);
             // Note: player already paid playerBid above; state.spent tracks it
             state.spent += playerBid;
@@ -8515,6 +8887,12 @@
     document.getElementById('sellAllBtn').addEventListener('click', sellAll);
     document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
     document.getElementById('musicToggle').addEventListener('click', toggleMusic);
+    document.getElementById('qolSettingsOverlay').addEventListener('click', (e) => {
+        if (e.target === document.getElementById('qolSettingsOverlay')) closeSettings();
+    });
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeSettings();
+    });
     document.querySelectorAll('.screen-btn').forEach(btn => btn.addEventListener('click', () => location.reload()));
 
     // ─── MI MUSEO ────────────────────────────────────────────────────────────────
@@ -8981,8 +9359,13 @@
     })();
     let glitchCursorActive = false;
     let thiefActive = false;
+    let glitchCursorRaf = null;
+    let glitchCursorMoveListener = null;
+    let glitchCursorTimeout = null;
+    let thiefRaf = null;
 
     function showParasiteAlert(msg) {
+        if (!isParasitesEnabled()) return;
         const el = document.createElement('div');
         el.className = 'parasite-alert';
         el.textContent = msg;
@@ -8991,7 +9374,7 @@
     }
 
     function activateGlitchCursor() {
-        if (glitchCursorActive) return;
+        if (!isParasitesEnabled() || glitchCursorActive) return;
         glitchCursorActive = true;
         document.body.style.cursor = 'none';
         const cursor = document.getElementById('glitchCursor');
@@ -9000,10 +9383,9 @@
 
         let mouseX = window.innerWidth / 2, mouseY = window.innerHeight / 2;
         let phase = 0;
-        let glitchRaf;
-
         const onMove = (e) => { mouseX = e.clientX; mouseY = e.clientY; };
         document.addEventListener('mousemove', onMove);
+        glitchCursorMoveListener = onMove;
 
         const animate = () => {
             phase += 0.07;
@@ -9011,22 +9393,25 @@
             const wobbleY = Math.cos(phase * 1.4) * 28 + Math.cos(phase * 2.3) * 12;
             cursor.style.left = (mouseX + wobbleX) + 'px';
             cursor.style.top  = (mouseY + wobbleY) + 'px';
-            glitchRaf = requestAnimationFrame(animate);
+            glitchCursorRaf = requestAnimationFrame(animate);
         };
-        glitchRaf = requestAnimationFrame(animate);
+        glitchCursorRaf = requestAnimationFrame(animate);
 
-        setTimeout(() => {
+        glitchCursorTimeout = setTimeout(() => {
             glitchCursorActive = false;
             document.body.style.cursor = '';
             cursor.style.display = 'none';
-            document.removeEventListener('mousemove', onMove);
-            cancelAnimationFrame(glitchRaf);
+            if (glitchCursorMoveListener) document.removeEventListener('mousemove', glitchCursorMoveListener);
+            if (glitchCursorRaf) cancelAnimationFrame(glitchCursorRaf);
+            glitchCursorMoveListener = null;
+            glitchCursorRaf = null;
+            glitchCursorTimeout = null;
             showParasiteAlert('✅ El Glitch del Ratón ha desaparecido... por ahora.');
         }, 120000);
     }
 
     function activateButtonThief() {
-        if (thiefActive) return;
+        if (!isParasitesEnabled() || thiefActive) return;
         thiefActive = true;
         let thiefHits = 0;
         const HITS_NEEDED = 3;
@@ -9046,8 +9431,6 @@
         let vx = (Math.random() < 0.5 ? 1 : -1) * (baseSpeed + Math.random() * 1.5);
         let vy = (Math.random() < 0.5 ? 1 : -1) * (baseSpeed + Math.random() * 1.5);
         let speed = 1;
-        let thiefRaf;
-
         const moveThief = () => {
             x += vx * speed;
             y += vy * speed;
@@ -9065,7 +9448,8 @@
             setTimeout(() => { thief.style.transform = ''; }, 150);
             speed += 0.6;
             if (thiefHits >= HITS_NEEDED) {
-                cancelAnimationFrame(thiefRaf);
+                if (thiefRaf) cancelAnimationFrame(thiefRaf);
+                thiefRaf = null;
                 thief.style.display = 'none';
                 sellBtn.style.visibility = '';
                 thiefActive = false;
@@ -9078,7 +9462,7 @@
 
     // Comprobar cada 5s si algún objeto infectado lleva más de 15 segundos en el inventario
     setInterval(() => {
-        if (state.over || glitchCursorActive || thiefActive) return;
+        if (!isParasitesEnabled() || state.over || glitchCursorActive || thiefActive) return;
         const now = Date.now();
         const ready = inventory.filter(item => item.infected && !item.parasiteUsed && (now - item.infectedSince) > 15 * 1000);
         if (ready.length > 0) {
@@ -9782,6 +10166,7 @@
         document.getElementById('ds_wins').textContent   = fmt(rec.wins);
         document.getElementById('ds_losses').textContent = fmt(rec.losses);
 
+        renderChestRarityStats();
         document.getElementById('statsOverlay').classList.add('open');
     }
 
@@ -10073,6 +10458,480 @@
         inp.value = v==='max'?Math.floor(state.balance):Math.min(v,Math.floor(state.balance));
     }
     // ═══════════════════ FIN POKER ═══════════════════
+
+    // ═══════════════════ HABILIDADES Y MISIONES ═══════════════════
+    const COLLECTOR_SKILLS = {
+        luck: {
+            name: 'Suerte',
+            description: 'Aumenta la probabilidad de obtener objetos poco comunes o mejores.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `+${level * 8}% de probabilidad para rarezas superiores a común`
+        },
+        money: {
+            name: 'Tasador',
+            description: 'Aumenta el valor de los objetos que consigues en cofres y subastas.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `+${level * 5}% al valor de los objetos`
+        },
+        'chest-discount': {
+            name: 'Negociador',
+            description: 'Reduce el precio de apertura de todos los cofres.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `-${level * 4}% al coste de los cofres`
+        },
+        'museum-slots': {
+            name: 'Conservador',
+            description: 'Añade espacios permanentes para exponer objetos en el museo.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `+${level} espacio${level === 1 ? '' : 's'} de museo`
+        },
+        'coinflip-cooldown': {
+            name: 'Reflejos',
+            description: 'Reduce el tiempo de espera entre partidas de cara o cruz.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `-${level * 20} s de cooldown`
+        }
+    };
+
+    let collectorSnapshotTimer = null;
+
+    function getCollectorSkillLevel(skillId) {
+        const raw = state.collectorSkillLevels && state.collectorSkillLevels[skillId];
+        const level = Number(raw);
+        const maximum = COLLECTOR_SKILLS[skillId] ? COLLECTOR_SKILLS[skillId].maxLevel : 0;
+        return Number.isFinite(level) ? Math.max(0, Math.min(maximum, Math.floor(level))) : 0;
+    }
+
+    function collectorCrateCost(baseCost) {
+        let cost = Number(baseCost) || 0;
+        if (currentEvent && currentEvent.id === 'suerte_max') cost = Math.round(cost * 0.5);
+        cost = Math.round(cost * (1 - getCollectorSkillLevel('chest-discount') * 0.04));
+        return Math.max(1, cost);
+    }
+
+    function collectorDateKey(date) {
+        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    }
+
+    function collectorWeekKey(date) {
+        const monday = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+        monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+        return collectorDateKey(monday);
+    }
+
+    function synchronizeCollectorMissionPeriod() {
+        const progress = state.collectorMissionProgress;
+        if (!progress) return;
+        const today = collectorDateKey(new Date());
+        const week = collectorWeekKey(new Date());
+        progress.claimed = progress.claimed || {};
+        if (progress.dailyKey !== today) {
+            progress.dailyKey = today;
+            progress.dailyTech = 0;
+            progress.dailyAuction = 0;
+            progress.claimed.dailyTech = false;
+            progress.claimed.dailyAuction = false;
+        }
+        if (progress.weekKey !== week) {
+            progress.weekKey = week;
+            progress.weeklyCrates = 0;
+            progress.weeklyAuction = 0;
+            progress.claimed.weeklyCrates = false;
+            progress.claimed.weeklyAuction = false;
+        }
+    }
+
+    function restoreCollectorPotion(type) {
+        const endAt = Number(state.collectorPotionEnds[type]) || 0;
+        const seconds = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+        if (type === 'luck') {
+            luckPotionSecondsLeft = seconds;
+            luckPotionActive = seconds > 0;
+            const indicator = document.getElementById('luckPotionInd');
+            if (indicator) indicator.classList.toggle('active', luckPotionActive);
+            const timer = document.getElementById('luckPotionTimer');
+            if (timer && seconds) timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        } else if (type === 'money') {
+            moneyPotionSecondsLeft = seconds;
+            moneyPotionActive = seconds > 0;
+            const indicator = document.getElementById('moneyPotionInd');
+            if (indicator) indicator.classList.toggle('active', moneyPotionActive);
+            const timer = document.getElementById('moneyPotionTimer');
+            if (timer && seconds) timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        }
+    }
+
+    function initializeCollectorSystems() {
+        const levels = state.collectorSkillLevels || {};
+        state.collectorSkillLevels = {};
+        Object.keys(COLLECTOR_SKILLS).forEach(id => {
+            const value = Number(levels[id]);
+            state.collectorSkillLevels[id] = Number.isFinite(value)
+                ? Math.max(0, Math.min(COLLECTOR_SKILLS[id].maxLevel, Math.floor(value)))
+                : 0;
+        });
+
+        const today = collectorDateKey(new Date());
+        const week = collectorWeekKey(new Date());
+        const saved = state.collectorMissionProgress || {};
+        state.collectorMissionProgress = {
+            dailyKey: saved.dailyKey || today,
+            weekKey: saved.weekKey || week,
+            dailyTech: Number(saved.dailyTech) || 0,
+            dailyAuction: Number(saved.dailyAuction) || 0,
+            weeklyCrates: Number(saved.weeklyCrates) || 0,
+            weeklyAuction: Number(saved.weeklyAuction) || 0,
+            claimed: {
+                dailyTech: false,
+                dailyAuction: false,
+                weeklyCrates: false,
+                weeklyAuction: false,
+                ...(saved.claimed || {})
+            }
+        };
+        state.collectorPotionEnds = state.collectorPotionEnds || {};
+        synchronizeCollectorMissionPeriod();
+        restoreCollectorPotion('luck');
+        restoreCollectorPotion('money');
+        if (typeof refreshShopPotionBtns === 'function') refreshShopPotionBtns();
+    }
+
+    function collectorMissionsSnapshot() {
+        synchronizeCollectorMissionPeriod();
+        const p = state.collectorMissionProgress;
+        const claimed = p.claimed || {};
+        return [
+            {
+                id: 'daily-tech',
+                period: 'daily',
+                title: 'Abre 20 cofres Tech',
+                description: 'Abre cofres de la categoría Tech antes de que termine el día.',
+                progress: Math.min(20, p.dailyTech),
+                target: 20,
+                reward: { type: 'xp', amount: 350, label: '350 XP' },
+                completed: p.dailyTech >= 20,
+                claimed: !!claimed.dailyTech
+            },
+            {
+                id: 'daily-auction',
+                period: 'daily',
+                title: 'Gana 1 subasta',
+                description: 'Consigue la puja ganadora en una batalla de subasta.',
+                progress: Math.min(1, p.dailyAuction),
+                target: 1,
+                reward: { type: 'potion', amount: 1, label: 'Poción de suerte · 5 min' },
+                completed: p.dailyAuction >= 1,
+                claimed: !!claimed.dailyAuction
+            },
+            {
+                id: 'weekly-crates',
+                period: 'weekly',
+                title: 'Abre 100 cofres',
+                description: 'Abre cofres de cualquier categoría durante esta semana.',
+                progress: Math.min(100, p.weeklyCrates),
+                target: 100,
+                reward: { type: 'xp', amount: 1800, label: '1.800 XP' },
+                completed: p.weeklyCrates >= 100,
+                claimed: !!claimed.weeklyCrates
+            },
+            {
+                id: 'weekly-auction',
+                period: 'weekly',
+                title: 'Gana 5 subastas',
+                description: 'Supera a los bots en cinco batallas de subasta esta semana.',
+                progress: Math.min(5, p.weeklyAuction),
+                target: 5,
+                reward: { type: 'potion', amount: 1, label: 'Poción de dinero · 3 min' },
+                completed: p.weeklyAuction >= 5,
+                claimed: !!claimed.weeklyAuction
+            }
+        ];
+    }
+
+    function collectorSkillsSnapshot() {
+        return Object.entries(COLLECTOR_SKILLS).map(([id, skill]) => {
+            const level = getCollectorSkillLevel(id);
+            return {
+                id,
+                name: skill.name,
+                description: skill.description,
+                level,
+                maxLevel: skill.maxLevel,
+                cost: level >= skill.maxLevel ? 0 : skill.costs[level],
+                effect: level >= skill.maxLevel
+                    ? `Máximo alcanzado: ${skill.effect(level)}`
+                    : `${skill.effect(level)} · Siguiente: ${skill.effect(level + 1)}`
+            };
+        });
+    }
+
+    function postCollectorSnapshot() {
+        if (!state.collectorMissionProgress || window.parent === window) return;
+        synchronizeCollectorMissionPeriod();
+        const level = Number(state.level) || 1;
+        const atMaxLevel = level >= (typeof LEVEL_MAX === 'number' ? LEVEL_MAX : 200);
+        window.parent.postMessage({
+            channel: 'the-best-collector',
+            type: 'snapshot',
+            payload: {
+                balance: Number(state.balance) || 0,
+                level,
+                xp: Number(state.xp) || 0,
+                xpToNextLevel: atMaxLevel ? 0 : xpForLevel(level),
+                skillPoints: Number(state.skillPoints) || 0,
+                skills: collectorSkillsSnapshot(),
+                missions: collectorMissionsSnapshot()
+            }
+        }, '*');
+    }
+
+    function startCollectorBridge() {
+        if (window.__theBestCollectorBridgeStarted) return;
+        window.__theBestCollectorBridgeStarted = true;
+        window.addEventListener('message', event => {
+            if (event.source !== window.parent) return;
+            const message = event.data;
+            if (!message || message.channel !== 'the-best-collector') return;
+            if (message.type === 'buy-skill') {
+                buyCollectorSkill(message.payload && message.payload.skillId);
+            } else if (message.type === 'claim-mission') {
+                claimCollectorMission(message.payload && message.payload.missionId);
+            }
+        });
+        if (!collectorSnapshotTimer) collectorSnapshotTimer = setInterval(postCollectorSnapshot, 1000);
+        postCollectorSnapshot();
+    }
+
+    function buyCollectorSkill(skillId) {
+        const skill = COLLECTOR_SKILLS[skillId];
+        const level = getCollectorSkillLevel(skillId);
+        if (!skill || level >= skill.maxLevel) return postCollectorSnapshot();
+        const cost = skill.costs[level];
+        if ((Number(state.skillPoints) || 0) < cost) return postCollectorSnapshot();
+
+        state.skillPoints = (Number(state.skillPoints) || 0) - cost;
+        state.collectorSkillLevels[skillId] = level + 1;
+        if (skillId === 'museum-slots') {
+            museumSlots.push(null);
+            const museum = document.getElementById('museoOverlay');
+            if (museum && museum.classList.contains('open')) renderMuseo();
+        }
+
+        updateLevelDisplay();
+        if (!state.spinning) switchBox(currentKey);
+        else {
+            const costLabel = document.getElementById('boxCost');
+            if (costLabel && boxes[currentKey]) costLabel.textContent = `Costo: ${collectorCrateCost(boxes[currentKey].cost).toLocaleString()} $`;
+        }
+        saveGame();
+        postCollectorSnapshot();
+    }
+
+    function recordCollectorMissionAction(type, boxKey) {
+        if (!state.collectorMissionProgress) return;
+        synchronizeCollectorMissionPeriod();
+        const progress = state.collectorMissionProgress;
+        if (type === 'crate') {
+            progress.weeklyCrates = (Number(progress.weeklyCrates) || 0) + 1;
+            if (boxKey === 'tech') progress.dailyTech = (Number(progress.dailyTech) || 0) + 1;
+        } else if (type === 'auction') {
+            progress.dailyAuction = (Number(progress.dailyAuction) || 0) + 1;
+            progress.weeklyAuction = (Number(progress.weeklyAuction) || 0) + 1;
+        }
+        postCollectorSnapshot();
+    }
+
+    function grantCollectorPotion(type, durationSeconds) {
+        const now = Date.now();
+        state.collectorPotionEnds = state.collectorPotionEnds || {};
+        const endAt = Math.max(now, Number(state.collectorPotionEnds[type]) || 0) + durationSeconds * 1000;
+        state.collectorPotionEnds[type] = endAt;
+        const seconds = Math.ceil((endAt - now) / 1000);
+        if (type === 'luck') {
+            luckPotionActive = true;
+            luckPotionSecondsLeft = seconds;
+            document.getElementById('luckPotionInd').classList.add('active');
+        } else {
+            moneyPotionActive = true;
+            moneyPotionSecondsLeft = seconds;
+            document.getElementById('moneyPotionInd').classList.add('active');
+        }
+        if (typeof refreshShopPotionBtns === 'function') refreshShopPotionBtns();
+    }
+
+    function claimCollectorMission(missionId) {
+        const missions = collectorMissionsSnapshot();
+        const mission = missions.find(item => item.id === missionId);
+        if (!mission || !mission.completed || mission.claimed) return postCollectorSnapshot();
+        const claimedKey = {
+            'daily-tech': 'dailyTech',
+            'daily-auction': 'dailyAuction',
+            'weekly-crates': 'weeklyCrates',
+            'weekly-auction': 'weeklyAuction'
+        }[mission.id];
+        if (!claimedKey) return postCollectorSnapshot();
+
+        state.collectorMissionProgress.claimed[claimedKey] = true;
+        if (mission.reward.type === 'xp') {
+            addXP(mission.reward.amount);
+        } else if (mission.id === 'daily-auction') {
+            grantCollectorPotion('luck', 5 * 60);
+        } else {
+            grantCollectorPotion('money', 3 * 60);
+        }
+        saveGame();
+        postCollectorSnapshot();
+    }
+    // ═══════════════════ FIN HABILIDADES Y MISIONES ═══════════════════
+
+    // ═══════════════════ CALIDAD DE VIDA ═══════════════════
+    function getQolSettings() {
+        const defaults = { musicVolume: 100, effectsVolume: 100, parasitesEnabled: true, screenShakeEnabled: true };
+        const saved = state && state.qolSettings && typeof state.qolSettings === 'object' ? state.qolSettings : {};
+        const musicVolume = Number(saved.musicVolume);
+        const effectsVolume = Number(saved.effectsVolume);
+        return {
+            musicVolume: Number.isFinite(musicVolume) ? Math.max(0, Math.min(100, musicVolume)) : defaults.musicVolume,
+            effectsVolume: Number.isFinite(effectsVolume) ? Math.max(0, Math.min(100, effectsVolume)) : defaults.effectsVolume,
+            parasitesEnabled: saved.parasitesEnabled !== false,
+            screenShakeEnabled: saved.screenShakeEnabled !== false
+        };
+    }
+
+    function isParasitesEnabled() {
+        return getQolSettings().parasitesEnabled;
+    }
+
+    function applyQolSettings() {
+        const settings = getQolSettings();
+        if (effectsMasterGain && audioCtx) {
+            effectsMasterGain.gain.setTargetAtTime(settings.effectsVolume / 100, audioCtx.currentTime, 0.025);
+        }
+        if (typeof scWidget !== 'undefined' && scWidget && typeof scWidget.setVolume === 'function') {
+            try { scWidget.setVolume(Math.round(settings.musicVolume)); } catch (e) {}
+        }
+        document.body.classList.toggle('no-screen-shake', !settings.screenShakeEnabled);
+        if (!settings.screenShakeEnabled) document.body.style.transform = '';
+        const music = document.getElementById('musicVolumeSlider');
+        const effects = document.getElementById('effectsVolumeSlider');
+        const parasites = document.getElementById('parasitesEnabled');
+        const shake = document.getElementById('screenShakeEnabled');
+        if (music) music.value = String(Math.round(settings.musicVolume));
+        if (effects) effects.value = String(Math.round(settings.effectsVolume));
+        if (parasites) parasites.checked = settings.parasitesEnabled;
+        if (shake) shake.checked = settings.screenShakeEnabled;
+        const musicOutput = document.getElementById('musicVolumeOutput');
+        const effectsOutput = document.getElementById('effectsVolumeOutput');
+        if (musicOutput) musicOutput.textContent = `${Math.round(settings.musicVolume)}%`;
+        if (effectsOutput) effectsOutput.textContent = `${Math.round(settings.effectsVolume)}%`;
+    }
+
+    function initializeQolSettings() {
+        state.qolSettings = getQolSettings();
+        if (!state.chestRarityStats || typeof state.chestRarityStats !== 'object' || Array.isArray(state.chestRarityStats)) {
+            state.chestRarityStats = {};
+        }
+        applyQolSettings();
+    }
+
+    function previewQolVolume(key, value) {
+        if (key !== 'musicVolume' && key !== 'effectsVolume') return;
+        const settings = getQolSettings();
+        settings[key] = Math.max(0, Math.min(100, Number(value) || 0));
+        state.qolSettings = settings;
+        applyQolSettings();
+    }
+
+    function setQolSetting(key, value) {
+        const settings = getQolSettings();
+        if (key === 'musicVolume' || key === 'effectsVolume') {
+            settings[key] = Math.max(0, Math.min(100, Number(value) || 0));
+        } else if (key === 'parasitesEnabled' || key === 'screenShakeEnabled') {
+            settings[key] = !!value;
+        } else {
+            return;
+        }
+        state.qolSettings = settings;
+        applyQolSettings();
+        if (key === 'parasitesEnabled' && !settings.parasitesEnabled) disableActiveParasites();
+        saveGame();
+    }
+
+    function openSettings() {
+        if (state.over) return;
+        playSound('click');
+        applyQolSettings();
+        document.getElementById('qolSettingsOverlay').classList.add('open');
+    }
+
+    function closeSettings() {
+        const overlay = document.getElementById('qolSettingsOverlay');
+        if (overlay) overlay.classList.remove('open');
+        if (state && state.qolSettings) saveGame();
+    }
+
+    function disableActiveParasites() {
+        glitchCursorActive = false;
+        if (glitchCursorTimeout) clearTimeout(glitchCursorTimeout);
+        glitchCursorTimeout = null;
+        if (glitchCursorRaf) cancelAnimationFrame(glitchCursorRaf);
+        glitchCursorRaf = null;
+        if (glitchCursorMoveListener) document.removeEventListener('mousemove', glitchCursorMoveListener);
+        glitchCursorMoveListener = null;
+        document.body.style.cursor = '';
+        const cursor = document.getElementById('glitchCursor');
+        if (cursor) cursor.style.display = 'none';
+
+        thiefActive = false;
+        if (thiefRaf) cancelAnimationFrame(thiefRaf);
+        thiefRaf = null;
+        const thief = document.getElementById('thiefDiv');
+        if (thief) {
+            thief.style.display = 'none';
+            thief.onclick = null;
+        }
+        const sellButton = document.getElementById('sellAllBtn');
+        if (sellButton) sellButton.style.visibility = '';
+        document.querySelectorAll('.parasite-alert').forEach(alert => alert.remove());
+    }
+
+    function renderChestRarityStats() {
+        const container = document.getElementById('chestRarityStats');
+        if (!container) return;
+        container.innerHTML = '';
+        const allStats = state.chestRarityStats || {};
+        const rarityKeys = Object.keys(rarities);
+
+        Object.entries(boxes).forEach(([boxKey, box]) => {
+            const counts = allStats[boxKey] || {};
+            const total = rarityKeys.reduce((sum, rarity) => sum + (Number(counts[rarity]) || 0), 0);
+            const details = document.createElement('details');
+            details.className = 'chest-stat-details';
+            const summary = document.createElement('summary');
+            summary.textContent = `${box.label} · ${total.toLocaleString('es-ES')} objetos`;
+            details.appendChild(summary);
+            const grid = document.createElement('div');
+            grid.className = 'chest-stat-grid';
+            rarityKeys.forEach(rarity => {
+                const cell = document.createElement('div');
+                cell.className = 'chest-stat-cell';
+                const label = document.createElement('span');
+                label.textContent = rarities[rarity].label;
+                const value = document.createElement('b');
+                value.textContent = (Number(counts[rarity]) || 0).toLocaleString('es-ES');
+                cell.append(label, value);
+                grid.appendChild(cell);
+            });
+            details.appendChild(grid);
+            container.appendChild(details);
+        });
+    }
+    // ═══════════════════ FIN CALIDAD DE VIDA ═══════════════════
 
 </script>
 </body>
