@@ -1589,6 +1589,88 @@
 
         .splash-by span { color: #334155; }
 
+        /* ── TUTORIAL DE INICIO ─────────────────────────────────── */
+        .game-tutorial-overlay {
+            display:none; position:fixed; inset:0; z-index:12000;
+            align-items:center; justify-content:center; overflow-y:auto;
+            padding:18px; background:rgba(2,6,23,0.94); backdrop-filter:blur(18px);
+        }
+        .game-tutorial-overlay.open { display:flex; }
+        .game-tutorial-box {
+            width:min(740px,100%); max-height:90vh; overflow-y:auto;
+            padding:clamp(20px,4vw,34px); border:1px solid rgba(59,130,246,0.35);
+            border-radius:22px; background:linear-gradient(145deg,#0a1020,#111a2d);
+            box-shadow:0 28px 90px rgba(0,0,0,0.75),0 0 50px rgba(59,130,246,0.12);
+        }
+        .game-tutorial-kicker {
+            color:#60a5fa; font:11px 'JetBrains Mono',monospace;
+            letter-spacing:2px; text-align:center; text-transform:uppercase;
+        }
+        .game-tutorial-progress {
+            height:5px; margin:13px 0 20px; overflow:hidden;
+            border-radius:99px; background:rgba(255,255,255,0.08);
+        }
+        .game-tutorial-progress-fill {
+            width:0; height:100%; border-radius:inherit;
+            background:linear-gradient(90deg,#3b82f6,#a855f7); transition:width .25s ease;
+        }
+        .game-tutorial-icon {
+            width:66px; height:66px; display:grid; place-items:center; margin:0 auto 12px;
+            border:1px solid rgba(96,165,250,0.25); border-radius:20px;
+            background:rgba(59,130,246,0.08); font-size:34px;
+        }
+        .game-tutorial-title {
+            margin:0; color:#f8fafc; font:clamp(27px,5vw,38px) 'Bebas Neue',sans-serif;
+            letter-spacing:3px; text-align:center;
+        }
+        .game-tutorial-intro {
+            max-width:590px; margin:8px auto 18px; color:#94a3b8;
+            font-size:13px; line-height:1.65; text-align:center;
+        }
+        .game-tutorial-points { display:grid; gap:9px; margin:0; padding:0; list-style:none; }
+        .game-tutorial-point {
+            display:flex; align-items:flex-start; gap:10px; padding:11px 13px;
+            border:1px solid rgba(255,255,255,0.075); border-radius:11px;
+            background:rgba(255,255,255,0.025); color:#cbd5e1;
+            font-size:12px; line-height:1.55;
+        }
+        .game-tutorial-point-icon { flex-shrink:0; color:#60a5fa; font-size:15px; }
+        .game-tutorial-note {
+            margin-top:13px; padding:10px 12px; border-left:2px solid #fbbf24;
+            border-radius:0 8px 8px 0; background:rgba(251,191,36,0.06);
+            color:#fcd34d; font-size:11px; line-height:1.5;
+        }
+        .game-tutorial-actions {
+            display:flex; align-items:center; justify-content:space-between;
+            gap:8px; margin-top:22px;
+        }
+        .game-tutorial-action {
+            min-height:42px; padding:9px 15px; border:1px solid rgba(255,255,255,0.12);
+            border-radius:9px; background:rgba(255,255,255,0.045); color:#cbd5e1;
+            font:14px 'Bebas Neue',sans-serif; letter-spacing:1.5px; cursor:pointer;
+        }
+        .game-tutorial-action:disabled { opacity:.35; cursor:not-allowed; }
+        .game-tutorial-action.primary {
+            border-color:transparent; background:linear-gradient(135deg,#2563eb,#7c3aed);
+            color:#fff; box-shadow:0 5px 18px rgba(59,130,246,0.22);
+        }
+        .game-tutorial-skip {
+            border:0; background:transparent; color:#64748b;
+            font:11px 'JetBrains Mono',monospace; cursor:pointer;
+        }
+        .game-tutorial-reopen-btn {
+            padding:10px 22px; border:1px solid rgba(96,165,250,0.35);
+            border-radius:10px; background:rgba(59,130,246,0.08); color:#93c5fd;
+            font:14px 'Bebas Neue',sans-serif; letter-spacing:3px; cursor:pointer;
+        }
+        .game-tutorial-reopen-btn:hover { background:rgba(59,130,246,0.18); }
+        @media(max-width:520px) {
+            .game-tutorial-box { padding:20px 15px; }
+            .game-tutorial-point { padding:10px; font-size:11px; }
+            .game-tutorial-actions { flex-wrap:wrap; }
+            .game-tutorial-skip { order:3; width:100%; padding:8px; }
+        }
+
         /* Particle */
         .particle {
             position: fixed;
@@ -3693,8 +3775,25 @@
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;15/ 10 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #169</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #50</div>
     </div>
+</div>
+
+<div class="game-tutorial-overlay" id="gameTutorialOverlay" role="presentation">
+    <section class="game-tutorial-box" role="dialog" aria-modal="true" aria-labelledby="gameTutorialTitle">
+        <div class="game-tutorial-kicker" id="gameTutorialKicker">GUÍA INICIAL · PASO 1 DE 8</div>
+        <div class="game-tutorial-progress" aria-hidden="true"><div class="game-tutorial-progress-fill" id="gameTutorialProgress"></div></div>
+        <div class="game-tutorial-icon" id="gameTutorialIcon" aria-hidden="true">🎯</div>
+        <h2 class="game-tutorial-title" id="gameTutorialTitle">PREPARA TU COLECCIÓN</h2>
+        <p class="game-tutorial-intro" id="gameTutorialIntro"></p>
+        <ul class="game-tutorial-points" id="gameTutorialPoints"></ul>
+        <div class="game-tutorial-note" id="gameTutorialNote" style="display:none"></div>
+        <div class="game-tutorial-actions">
+            <button class="game-tutorial-action" id="gameTutorialPrev" type="button" onclick="previousGameTutorial()">← ATRÁS</button>
+            <button class="game-tutorial-skip" id="gameTutorialSkip" type="button" onclick="skipGameTutorial()">SALTAR TUTORIAL</button>
+            <button class="game-tutorial-action primary" id="gameTutorialNext" type="button" onclick="nextGameTutorial()">SIGUIENTE →</button>
+        </div>
+    </section>
 </div>
 
 <div class="wrapper" id="gameWrapper" style="display:none">
@@ -3819,6 +3918,7 @@
         <button class="daily-login-open-btn" id="dailyLoginOpenBtn" type="button" onclick="openDailyLoginModal()">🎁 &nbsp;BONO DIARIO</button>
         <button class="collector-missions-open-btn" id="collectorMissionsOpenBtn" type="button" onclick="openCollectorMissionsModal()">📜 &nbsp;MISIONES</button>
         <button class="collector-skills-open-btn" id="collectorSkillsOpenBtn" type="button" onclick="openCollectorSkillsModal()">🌳 &nbsp;ÁRBOL DE HABILIDADES</button>
+        <button class="game-tutorial-reopen-btn" id="gameTutorialOpenBtn" type="button" onclick="openGameTutorial(false)">📘 &nbsp;TUTORIAL</button>
         <button onclick="openStats()" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:10px 28px;border:1px solid rgba(99,102,241,0.4);border-radius:10px;background:rgba(99,102,241,0.1);color:#a5b4fc;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='rgba(99,102,241,0.1)'">📊 &nbsp;ESTADÍSTICAS DETALLADAS</button>
         <button onclick="openSettings()" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:10px 28px;border:1px solid rgba(251,191,36,0.35);border-radius:10px;background:rgba(251,191,36,0.08);color:#fbbf24;cursor:pointer;transition:all 0.2s;">⚙️ &nbsp;AJUSTES</button>
     </div>
@@ -6923,6 +7023,186 @@
         startCollectorBridge();
     }
 
+    const GAME_TUTORIAL_SEEN_KEY = 'theBestCollectorTutorialSeen_v1';
+    const GAME_TUTORIAL_STEPS = [
+        {
+            icon:'🎯',
+            title:'TU META: CONSTRUIR UNA FORTUNA',
+            intro:'Empiezas con 2.000 monedas. Haz crecer el saldo hasta la meta del juego combinando cofres, ventas y actividades.',
+            points:[
+                'Tu saldo aparece arriba a la derecha. Cada cofre indica su precio antes de abrirlo.',
+                'Puedes perder dinero si gastas más de lo que recuperas: alterna entre abrir, vender y probar otras actividades.'
+            ],
+            note:'La partida se guarda automáticamente; en la parte inferior también puedes exportar una copia.'
+        },
+        {
+            icon:'📦',
+            title:'COFRES, OBJETOS Y RAREZAS',
+            intro:'Elige una categoría en las pestañas y pulsa ABRIR COFRE. Cada apertura entrega un objeto aleatorio para tu inventario.',
+            points:[
+                'Los objetos van de Común a Mítico. Normalmente, cuanto más rara la pieza, mayor su valor.',
+                'La barra PITI avanza al abrir cofres y garantiza un Mítico al llegar a 100.'
+            ],
+            note:'Comprueba el coste de la categoría seleccionada antes de gastar monedas.'
+        },
+        {
+            icon:'🎒',
+            title:'INVENTARIO, VENTAS Y MUSEO',
+            intro:'Tu inventario guarda los objetos que consigues. Decide qué conservar y qué convertir en monedas.',
+            points:[
+                'Filtra y ordena por rareza, mutación o precio. Puedes vender piezas sueltas, una selección o todo menos los Míticos.',
+                'En el museo expones objetos para generar ingresos. La habilidad Conservador permite desbloquear más espacios.'
+            ],
+            note:'Los objetos vendidos dejan de estar disponibles para el museo, el taller o el mercado negro.'
+        },
+        {
+            icon:'🎲',
+            title:'SUBASTAS Y JUEGOS DE AZAR',
+            intro:'Hay varias formas de ganar —o arriesgar— monedas fuera de los cofres.',
+            points:[
+                'En las subastas compites con bots: puja, usa las tácticas disponibles o retírate.',
+                'En Cara o Cruz y en la ruleta de casino eliges una apuesta; el resultado puede aumentar o reducir tu saldo.',
+                'En póker eliges cuánto apostar, cambias las cartas que quieras y compites contra las manos de los bots.'
+            ],
+            note:'Cada actividad muestra sus controles y la apuesta antes de confirmar. No arriesgues monedas que necesites para abrir cofres.'
+        },
+        {
+            icon:'🎁',
+            title:'RACHA, MISIONES Y POTENCIADORES',
+            intro:'Las recompensas por entrar y las misiones ayudan a avanzar incluso cuando no abres cofres.',
+            points:[
+                'Reclama el bono diario para mantener tu racha: la recompensa aumenta hasta el día 7. Recuperar una racha perdida cuesta el 25% de tus monedas y no se puede hacer dos días seguidos.',
+                'Las misiones diarias y semanales rotan entre abrir, vender, jugar y otras actividades; reclama cada premio al completarlas.',
+                'Las pociones de la tienda y los eventos dan efectos temporales: revisa sus indicadores y temporizadores.'
+            ]
+        },
+        {
+            icon:'🌳',
+            title:'EXPERIENCIA Y ÁRBOL DE HABILIDADES',
+            intro:'Gana XP jugando. Al subir de nivel recibes puntos que puedes gastar en mejoras permanentes.',
+            points:[
+                'Suerte mejora las rarezas; Tasador aumenta el valor; Negociador abarata los cofres.',
+                'Conservador añade espacios de museo y Reflejos reduce el enfriamiento de Cara o Cruz.',
+                'Abre ÁRBOL DE HABILIDADES para ver el coste y el siguiente efecto antes de comprar.'
+            ]
+        },
+        {
+            icon:'🧪',
+            title:'TALLER, RULETAS Y MASCOTAS',
+            intro:'Cuando tengas más objetos, podrás probar sistemas de colección y mejoras adicionales.',
+            points:[
+                'En el taller fusionas hasta 5 objetos. Usar menos de 5 tiene riesgo de fallo y puede destruir los materiales; con 5 no hay fallo, pero se consumen.',
+                'Los Míticos que consigues cargan las ruletas especiales: 5 para la Mítica, 10 para la Súper Mítica y 2 tiradas Súper para la Hyper.',
+                'Las mascotas se pueden comprar y equipar para activar sus bonificaciones.'
+            ]
+        },
+        {
+            icon:'🚀',
+            title:'SISTEMAS AVANZADOS',
+            intro:'Más adelante encontrarás herramientas para acelerar o cambiar tu progreso.',
+            points:[
+                'El Mercado Negro intercambia un Mítico duplicado por otro Mítico aleatorio. Los favoritos no se pueden entregar.',
+                'Los préstamos dan monedas ahora, pero se devuelven con un 20% de interés antes de que acabe el plazo.',
+                'El Auto Abrir se desbloquea por 10.000.000 monedas. El Prestigio cuesta monedas y añade un 2% de bonificación por nivel.'
+            ],
+            note:'Las funciones avanzadas se desbloquean a medida que reúnes monedas y objetos.'
+        }
+    ];
+    let gameTutorialIndex = 0;
+    let gameTutorialStartsGame = false;
+
+    function hasSeenGameTutorial() {
+        try { return localStorage.getItem(GAME_TUTORIAL_SEEN_KEY) === '1'; }
+        catch (error) { return false; }
+    }
+
+    function markGameTutorialSeen() {
+        try { localStorage.setItem(GAME_TUTORIAL_SEEN_KEY, '1'); }
+        catch (error) {}
+    }
+
+    function openGameTutorial(startAfterTutorial = false) {
+        gameTutorialStartsGame = !!startAfterTutorial;
+        gameTutorialIndex = 0;
+        const overlay = document.getElementById('gameTutorialOverlay');
+        if (!overlay) {
+            if (gameTutorialStartsGame) startGame();
+            return;
+        }
+        overlay.classList.add('open');
+        renderGameTutorial();
+    }
+
+    function renderGameTutorial() {
+        const step = GAME_TUTORIAL_STEPS[gameTutorialIndex];
+        if (!step) return;
+        const finalStep = gameTutorialIndex === GAME_TUTORIAL_STEPS.length - 1;
+        document.getElementById('gameTutorialKicker').textContent = `GUÍA ${gameTutorialStartsGame ? 'INICIAL' : 'RÁPIDA'} · PASO ${gameTutorialIndex + 1} DE ${GAME_TUTORIAL_STEPS.length}`;
+        document.getElementById('gameTutorialProgress').style.width = `${((gameTutorialIndex + 1) / GAME_TUTORIAL_STEPS.length) * 100}%`;
+        document.getElementById('gameTutorialIcon').textContent = step.icon;
+        document.getElementById('gameTutorialTitle').textContent = step.title;
+        document.getElementById('gameTutorialIntro').textContent = step.intro;
+
+        const points = document.getElementById('gameTutorialPoints');
+        points.innerHTML = '';
+        step.points.forEach(text => {
+            const item = document.createElement('li');
+            item.className = 'game-tutorial-point';
+            const icon = document.createElement('span');
+            icon.className = 'game-tutorial-point-icon';
+            icon.textContent = '◆';
+            const detail = document.createElement('span');
+            detail.textContent = text;
+            item.append(icon, detail);
+            points.appendChild(item);
+        });
+
+        const note = document.getElementById('gameTutorialNote');
+        note.textContent = step.note || '';
+        note.style.display = step.note ? 'block' : 'none';
+        const previous = document.getElementById('gameTutorialPrev');
+        previous.disabled = gameTutorialIndex === 0;
+        document.getElementById('gameTutorialNext').textContent = finalStep
+            ? (gameTutorialStartsGame ? 'EMPEZAR A JUGAR ▶' : 'TERMINAR ✓')
+            : 'SIGUIENTE →';
+        document.getElementById('gameTutorialSkip').textContent = gameTutorialStartsGame
+            ? 'SALTAR TUTORIAL Y JUGAR'
+            : 'CERRAR TUTORIAL';
+    }
+
+    function nextGameTutorial() {
+        if (gameTutorialIndex < GAME_TUTORIAL_STEPS.length - 1) {
+            gameTutorialIndex++;
+            renderGameTutorial();
+        } else {
+            finishGameTutorial();
+        }
+    }
+
+    function previousGameTutorial() {
+        if (gameTutorialIndex > 0) {
+            gameTutorialIndex--;
+            renderGameTutorial();
+        }
+    }
+
+    function finishGameTutorial() {
+        const startAfterTutorial = gameTutorialStartsGame;
+        markGameTutorialSeen();
+        document.getElementById('gameTutorialOverlay').classList.remove('open');
+        gameTutorialStartsGame = false;
+        if (startAfterTutorial) startGame();
+    }
+
+    function skipGameTutorial() {
+        finishGameTutorial();
+    }
+
+    function startFromSplash() {
+        if (hasSeenGameTutorial()) startGame();
+        else openGameTutorial(true);
+    }
+
     function showSaveNotice() {
         const notice = document.createElement('div');
         notice.style.cssText = `
@@ -9032,7 +9312,7 @@
     startPotionTimers();
 
     document.getElementById('playBtn').addEventListener('click', () => {
-        startGame();
+        startFromSplash();
     });
 
     // ── CRAFTEO ──────────────────────────────────────────────────────────────
