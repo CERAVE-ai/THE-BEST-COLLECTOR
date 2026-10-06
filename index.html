@@ -2654,6 +2654,24 @@
         .idiota-ruleta-card .ir-name  { font-size: 8px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: rgba(255,255,255,0.85); line-height: 1.3; }
         .idiota-ruleta-card .ir-price { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: #84cc16; margin-top: 4px; }
 
+        .anuncios-espana-ruleta-card {
+            min-width: 140px; width: 140px; height: 90%;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            gap: 2px; padding: 9px 8px; text-align: center; border-radius: 8px;
+            position: relative; border: 1px solid var(--aes-accent, #fbbf24);
+            border-top: 4px solid var(--aes-accent, #fbbf24);
+            background: var(--aes-card-bg, rgba(15,23,42,0.95));
+            box-shadow: 0 0 18px var(--aes-glow, rgba(251,191,36,0.3)), inset 0 0 18px var(--aes-glow, rgba(251,191,36,0.15));
+            animation: anunciosEspanaCardPulse 2s ease-in-out infinite;
+        }
+        .anuncios-espana-ruleta-card .aes-icon { font-size: 34px; line-height: 1; margin-bottom: 4px; }
+        .anuncios-espana-ruleta-card .aes-name { font-size: 8px; font-weight: 800; letter-spacing: 0.8px; text-transform: uppercase; color: rgba(255,255,255,0.95); line-height: 1.2; }
+        .anuncios-espana-ruleta-card .aes-price { font-family: 'JetBrains Mono', monospace; font-size: 9px; font-weight: 700; color: var(--aes-accent, #fbbf24); margin-top: 3px; }
+        @keyframes anunciosEspanaCardPulse {
+            0%, 100% { filter: brightness(0.94); }
+            50% { filter: brightness(1.18); }
+        }
+
         #idiotaRuletaModal {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88);
             backdrop-filter: blur(16px); z-index: 800; align-items: center; justify-content: center;
@@ -2672,6 +2690,30 @@
             content: ''; position: absolute; top: -80px; left: 50%; transform: translateX(-50%);
             width: 260px; height: 260px; border-radius: 50%;
             background: radial-gradient(circle, rgba(132,204,22,0.25), transparent 70%);
+            pointer-events: none;
+        }
+
+        #anunciosEspanaRuletaModal {
+            display: none; position: fixed; inset: 0; background: rgba(3,5,14,0.92);
+            backdrop-filter: blur(18px); z-index: 820; align-items: center; justify-content: center;
+        }
+        #anunciosEspanaRuletaModal.show { display: flex; }
+        #anunciosEspanaRuletaModalBox {
+            --aes-accent: #fbbf24;
+            --aes-glow: rgba(251,191,36,0.35);
+            background: linear-gradient(145deg, #170817, #07101e 72%);
+            border: 2px solid var(--aes-accent);
+            border-radius: 28px; padding: 42px 34px; text-align: center;
+            position: relative; overflow: hidden; max-width: 500px; width: 92vw;
+            box-shadow: 0 0 70px var(--aes-glow), 0 24px 60px rgba(0,0,0,0.7);
+            transform: scale(0.85) translateY(30px); opacity: 0;
+            transition: all 0.45s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+        #anunciosEspanaRuletaModalBox.open { transform: scale(1) translateY(0); opacity: 1; }
+        #anunciosEspanaRuletaModalBox::before {
+            content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+            width: 280px; height: 280px; border-radius: 50%;
+            background: radial-gradient(circle, var(--aes-glow), transparent 72%);
             pointer-events: none;
         }
 
@@ -3533,6 +3575,26 @@
             100% { border-top-color:#f97316; box-shadow:0 0 22px #f97316, 0 0 44px rgba(249,115,22,0.55), inset 0 0 18px rgba(249,115,22,0.18); transform:scale(1); }
         }
 
+        /* ── ANUNCIOS ESPAÑA: objetos exclusivos con paleta propia ── */
+        .inv-card-anuncios-espana {
+            border-top: 4px solid var(--aes-accent, #fbbf24) !important;
+            background: var(--aes-card-bg, rgba(15,23,42,0.95)) !important;
+            box-shadow: 0 0 18px var(--aes-glow, rgba(251,191,36,0.3)), inset 0 0 18px var(--aes-glow, rgba(251,191,36,0.15)) !important;
+            animation: anunciosEspanaInvPulse 2.4s ease-in-out infinite;
+        }
+        .inv-card-anuncios-espana .inv-card-bar { background: var(--aes-accent, #fbbf24) !important; }
+        .inv-card-anuncios-espana .inv-card-name { color: var(--aes-accent, #fbbf24); }
+        .inv-card-anuncios-espana .inv-card-price { color: var(--aes-accent, #fbbf24); }
+        .anuncios-espana-badge {
+            color: var(--aes-accent, #fbbf24);
+            border: 1px solid var(--aes-accent, #fbbf24);
+            background: var(--aes-glow, rgba(251,191,36,0.16));
+        }
+        @keyframes anunciosEspanaInvPulse {
+            0%, 100% { box-shadow: 0 0 14px var(--aes-glow, rgba(251,191,36,0.3)), inset 0 0 12px var(--aes-glow, rgba(251,191,36,0.12)); }
+            50% { box-shadow: 0 0 30px var(--aes-glow, rgba(251,191,36,0.45)), inset 0 0 22px var(--aes-glow, rgba(251,191,36,0.22)); }
+        }
+
         /* ── RECOMPENSA DIARIA ───────────────────────────────────── */
         .daily-login-overlay {
             display:none; position:fixed; inset:0; z-index:9950;
@@ -4178,6 +4240,23 @@
         </div>
         <div class="ruleta-cost-info">Precio por tirada: <span style="color:#84cc16;">2.500.000.000 $</span></div>
         <button class="ruleta-spin-btn" id="idiotaRuletaSpinBtn" style="background:linear-gradient(135deg,#3f6212,#65a30d,#84cc16);box-shadow:0 0 30px rgba(132,204,22,0.5),0 8px 24px rgba(0,0,0,0.4);">🤡 GIRAR RULETA DE IDIOTAS</button>
+    </div>
+
+    <!-- RULETA ESPECIAL: ANUNCIOS ESPAÑA -->
+    <div id="anunciosEspanaRuletaSection" style="margin-top:40px;margin-bottom:24px;padding:22px 18px 26px;border:1px solid rgba(248,113,113,0.38);border-radius:22px;background:radial-gradient(ellipse at 50% 0%,rgba(220,38,38,0.12),transparent 65%),linear-gradient(145deg,rgba(24,7,14,0.72),rgba(7,12,24,0.92));box-shadow:0 0 38px rgba(220,38,38,0.12),inset 0 1px 0 rgba(255,255,255,0.06);">
+        <div class="inventory-header">
+            <div class="inventory-title" style="background:linear-gradient(90deg,#ef4444,#fbbf24,#fff1b8,#ef4444);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🇪🇸 Ruleta Especial: Anuncios España</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#fbbf24;">Premios publicitarios ultraexclusivos</div>
+        </div>
+        <div style="text-align:center;margin-bottom:16px;">
+            <div class="box-badge" style="border-color:#fbbf24;color:#ffe08a;background:linear-gradient(135deg,rgba(220,38,38,0.18),rgba(251,191,36,0.16));box-shadow:0 0 22px rgba(251,191,36,0.18);">📺 🇪🇸 ANUNCIOS ESPAÑA · ESPECIAL</div>
+        </div>
+        <div class="ruleta-wrap" id="anunciosEspanaRuletaCase" style="border-color:rgba(251,191,36,0.6);box-shadow:0 0 48px rgba(220,38,38,0.18),0 0 34px rgba(251,191,36,0.14),inset 0 1px 0 rgba(255,255,255,0.08);">
+            <div class="ruleta-marker" style="background:#fff1b8;box-shadow:0 0 18px #fbbf24,0 0 42px rgba(239,68,68,0.62);"></div>
+            <div class="ruleta-reel" id="anunciosEspanaRuletaReel"></div>
+        </div>
+        <div class="ruleta-cost-info">Precio por tirada: <span style="color:#ffe08a;">70.000.000.000 €</span> · 5 premios publicitarios exclusivos</div>
+        <button class="ruleta-spin-btn" id="anunciosEspanaRuletaSpinBtn" style="background:linear-gradient(115deg,#991b1b,#dc2626 42%,#b45309 72%,#eab308);box-shadow:0 0 34px rgba(220,38,38,0.48),0 0 20px rgba(251,191,36,0.32),0 8px 24px rgba(0,0,0,0.5);">🇪🇸 GIRAR ANUNCIOS ESPAÑA</button>
     </div>
 
     <!-- BATALLAS DE SUBASTAS EN VIVO -->
@@ -4944,6 +5023,21 @@
             <div id="idiotaRuletaModalPrice" style="font-family:'JetBrains Mono',monospace;font-size:28px;font-weight:700;color:#84cc16;"></div>
         </div>
         <button class="modal-close-btn" id="idiotaRuletaModalCloseBtn" style="background:linear-gradient(135deg,#3f6212,#84cc16);color:white;">COLECCIONAR 🤡</button>
+    </div>
+</div>
+
+<!-- RULETA ESPECIAL ANUNCIOS ESPAÑA MODAL -->
+<div id="anunciosEspanaRuletaModal">
+    <div id="anunciosEspanaRuletaModalBox">
+        <div style="position:absolute;top:-70px;left:50%;transform:translateX(-50%);width:230px;height:230px;border-radius:50%;background:linear-gradient(135deg,#ef4444,#fbbf24,#fff1b8);filter:blur(70px);opacity:0.24;pointer-events:none;"></div>
+        <div style="position:relative;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:var(--aes-accent);margin-bottom:12px;">🇪🇸 PREMIO PUBLICITARIO EXCLUSIVO</div>
+        <div id="anunciosEspanaRuletaModalIcon" style="position:relative;font-size:94px;line-height:1;margin:16px 0;filter:drop-shadow(0 0 34px var(--aes-glow));animation:floatIcon 3s ease-in-out infinite;">📺</div>
+        <div id="anunciosEspanaRuletaModalName" style="position:relative;font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:3px;margin:0 auto 8px;color:white;max-width:420px;line-height:1.15;"></div>
+        <div style="position:relative;background:rgba(0,0,0,0.42);border:1px solid var(--aes-glow);border-radius:14px;padding:16px;margin-bottom:24px;">
+            <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#94a3b8;margin-bottom:4px;">Valor del premio</div>
+            <div id="anunciosEspanaRuletaModalPrice" style="font-family:'JetBrains Mono',monospace;font-size:clamp(20px,5vw,30px);font-weight:700;color:var(--aes-accent);"></div>
+        </div>
+        <button class="modal-close-btn" id="anunciosEspanaRuletaModalCloseBtn" style="position:relative;background:linear-gradient(115deg,#991b1b,#dc2626 48%,#b45309 76%,#eab308);color:white;box-shadow:0 0 24px var(--aes-glow);">COLECCIONAR 🇪🇸</button>
     </div>
 </div>
 
@@ -5781,23 +5875,30 @@
         }
         entries.forEach(({ item, origIdx }) => {
             const salePrice = item.price;
+            const itemCurrency = item.currency || '$';
             const isFav = !!item.favorite;
             const d = document.createElement('div');
             let invCardClass = 'inv-card' + (isFav ? ' favorited' : '');
             if (item.source === 'hyper') invCardClass += ' inv-card-hyper';
             else if (item.source === 'super') invCardClass += ' inv-card-super';
+            else if (item.source === 'anuncios-espana') invCardClass += ' inv-card-anuncios-espana';
             d.className = invCardClass;
+            if (item.source === 'anuncios-espana') {
+                d.style.setProperty('--aes-accent', item.accent || '#fbbf24');
+                d.style.setProperty('--aes-glow', item.glow || 'rgba(251,191,36,0.3)');
+                d.style.setProperty('--aes-card-bg', item.cardBg || 'rgba(15,23,42,0.95)');
+            }
             d.innerHTML = `
-                <div class="inv-card-bar" style="background:${rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24'}"></div>
+                <div class="inv-card-bar" style="background:${item.source === 'anuncios-espana' ? item.accent : (rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24')}"></div>
                 <div class="fav-btn" title="${isFav ? 'Quitar favorito' : 'Marcar favorito'}">${isFav ? '⭐' : '☆'}</div>
                 ${item.infected && !item.parasiteUsed ? '<div class="infected-badge" title="¡Objeto infectado! Si lo guardas mucho tiempo...">🦠</div>' : ''}
                 <div class="inv-card-icon">${item.icon}</div>
                 <div class="inv-card-name">${item.name}</div>
-                ${(() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
-                <div class="inv-card-price">${salePrice.toLocaleString()} $</div>
+                ${item.source === 'anuncios-espana' ? '<div class="mutation-badge anuncios-espana-badge">🇪🇸 ANUNCIOS ESPAÑA</div>' : (() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
+                <div class="inv-card-price">${salePrice.toLocaleString('es-ES')} ${itemCurrency}</div>
                 <div class="sell-overlay">
                     <div class="sell-overlay-text">💰 VENDER</div>
-                    <div class="sell-overlay-price">${salePrice.toLocaleString()} $</div>
+                    <div class="sell-overlay-price">${salePrice.toLocaleString('es-ES')} ${itemCurrency}</div>
                 </div>
             `;
             d.querySelector('.fav-btn').addEventListener('click', (e) => {
@@ -5901,6 +6002,7 @@
         document.getElementById('progressFill').style.width = `${Math.min((state.balance / WIN_GOAL) * 100, 100)}%`;
         if (state.balance > (state.maxBalance||0)) state.maxBalance = state.balance;
         if (typeof updateIdiotaRuletaBtn === 'function') updateIdiotaRuletaBtn();
+        if (typeof updateAnunciosEspanaRuletaBtn === 'function') updateAnunciosEspanaRuletaBtn();
         if (typeof updatePrestigioBtn === 'function') updatePrestigioBtn();
     }
 
@@ -8586,6 +8688,163 @@
     setupIdiotaRuleta();
     updateIdiotaRuletaBtn();
 
+    // ─── RULETA ESPECIAL: ANUNCIOS ESPAÑA ────────────────────────────────────────
+    const ANUNCIOS_ESPANA_SPIN_COST = 70000000000;
+    const anunciosEspanaItems = [
+        { name:'Carglass', icon:'🪟', price:72000000000, probability:35, accent:'#38bdf8', glow:'rgba(56,189,248,0.34)', cardBg:'radial-gradient(circle at 50% 0%,rgba(56,189,248,0.34),transparent 58%),linear-gradient(145deg,#061827,#0b2d45)' },
+        { name:'Verisure/Securitas Direct', icon:'🔐', price:65000000000, probability:50, accent:'#fb923c', glow:'rgba(251,146,60,0.34)', cardBg:'radial-gradient(circle at 80% 10%,rgba(251,146,60,0.32),transparent 56%),linear-gradient(145deg,#20110b,#472411)' },
+        { name:'Soy Antonio Lobato', icon:'🏁', price:150000000000, probability:1, accent:'#fb3159', glow:'rgba(251,49,89,0.38)', cardBg:'radial-gradient(circle at 50% 0%,rgba(251,49,89,0.36),transparent 58%),linear-gradient(145deg,#260711,#4a0b1d)' },
+        { name:'Lea estas instrucciones y consulte a su farmacéutico', icon:'💊', price:100000000000, probability:4, accent:'#c084fc', glow:'rgba(192,132,252,0.36)', cardBg:'radial-gradient(circle at 18% 10%,rgba(192,132,252,0.34),transparent 54%),linear-gradient(145deg,#15102b,#183229)' },
+        { name:'Mi vecino Jose', icon:'📣', price:95000000000, probability:10, accent:'#facc15', glow:'rgba(250,204,21,0.38)', cardBg:'radial-gradient(circle at 50% 0%,rgba(250,204,21,0.32),transparent 58%),linear-gradient(145deg,#28100c,#4c210d)' }
+    ];
+    let anunciosEspanaRuletaSpinning = false;
+
+    function pickAnunciosEspanaItem() {
+        const totalWeight = anunciosEspanaItems.reduce((sum, item) => sum + item.probability, 0);
+        let roll = Math.random() * totalWeight;
+        for (const item of anunciosEspanaItems) {
+            roll -= item.probability;
+            if (roll < 0) return item;
+        }
+        return anunciosEspanaItems[anunciosEspanaItems.length - 1];
+    }
+
+    function setupAnunciosEspanaRuleta() {
+        const reel = document.getElementById('anunciosEspanaRuletaReel');
+        if (!reel) return;
+        reel.innerHTML = '';
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        for (let i = 0; i < 60; i++) {
+            const item = pickAnunciosEspanaItem();
+            const card = document.createElement('div');
+            card.className = 'anuncios-espana-ruleta-card';
+            card.style.minWidth = cardW + 'px';
+            card.style.width = cardW + 'px';
+            card.style.setProperty('--aes-accent', item.accent);
+            card.style.setProperty('--aes-glow', item.glow);
+            card.style.setProperty('--aes-card-bg', item.cardBg);
+            card.innerHTML = `<div class="aes-icon">${item.icon}</div><div class="aes-name">${item.name}</div><div class="aes-price">${item.price.toLocaleString('es-ES')} €</div>`;
+            card._item = item;
+            reel.appendChild(card);
+        }
+        reel.style.transition = 'none';
+        reel.style.transform = 'translateX(0px)';
+    }
+
+    function spinAnunciosEspanaRuleta() {
+        if (state.over || state.spinning || anunciosEspanaRuletaSpinning) return;
+        const btn = document.getElementById('anunciosEspanaRuletaSpinBtn');
+        if (state.balance < ANUNCIOS_ESPANA_SPIN_COST) {
+            playSound('click');
+            btn.classList.add('shake');
+            setTimeout(() => btn.classList.remove('shake'), 400);
+            return;
+        }
+
+        state.balance -= ANUNCIOS_ESPANA_SPIN_COST;
+        state.spent += ANUNCIOS_ESPANA_SPIN_COST;
+        updateStats();
+        saveGame();
+
+        anunciosEspanaRuletaSpinning = true;
+        btn.disabled = true;
+        setupAnunciosEspanaRuleta();
+        const reel = document.getElementById('anunciosEspanaRuletaReel');
+        const caseEl = document.getElementById('anunciosEspanaRuletaCase');
+        void reel.offsetWidth;
+        caseEl.style.boxShadow = '0 0 70px rgba(239,68,68,0.5),0 0 52px rgba(251,191,36,0.42),inset 0 1px 0 rgba(255,255,255,0.1)';
+
+        const spinDur = ceravePotionActive ? Math.round(5400 * 0.333) : 5400;
+        const winIdx = 55;
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        const tx = -((winIdx * cardW) - (caseEl.offsetWidth / 2) + cardW / 2);
+        reel.style.transition = `transform ${spinDur / 1000}s cubic-bezier(0.12,0,0.04,1)`;
+        reel.style.transform = `translateX(${tx}px)`;
+
+        let lastTickIdx = -1;
+        const tickCheck = () => {
+            if (!anunciosEspanaRuletaSpinning) return;
+            const rect = reel.getBoundingClientRect();
+            const idx = Math.floor((window.innerWidth / 2 - rect.left) / cardW);
+            if (idx !== lastTickIdx && idx >= 0) {
+                playSound('tick');
+                lastTickIdx = idx;
+            }
+            requestAnimationFrame(tickCheck);
+        };
+        tickCheck();
+
+        setTimeout(() => {
+            caseEl.style.boxShadow = '';
+            const winner = reel.querySelectorAll('.anuncios-espana-ruleta-card')[winIdx]._item;
+            const wonItem = {
+                ...winner,
+                rarity: 'mitico',
+                favorite: false,
+                mutation: 'normal',
+                source: 'anuncios-espana',
+                currency: '€'
+            };
+            inventory.push(wonItem);
+            state.invValue += wonItem.price;
+            if (wonItem.price > state.best) state.best = wonItem.price;
+            renderInventory();
+            updateStats();
+            checkAchievements();
+            saveGame();
+            showAnunciosEspanaRuletaModal(wonItem);
+            anunciosEspanaRuletaSpinning = false;
+            btn.disabled = false;
+            updateAnunciosEspanaRuletaBtn();
+            checkEnd();
+        }, spinDur + 200);
+    }
+
+    function showAnunciosEspanaRuletaModal(item) {
+        const overlay = document.getElementById('anunciosEspanaRuletaModal');
+        const box = document.getElementById('anunciosEspanaRuletaModalBox');
+        box.style.setProperty('--aes-accent', item.accent);
+        box.style.setProperty('--aes-glow', item.glow);
+        document.getElementById('anunciosEspanaRuletaModalIcon').textContent = item.icon;
+        document.getElementById('anunciosEspanaRuletaModalName').textContent = item.name;
+        document.getElementById('anunciosEspanaRuletaModalPrice').textContent = `${item.price.toLocaleString('es-ES')} €`;
+        overlay.classList.add('show');
+        setTimeout(() => box.classList.add('open'), 10);
+        confetti({ particleCount:420, spread:160, colors:[item.accent,'#ef4444','#fbbf24','#fff1b8','#ffffff'] });
+        setTimeout(() => confetti({ particleCount:180, spread:100, origin:{x:0.12,y:0.5}, colors:[item.accent,'#ef4444','#fbbf24'] }), 300);
+        setTimeout(() => confetti({ particleCount:180, spread:100, origin:{x:0.88,y:0.5}, colors:[item.accent,'#fbbf24','#ffffff'] }), 500);
+        playSound('win');
+    }
+
+    function closeAnunciosEspanaRuletaModal() {
+        const box = document.getElementById('anunciosEspanaRuletaModalBox');
+        box.classList.remove('open');
+        setTimeout(() => {
+            document.getElementById('anunciosEspanaRuletaModal').classList.remove('show');
+            checkEnd();
+        }, 350);
+    }
+
+    function updateAnunciosEspanaRuletaBtn() {
+        const btn = document.getElementById('anunciosEspanaRuletaSpinBtn');
+        if (!btn) return;
+        const affordable = state.balance >= ANUNCIOS_ESPANA_SPIN_COST;
+        btn.disabled = !affordable || state.over || anunciosEspanaRuletaSpinning;
+        btn.textContent = affordable
+            ? '🇪🇸 GIRAR ANUNCIOS ESPAÑA (70.000.000.000 €)'
+            : 'NECESITAS 70.000.000.000 €';
+        btn.style.opacity = btn.disabled ? '0.45' : '1';
+        btn.style.cursor = btn.disabled ? 'not-allowed' : 'pointer';
+    }
+
+    document.getElementById('anunciosEspanaRuletaSpinBtn').addEventListener('click', spinAnunciosEspanaRuleta);
+    document.getElementById('anunciosEspanaRuletaModalCloseBtn').addEventListener('click', closeAnunciosEspanaRuletaModal);
+    document.getElementById('anunciosEspanaRuletaModal').addEventListener('click', function(e) {
+        if (e.target === this) closeAnunciosEspanaRuletaModal();
+    });
+    setupAnunciosEspanaRuleta();
+    updateAnunciosEspanaRuletaBtn();
+
     // ─── MÁQUINA DE JACKPOT ─────────────────────────────────────────────────────
     const slotSymbols = [
         { icon: '🍒', label: 'Cereza',   weight: 35, mult3: 2   },
@@ -9253,7 +9512,7 @@
         const cost = prestigeCost();
         if (state.balance < cost) return;
         playSound('money');
-        state.balance -= cost;
+        state.balance = 2000;
         state.spent   += cost;
         state.prestige++;
         addXP(500);
