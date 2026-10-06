@@ -3450,6 +3450,232 @@
             80%  { border-top-color:#ff6b35; box-shadow:0 0 24px #ff6b35, 0 0 48px rgba(255,107,53,0.6), inset 0 0 20px rgba(255,107,53,0.2); transform:scale(1.01); }
             100% { border-top-color:#f97316; box-shadow:0 0 22px #f97316, 0 0 44px rgba(249,115,22,0.55), inset 0 0 18px rgba(249,115,22,0.18); transform:scale(1); }
         }
+
+        /* ── RECOMPENSA DIARIA ───────────────────────────────────── */
+        .daily-login-overlay {
+            display:none; position:fixed; inset:0; z-index:9950;
+            align-items:center; justify-content:center; overflow-y:auto;
+            padding:18px; background:rgba(0,0,0,0.88); backdrop-filter:blur(16px);
+        }
+        .daily-login-overlay.open { display:flex; }
+        .daily-login-box {
+            width:min(520px,100%); padding:26px;
+            background:linear-gradient(145deg,#0a0c1a,#111426);
+            border:1px solid rgba(74,222,128,0.34); border-radius:22px;
+            box-shadow:0 24px 80px rgba(0,0,0,0.7),0 0 38px rgba(34,197,94,0.12);
+            text-align:center; position:relative; overflow:hidden;
+        }
+        .daily-login-box::before {
+            content:''; position:absolute; top:0; left:0; right:0; height:3px;
+            background:linear-gradient(90deg,transparent,#4ade80,#fbbf24,transparent);
+        }
+        .daily-login-title {
+            margin:0 0 5px; color:#4ade80;
+            font:30px 'Bebas Neue',sans-serif; letter-spacing:4px;
+        }
+        .daily-login-caption {
+            margin:0 0 20px; color:#94a3b8; font-size:12px; line-height:1.5;
+        }
+        .daily-login-stats {
+            display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px;
+        }
+        .daily-login-stat {
+            padding:13px 10px; border:1px solid rgba(255,255,255,0.09);
+            border-radius:12px; background:rgba(255,255,255,0.035);
+        }
+        .daily-login-stat-label {
+            display:block; color:#64748b; font-size:9px; font-weight:700;
+            letter-spacing:1.5px; text-transform:uppercase; margin-bottom:5px;
+        }
+        .daily-login-stat-value {
+            display:block; color:#fbbf24; font:20px 'JetBrains Mono',monospace;
+            font-weight:700; overflow-wrap:anywhere;
+        }
+        .daily-login-message {
+            min-height:42px; margin:10px 0 16px; padding:10px 12px;
+            border:1px solid rgba(255,255,255,0.07); border-radius:10px;
+            background:rgba(0,0,0,0.2); color:#cbd5e1;
+            font-size:12px; line-height:1.5;
+        }
+        .daily-login-actions { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+        .daily-login-action {
+            min-height:48px; padding:10px 12px; border:0; border-radius:10px;
+            font:16px 'Bebas Neue',sans-serif; letter-spacing:1.5px;
+            cursor:pointer; transition:transform 0.2s,filter 0.2s;
+        }
+        .daily-login-action:hover:not(:disabled) { transform:translateY(-2px); filter:brightness(1.12); }
+        .daily-login-action:disabled { opacity:0.45; cursor:not-allowed; }
+        .daily-login-claim { background:linear-gradient(135deg,#166534,#4ade80); color:#06120a; }
+        .daily-login-recover { background:linear-gradient(135deg,#92400e,#fbbf24); color:#171006; }
+        .daily-login-close {
+            margin-top:12px; padding:9px 20px; border:1px solid rgba(255,255,255,0.12);
+            border-radius:9px; background:rgba(255,255,255,0.05); color:#cbd5e1;
+            font:14px 'Bebas Neue',sans-serif; letter-spacing:2px; cursor:pointer;
+        }
+        .daily-login-open-btn {
+            font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px;
+            padding:10px 28px; border:1px solid rgba(74,222,128,0.38);
+            border-radius:10px; background:rgba(34,197,94,0.09); color:#4ade80;
+            cursor:pointer; transition:all 0.2s;
+        }
+        .daily-login-open-btn:hover { background:rgba(34,197,94,0.18); }
+        @media(max-width:480px) {
+            .daily-login-box { padding:22px 16px; }
+            .daily-login-actions { grid-template-columns:1fr; }
+            .daily-login-title { font-size:26px; }
+        }
+
+        /* ── PANEL DE MISIONES ───────────────────────────────────── */
+        .collector-missions-overlay {
+            display:none; position:fixed; inset:0; z-index:9950;
+            align-items:center; justify-content:center; overflow-y:auto;
+            padding:18px; background:rgba(0,0,0,0.9); backdrop-filter:blur(16px);
+        }
+        .collector-missions-overlay.open { display:flex; }
+        .collector-missions-box {
+            width:min(760px,100%); max-height:min(88vh,900px); overflow-y:auto;
+            padding:24px; background:linear-gradient(145deg,#0a0c1a,#111426);
+            border:1px solid rgba(99,102,241,0.35); border-radius:20px;
+            box-shadow:0 24px 80px rgba(0,0,0,0.75);
+        }
+        .collector-missions-heading {
+            margin:0 0 4px; text-align:center; color:#a5b4fc;
+            font:30px 'Bebas Neue',sans-serif; letter-spacing:4px;
+        }
+        .collector-missions-caption {
+            margin:0 0 18px; text-align:center; color:#64748b;
+            font-size:11px; line-height:1.5;
+        }
+        .collector-missions-group { margin:16px 0; }
+        .collector-missions-group-title {
+            margin:0 0 9px; color:#cbd5e1; font:18px 'Bebas Neue',sans-serif;
+            letter-spacing:2px;
+        }
+        .collector-missions-list { display:grid; gap:9px; }
+        .collector-mission-card {
+            padding:13px 14px; border:1px solid rgba(255,255,255,0.08);
+            border-radius:12px; background:rgba(255,255,255,0.035);
+        }
+        .collector-mission-card.completed { border-color:rgba(74,222,128,0.3); background:rgba(34,197,94,0.055); }
+        .collector-mission-card.claimed { opacity:0.68; }
+        .collector-mission-top { display:flex; justify-content:space-between; gap:12px; align-items:flex-start; }
+        .collector-mission-title { color:#e2e8f0; font-size:15px; font-weight:700; }
+        .collector-mission-reward {
+            flex-shrink:0; color:#fbbf24; font:11px 'JetBrains Mono',monospace;
+            font-weight:700; text-align:right;
+        }
+        .collector-mission-desc { margin-top:3px; color:#64748b; font-size:11px; line-height:1.45; }
+        .collector-mission-progress-row {
+            display:flex; align-items:center; gap:9px; margin-top:10px;
+        }
+        .collector-mission-progress-track {
+            height:6px; flex:1; overflow:hidden; border-radius:999px;
+            background:rgba(255,255,255,0.08);
+        }
+        .collector-mission-progress-fill {
+            height:100%; border-radius:inherit;
+            background:linear-gradient(90deg,#6366f1,#4ade80);
+            transition:width 0.25s ease;
+        }
+        .collector-mission-progress-text {
+            min-width:55px; color:#94a3b8; font:10px 'JetBrains Mono',monospace;
+            text-align:right;
+        }
+        .collector-mission-footer { display:flex; justify-content:flex-end; margin-top:9px; }
+        .collector-mission-claim {
+            padding:7px 14px; border:0; border-radius:8px;
+            background:linear-gradient(135deg,#166534,#4ade80); color:#06120a;
+            font:14px 'Bebas Neue',sans-serif; letter-spacing:1.5px; cursor:pointer;
+        }
+        .collector-mission-claim:disabled { opacity:0.42; cursor:not-allowed; }
+        .collector-missions-close {
+            display:block; margin:16px auto 0; padding:9px 24px;
+            border:1px solid rgba(255,255,255,0.12); border-radius:9px;
+            background:rgba(255,255,255,0.05); color:#cbd5e1;
+            font:14px 'Bebas Neue',sans-serif; letter-spacing:2px; cursor:pointer;
+        }
+        .collector-missions-open-btn {
+            font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px;
+            padding:10px 28px; border:1px solid rgba(129,140,248,0.4);
+            border-radius:10px; background:rgba(99,102,241,0.1); color:#a5b4fc;
+            cursor:pointer; transition:all 0.2s;
+        }
+        .collector-missions-open-btn:hover { background:rgba(99,102,241,0.2); }
+        @media(max-width:520px) {
+            .collector-missions-box { padding:20px 14px; }
+            .collector-mission-top { flex-direction:column; gap:4px; }
+            .collector-mission-reward { text-align:left; }
+            .collector-missions-heading { font-size:26px; }
+        }
+
+        /* ── ÁRBOL DE HABILIDADES ───────────────────────────────── */
+        .collector-skills-overlay {
+            display:none; position:fixed; inset:0; z-index:9960;
+            align-items:center; justify-content:center; overflow-y:auto;
+            padding:18px; background:rgba(0,0,0,0.91); backdrop-filter:blur(16px);
+        }
+        .collector-skills-overlay.open { display:flex; }
+        .collector-skills-box {
+            width:min(820px,100%); max-height:min(88vh,920px); overflow-y:auto;
+            padding:24px; background:linear-gradient(145deg,#0a0c1a,#111426);
+            border:1px solid rgba(168,85,247,0.38); border-radius:20px;
+            box-shadow:0 24px 80px rgba(0,0,0,0.78),0 0 40px rgba(168,85,247,0.1);
+        }
+        .collector-skills-heading {
+            margin:0 0 4px; text-align:center; color:#c4b5fd;
+            font:30px 'Bebas Neue',sans-serif; letter-spacing:4px;
+        }
+        .collector-skills-caption {
+            margin:0 0 15px; text-align:center; color:#64748b;
+            font-size:11px; line-height:1.5;
+        }
+        .collector-skills-points {
+            width:max-content; max-width:100%; margin:0 auto 18px; padding:8px 15px;
+            border:1px solid rgba(251,191,36,0.3); border-radius:10px;
+            background:rgba(251,191,36,0.07); color:#fbbf24;
+            font:14px 'JetBrains Mono',monospace; font-weight:700;
+        }
+        .collector-skills-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+        .collector-skill-card {
+            padding:15px; border:1px solid rgba(255,255,255,0.09);
+            border-radius:13px; background:rgba(255,255,255,0.035);
+        }
+        .collector-skill-card.maxed { border-color:rgba(192,132,252,0.38); background:rgba(168,85,247,0.07); }
+        .collector-skill-card-top { display:flex; justify-content:space-between; gap:10px; align-items:flex-start; }
+        .collector-skill-name { color:#e9d5ff; font-size:16px; font-weight:700; }
+        .collector-skill-level { flex-shrink:0; color:#c4b5fd; font:11px 'JetBrains Mono',monospace; }
+        .collector-skill-description { min-height:32px; margin:6px 0 11px; color:#64748b; font-size:11px; line-height:1.45; }
+        .collector-skill-nodes { display:flex; gap:5px; margin:8px 0 10px; }
+        .collector-skill-node { height:6px; flex:1; border-radius:99px; background:rgba(255,255,255,0.09); }
+        .collector-skill-node.filled { background:linear-gradient(90deg,#7c3aed,#c084fc); box-shadow:0 0 7px rgba(192,132,252,0.3); }
+        .collector-skill-effect { min-height:30px; color:#a78bfa; font-size:10px; line-height:1.5; }
+        .collector-skill-next { margin-top:3px; color:#64748b; font-size:10px; line-height:1.5; }
+        .collector-skill-buy {
+            width:100%; margin-top:11px; padding:8px 10px; border:0; border-radius:8px;
+            background:linear-gradient(135deg,#6d28d9,#c084fc); color:#fff;
+            font:14px 'Bebas Neue',sans-serif; letter-spacing:1.5px; cursor:pointer;
+        }
+        .collector-skill-buy:hover:not(:disabled) { filter:brightness(1.12); }
+        .collector-skill-buy:disabled { opacity:0.4; cursor:not-allowed; }
+        .collector-skills-close {
+            display:block; margin:16px auto 0; padding:9px 24px;
+            border:1px solid rgba(255,255,255,0.12); border-radius:9px;
+            background:rgba(255,255,255,0.05); color:#cbd5e1;
+            font:14px 'Bebas Neue',sans-serif; letter-spacing:2px; cursor:pointer;
+        }
+        .collector-skills-open-btn {
+            font-family:'Bebas Neue',sans-serif; font-size:14px; letter-spacing:3px;
+            padding:10px 28px; border:1px solid rgba(192,132,252,0.4);
+            border-radius:10px; background:rgba(168,85,247,0.1); color:#c4b5fd;
+            cursor:pointer; transition:all 0.2s;
+        }
+        .collector-skills-open-btn:hover { background:rgba(168,85,247,0.2); }
+        @media(max-width:600px) {
+            .collector-skills-box { padding:20px 14px; }
+            .collector-skills-grid { grid-template-columns:1fr; }
+            .collector-skills-heading { font-size:26px; }
+            .collector-skill-description { min-height:0; }
+        }
     </style>
 </head>
 <body>
@@ -3590,8 +3816,60 @@
 
     <!-- BOTÓN ESTADÍSTICAS DETALLADAS -->
     <div style="display:flex;justify-content:center;gap:10px;flex-wrap:wrap;text-align:center;margin:6px 0 20px;">
+        <button class="daily-login-open-btn" id="dailyLoginOpenBtn" type="button" onclick="openDailyLoginModal()">🎁 &nbsp;BONO DIARIO</button>
+        <button class="collector-missions-open-btn" id="collectorMissionsOpenBtn" type="button" onclick="openCollectorMissionsModal()">📜 &nbsp;MISIONES</button>
+        <button class="collector-skills-open-btn" id="collectorSkillsOpenBtn" type="button" onclick="openCollectorSkillsModal()">🌳 &nbsp;ÁRBOL DE HABILIDADES</button>
         <button onclick="openStats()" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:10px 28px;border:1px solid rgba(99,102,241,0.4);border-radius:10px;background:rgba(99,102,241,0.1);color:#a5b4fc;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='rgba(99,102,241,0.2)'" onmouseout="this.style.background='rgba(99,102,241,0.1)'">📊 &nbsp;ESTADÍSTICAS DETALLADAS</button>
         <button onclick="openSettings()" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;padding:10px 28px;border:1px solid rgba(251,191,36,0.35);border-radius:10px;background:rgba(251,191,36,0.08);color:#fbbf24;cursor:pointer;transition:all 0.2s;">⚙️ &nbsp;AJUSTES</button>
+    </div>
+
+    <div class="daily-login-overlay" id="dailyLoginOverlay" role="presentation" onclick="if(event.target===this) closeDailyLoginModal()">
+        <section class="daily-login-box" role="dialog" aria-modal="true" aria-labelledby="dailyLoginTitle">
+            <h2 class="daily-login-title" id="dailyLoginTitle">🎁 RECOMPENSA DIARIA</h2>
+            <p class="daily-login-caption">Entra cada día para mantener la racha y aumentar tu recompensa.</p>
+            <div class="daily-login-stats">
+                <div class="daily-login-stat">
+                    <span class="daily-login-stat-label">🔥 Racha</span>
+                    <strong class="daily-login-stat-value" id="dailyLoginStreak">0 días</strong>
+                </div>
+                <div class="daily-login-stat">
+                    <span class="daily-login-stat-label">💰 Premio de hoy</span>
+                    <strong class="daily-login-stat-value" id="dailyLoginReward">—</strong>
+                </div>
+            </div>
+            <div class="daily-login-message" id="dailyLoginMessage" role="status"></div>
+            <div class="daily-login-actions">
+                <button class="daily-login-action daily-login-claim" id="dailyLoginClaimBtn" type="button" onclick="claimDailyLogin(false)">🎁 RECLAMAR RECOMPENSA</button>
+                <button class="daily-login-action daily-login-recover" id="dailyLoginRecoverBtn" type="button" onclick="claimDailyLogin(true)" style="display:none">🛟 RECUPERAR RACHA</button>
+            </div>
+            <button class="daily-login-close" type="button" onclick="closeDailyLoginModal()">CERRAR</button>
+        </section>
+    </div>
+
+    <div class="collector-missions-overlay" id="collectorMissionsOverlay" role="presentation" onclick="if(event.target===this) closeCollectorMissionsModal()">
+        <section class="collector-missions-box" role="dialog" aria-modal="true" aria-labelledby="collectorMissionsTitle">
+            <h2 class="collector-missions-heading" id="collectorMissionsTitle">📜 MISIONES</h2>
+            <p class="collector-missions-caption">Completa objetivos distintos cada día y cada semana para conseguir recompensas.</p>
+            <div class="collector-missions-group">
+                <h3 class="collector-missions-group-title">☀️ MISIONES DIARIAS</h3>
+                <div class="collector-missions-list" id="collectorDailyMissions"></div>
+            </div>
+            <div class="collector-missions-group">
+                <h3 class="collector-missions-group-title">🗓️ MISIONES SEMANALES</h3>
+                <div class="collector-missions-list" id="collectorWeeklyMissions"></div>
+            </div>
+            <button class="collector-missions-close" type="button" onclick="closeCollectorMissionsModal()">CERRAR</button>
+        </section>
+    </div>
+
+    <div class="collector-skills-overlay" id="collectorSkillsOverlay" role="presentation" onclick="if(event.target===this) closeCollectorSkillsModal()">
+        <section class="collector-skills-box" role="dialog" aria-modal="true" aria-labelledby="collectorSkillsTitle">
+            <h2 class="collector-skills-heading" id="collectorSkillsTitle">🌳 ÁRBOL DE HABILIDADES</h2>
+            <p class="collector-skills-caption">Gasta puntos de habilidad para mejorar las ventajas permanentes de tu partida.</p>
+            <div class="collector-skills-points" id="collectorSkillsPoints">⭐ 0 puntos disponibles</div>
+            <div class="collector-skills-grid" id="collectorSkillsGrid"></div>
+            <button class="collector-skills-close" type="button" onclick="closeCollectorSkillsModal()">CERRAR</button>
+        </section>
     </div>
 
     <!-- HISTORIAL DE PARTIDAS -->
@@ -4895,6 +5173,7 @@
     let currentKey = 'tech';
     let inventory = [];
     let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
+    state.dailyLogin = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
     const WIN_GOAL = 500000000000;
 
     const reel = document.getElementById('caseReel');
@@ -5451,6 +5730,7 @@
             state.balance += _saleAmt;
             state.earned = (state.earned||0) + _saleAmt;
             state.sold = (state.sold||0) + 1;
+            recordCollectorMissionAction('sell', 1);
             addXP(Math.max(5, Math.floor(salePrice / 20000) * 5));
             state.invValue -= inventory[origIdx].price;
             if (state.invValue < 0) state.invValue = 0;
@@ -5475,6 +5755,7 @@
         state.balance += _sellAmt;
         state.earned = (state.earned||0) + _sellAmt;
         state.sold = (state.sold||0) + itemsToSell.length;
+        recordCollectorMissionAction('sell', itemsToSell.length);
         addXP(Math.max(5, Math.floor(sellValue / 20000) * 5));
         state.invValue -= sellValue;
         if (state.invValue < 0) state.invValue = 0;
@@ -6289,7 +6570,8 @@
                 collectorMissionProgress: state.collectorMissionProgress||null,
                 collectorPotionEnds: state.collectorPotionEnds||{},
                 qolSettings: state.qolSettings||{},
-                chestRarityStats: state.chestRarityStats||{}
+                chestRarityStats: state.chestRarityStats||{},
+                dailyLogin: state.dailyLogin||{streak:0,lastClaimDate:null,missedStreak:0,recoveryLocked:false,lastRewardAmount:0}
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -6328,6 +6610,184 @@
             inventory.forEach(item => { if (!item._id) item._id = Date.now() + Math.floor(Math.random()*99999); });
             return true;
         } catch(e) { return false; }
+    }
+
+    // RECOMPENSA DIARIA Y RACHA DE LOGIN
+    let dailyLoginPromptedDate = null;
+
+    function normalizeDailyLoginState() {
+        const defaults = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
+        if (!state.dailyLogin || typeof state.dailyLogin !== 'object') state.dailyLogin = {};
+        state.dailyLogin = { ...defaults, ...state.dailyLogin };
+        state.dailyLogin.streak = Math.max(0, Math.floor(Number(state.dailyLogin.streak) || 0));
+        state.dailyLogin.missedStreak = Math.max(0, Math.floor(Number(state.dailyLogin.missedStreak) || 0));
+        state.dailyLogin.recoveryLocked = !!state.dailyLogin.recoveryLocked;
+        state.dailyLogin.lastRewardAmount = Math.max(0, Number(state.dailyLogin.lastRewardAmount) || 0);
+    }
+
+    function getDailyLoginDateKey(date = new Date()) {
+        const year = date.getFullYear();
+        const month = String(date.getMonth() + 1).padStart(2, '0');
+        const day = String(date.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+    }
+
+    function getDailyLoginDayGap(fromDate, toDate) {
+        if (!fromDate || !toDate) return null;
+        const from = String(fromDate).split('-').map(Number);
+        const to = String(toDate).split('-').map(Number);
+        if (from.length !== 3 || to.length !== 3 || [...from, ...to].some(value => !Number.isFinite(value))) return null;
+        return Math.round((Date.UTC(to[0], to[1] - 1, to[2]) - Date.UTC(from[0], from[1] - 1, from[2])) / 86400000);
+    }
+
+    function getDailyLoginRewardAmount(streak, balance = state.balance) {
+        const streakDay = Math.max(1, Math.min(7, Math.floor(Number(streak) || 1)));
+        const rewardRate = 0.005 + (streakDay - 1) * 0.0025;
+        const currentBalance = Math.max(0, Number(balance) || 0);
+        return Math.max(250, Math.floor(currentBalance * rewardRate));
+    }
+
+    function getDailyLoginRecoveryCost() {
+        return Math.ceil(Math.max(0, Number(state.balance) || 0) * 0.25);
+    }
+
+    function updateDailyLoginUI() {
+        normalizeDailyLoginState();
+        const daily = state.dailyLogin;
+        const today = getDailyLoginDateKey();
+        const dayGap = getDailyLoginDayGap(daily.lastClaimDate, today);
+        const alreadyClaimed = daily.lastClaimDate === today;
+        const futureClaim = !!daily.lastClaimDate && today < daily.lastClaimDate;
+        const lostStreak = daily.missedStreak > 0;
+        const normalNextStreak = !lostStreak && dayGap === 1 ? daily.streak + 1 : 1;
+        const normalReward = getDailyLoginRewardAmount(normalNextStreak);
+        const visibleStreak = daily.streak || daily.missedStreak || 0;
+
+        const streakEl = document.getElementById('dailyLoginStreak');
+        const rewardEl = document.getElementById('dailyLoginReward');
+        const messageEl = document.getElementById('dailyLoginMessage');
+        const claimBtn = document.getElementById('dailyLoginClaimBtn');
+        const recoverBtn = document.getElementById('dailyLoginRecoverBtn');
+        const openBtn = document.getElementById('dailyLoginOpenBtn');
+        if (!streakEl || !rewardEl || !messageEl || !claimBtn || !recoverBtn) return;
+
+        streakEl.textContent = `${visibleStreak} día${visibleStreak === 1 ? '' : 's'}${lostStreak && !alreadyClaimed ? ' · perdida' : ''}`;
+        rewardEl.textContent = `${normalReward.toLocaleString('es-ES')} $`;
+        claimBtn.disabled = alreadyClaimed || futureClaim;
+        claimBtn.textContent = alreadyClaimed ? '✅ YA RECLAMADA' : lostStreak ? '🆕 EMPEZAR DESDE DÍA 1' : '🎁 RECLAMAR RECOMPENSA';
+
+        if (alreadyClaimed) {
+            messageEl.textContent = `✅ Recompensa de hoy reclamada: +${daily.lastRewardAmount.toLocaleString('es-ES')} $. Racha actual: ${daily.streak} día${daily.streak === 1 ? '' : 's'}.`;
+        } else if (futureClaim) {
+            messageEl.textContent = 'La fecha del último reclamo es posterior a la fecha actual del dispositivo. Podrás reclamar cuando el calendario alcance ese día.';
+        } else if (lostStreak) {
+            const recoveryCost = getDailyLoginRecoveryCost();
+            const recoveredReward = getDailyLoginRewardAmount(daily.missedStreak + 1, Math.max(0, state.balance - recoveryCost));
+            if (daily.recoveryLocked) {
+                messageEl.textContent = `Perdiste una racha de ${daily.missedStreak} días. Esta racha no se puede recuperar porque la anterior ya se recuperó; reclama el bono para empezar de nuevo.`;
+            } else {
+                messageEl.textContent = `Perdiste una racha de ${daily.missedStreak} días. Puedes recuperarla pagando el 25% de tu saldo actual; si reclamas el bono normal, empezarás desde el día 1.`;
+            }
+            recoverBtn.style.display = 'block';
+            recoverBtn.disabled = daily.recoveryLocked;
+            recoverBtn.textContent = daily.recoveryLocked
+                ? '⛔ RECUPERACIÓN BLOQUEADA'
+                : `🛟 RECUPERAR · −${recoveryCost.toLocaleString('es-ES')} $ · +${recoveredReward.toLocaleString('es-ES')} $`;
+        } else {
+            const intro = daily.lastClaimDate
+                ? `La racha seguirá desde el día ${normalNextStreak}.`
+                : '¡Tu primer bono diario está listo!';
+            messageEl.textContent = `${intro} Reclama hoy para mantener la racha. El premio sube hasta el día 7 y después se mantiene.`;
+            recoverBtn.style.display = 'none';
+            recoverBtn.disabled = true;
+        }
+
+        if (alreadyClaimed || futureClaim) {
+            recoverBtn.style.display = 'none';
+            recoverBtn.disabled = true;
+        }
+        if (openBtn) {
+            openBtn.textContent = alreadyClaimed
+                ? `✅ BONO RECLAMADO · 🔥 ${daily.streak}`
+                : lostStreak ? '🎁 BONO DIARIO · RACHA PERDIDA' : '🎁 BONO DIARIO';
+        }
+    }
+
+    function openDailyLoginModal() {
+        updateDailyLoginUI();
+        document.getElementById('dailyLoginOverlay').classList.add('open');
+    }
+
+    function closeDailyLoginModal() {
+        document.getElementById('dailyLoginOverlay').classList.remove('open');
+    }
+
+    function checkDailyLoginStatus(showPrompt = false) {
+        normalizeDailyLoginState();
+        const daily = state.dailyLogin;
+        const today = getDailyLoginDateKey();
+        const dayGap = getDailyLoginDayGap(daily.lastClaimDate, today);
+        let changed = false;
+
+        if (dayGap > 1 && daily.streak > 0) {
+            daily.missedStreak = Math.max(daily.missedStreak, daily.streak);
+            daily.streak = 0;
+            changed = true;
+        }
+        if (changed) saveGame();
+        updateDailyLoginUI();
+
+        if (showPrompt && daily.lastClaimDate !== today && today >= (daily.lastClaimDate || today) && dailyLoginPromptedDate !== today) {
+            dailyLoginPromptedDate = today;
+            openDailyLoginModal();
+        }
+    }
+
+    function claimDailyLogin(useRecovery = false) {
+        normalizeDailyLoginState();
+        const daily = state.dailyLogin;
+        const today = getDailyLoginDateKey();
+        const dayGap = getDailyLoginDayGap(daily.lastClaimDate, today);
+        if (daily.lastClaimDate === today || (daily.lastClaimDate && today < daily.lastClaimDate)) {
+            updateDailyLoginUI();
+            return;
+        }
+
+        const canRecover = daily.missedStreak > 0 && !daily.recoveryLocked;
+        if (useRecovery && !canRecover) {
+            updateDailyLoginUI();
+            return;
+        }
+        if (!useRecovery && canRecover && !confirm('Si reclamas el bono normal, perderás la opción de recuperar la racha anterior. ¿Quieres empezar desde el día 1?')) return;
+
+        let recoveryCost = 0;
+        if (useRecovery) {
+            recoveryCost = getDailyLoginRecoveryCost();
+            if (state.balance < recoveryCost) {
+                alert('No tienes suficientes monedas para recuperar la racha.');
+                return;
+            }
+            state.balance -= recoveryCost;
+        }
+
+        const previousStreak = useRecovery
+            ? daily.missedStreak
+            : (dayGap === 1 && daily.missedStreak === 0 ? daily.streak : 0);
+        const newStreak = previousStreak + 1;
+        const reward = getDailyLoginRewardAmount(newStreak);
+        state.balance += reward;
+
+        daily.streak = newStreak;
+        daily.lastClaimDate = today;
+        daily.missedStreak = 0;
+        daily.recoveryLocked = !!useRecovery;
+        daily.lastRewardAmount = reward;
+
+        updateStats();
+        saveGame();
+        updateDailyLoginUI();
+        if (typeof playSound === 'function') playSound('win');
+        if (typeof confetti === 'function') confetti({ particleCount: 90, spread: 70, origin: { y: 0.75 }, colors: ['#4ade80', '#fbbf24', '#ffffff'] });
     }
 
     // EXPORTAR PARTIDA
@@ -6442,6 +6902,7 @@
         updateStats();
         updateRecordDisplay();
         updateMascotaIndicator();
+        checkDailyLoginStatus(true);
 
         startBonusTimer();
         startEventTimer();
@@ -6457,6 +6918,8 @@
 
         // Guardar cada 15 segundos automáticamente
         setInterval(saveGame, 15000);
+        // Detectar el cambio de día incluso si el juego permanece abierto.
+        setInterval(() => checkDailyLoginStatus(true), 60000);
         startCollectorBridge();
     }
 
@@ -6804,6 +7267,7 @@
         }
         state.balance -= price;
         state.potionsBought++;
+        recordCollectorMissionAction('potion-purchase');
         updateStats();
         saveGame();
         playSound('win');
@@ -7176,6 +7640,7 @@
                 setTimeout(() => { flash.style.transition = 'opacity 0.5s'; flash.style.opacity = '0'; setTimeout(() => flash.remove(), 500); }, 150);
 
                 state.coinWinStreak++;
+                recordCollectorMissionAction('coin-win');
                 addXP(20);
                 state.coinLoseStreak = 0;
             } else {
@@ -8840,6 +9305,7 @@
             state.invValue += result.price;
             if (result.price > state.best) state.best = result.price;
             state.crafted = (state.crafted||0) + 1;
+            recordCollectorMissionAction('craft');
             updateStats(); renderInventory(); saveGame();
         }
         showCraftResult(result);
@@ -9867,6 +10333,8 @@
             if (pts > 0) { sp.textContent = '+' + pts + ' pts'; sp.style.display = 'inline-block'; }
             else { sp.style.display = 'none'; }
         }
+        const skillsOverlay = document.getElementById('collectorSkillsOverlay');
+        if (skillsOverlay && skillsOverlay.classList.contains('open')) renderCollectorSkillTree();
     }
 
     function triggerLevelUp(newLevel, levelsGained) {
@@ -10427,6 +10895,7 @@
                     const gain=pks.bet*POKER_WIN_MULTIPLIER;
                     state.balance+=gain;
                     state.pokerWon=(state.pokerWon||0)+1;
+                    recordCollectorMissionAction('poker-win');
                     addXP(30);
                     state.pokerProfit=(state.pokerProfit||0)+gain;
                     if(gain>(state.pokerMaxWin||0)) state.pokerMaxWin=gain;
@@ -10524,25 +10993,71 @@
         return collectorDateKey(monday);
     }
 
+    const COLLECTOR_DAILY_MISSION_POOL = [
+        { id:'daily-market', title:'Día de mercado', description:'Vende 4 objetos de tu inventario.', metric:'itemsSold', target:4, reward:{ type:'xp', amount:300, label:'300 XP' } },
+        { id:'daily-explorer', title:'Coleccionista curioso', description:'Abre cofres de 3 categorías diferentes.', metric:'uniqueBoxes', target:3, reward:{ type:'xp', amount:350, label:'350 XP' } },
+        { id:'daily-poker', title:'Apuesta inteligente', description:'Gana una partida de póker.', metric:'pokerWins', target:1, reward:{ type:'potion', potion:'luck', durationSeconds:180, amount:1, label:'Poción de suerte · 3 min' } },
+        { id:'daily-highroller', title:'Cara de la suerte', description:'Gana 2 lanzamientos de cara o cruz.', metric:'coinWins', target:2, reward:{ type:'coins', rate:0.01, minimum:250, amount:250, label:'Monedas extra' } },
+        { id:'daily-crafter', title:'Manos de artesano', description:'Completa una fusión en el taller.', metric:'crafts', target:1, reward:{ type:'xp', amount:400, label:'400 XP' } },
+        { id:'daily-alchemist', title:'Alquimista del día', description:'Compra una poción en la tienda.', metric:'potionsBought', target:1, reward:{ type:'potion', potion:'money', durationSeconds:120, amount:1, label:'Poción de dinero · 2 min' } }
+    ];
+
+    const COLLECTOR_WEEKLY_MISSION_POOL = [
+        { id:'weekly-market', title:'Liquidación semanal', description:'Vende 20 objetos durante esta semana.', metric:'itemsSold', target:20, reward:{ type:'xp', amount:1400, label:'1.400 XP' } },
+        { id:'weekly-explorer', title:'Pasaporte del coleccionista', description:'Abre cofres de 6 categorías diferentes.', metric:'uniqueBoxes', target:6, reward:{ type:'skillPoints', amount:1, label:'1 punto de habilidad' } },
+        { id:'weekly-coin', title:'La banca tiembla', description:'Gana 8 partidas de cara o cruz.', metric:'coinWins', target:8, reward:{ type:'potion', potion:'luck', durationSeconds:300, amount:1, label:'Poción de suerte · 5 min' } },
+        { id:'weekly-poker', title:'Rey de la mesa', description:'Gana 4 partidas de póker.', metric:'pokerWins', target:4, reward:{ type:'xp', amount:1800, label:'1.800 XP' } },
+        { id:'weekly-crafter', title:'Fábrica de tesoros', description:'Completa 3 fusiones en el taller.', metric:'crafts', target:3, reward:{ type:'potion', potion:'money', durationSeconds:300, amount:1, label:'Poción de dinero · 5 min' } },
+        { id:'weekly-alchemist', title:'Preparativos de la semana', description:'Compra 3 pociones en la tienda.', metric:'potionsBought', target:3, reward:{ type:'xp', amount:1200, label:'1.200 XP' } },
+        { id:'weekly-quester', title:'Una misión cada día', description:'Reclama 6 misiones diarias esta semana.', metric:'dailyClaims', target:6, reward:{ type:'skillPoints', amount:1, label:'1 punto de habilidad' } }
+    ];
+
+    function collectorMissionHash(value) {
+        let hash = 2166136261;
+        for (let i = 0; i < value.length; i++) hash = Math.imul(hash ^ value.charCodeAt(i), 16777619);
+        return hash >>> 0;
+    }
+
+    function getRotatingCollectorMissions(pool, periodKey, count) {
+        return [...pool].sort((a, b) => {
+            const scoreA = collectorMissionHash(`${periodKey}:${a.id}`);
+            const scoreB = collectorMissionHash(`${periodKey}:${b.id}`);
+            return scoreA - scoreB || a.id.localeCompare(b.id);
+        }).slice(0, count);
+    }
+
     function synchronizeCollectorMissionPeriod() {
         const progress = state.collectorMissionProgress;
         if (!progress) return;
         const today = collectorDateKey(new Date());
         const week = collectorWeekKey(new Date());
         progress.claimed = progress.claimed || {};
+        progress.dailyActionCounters = progress.dailyActionCounters || {};
+        progress.weeklyActionCounters = progress.weeklyActionCounters || {};
+        progress.dailyUniqueBoxes = Array.isArray(progress.dailyUniqueBoxes) ? progress.dailyUniqueBoxes : [];
+        progress.weeklyUniqueBoxes = Array.isArray(progress.weeklyUniqueBoxes) ? progress.weeklyUniqueBoxes : [];
+        progress.claimedMissions = progress.claimedMissions || {};
+        progress.claimedMissions.daily = progress.claimedMissions.daily || {};
+        progress.claimedMissions.weekly = progress.claimedMissions.weekly || {};
         if (progress.dailyKey !== today) {
             progress.dailyKey = today;
             progress.dailyTech = 0;
             progress.dailyAuction = 0;
+            progress.dailyActionCounters = {};
+            progress.dailyUniqueBoxes = [];
             progress.claimed.dailyTech = false;
             progress.claimed.dailyAuction = false;
+            progress.claimedMissions.daily = {};
         }
         if (progress.weekKey !== week) {
             progress.weekKey = week;
             progress.weeklyCrates = 0;
             progress.weeklyAuction = 0;
+            progress.weeklyActionCounters = {};
+            progress.weeklyUniqueBoxes = [];
             progress.claimed.weeklyCrates = false;
             progress.claimed.weeklyAuction = false;
+            progress.claimedMissions.weekly = {};
         }
     }
 
@@ -10586,12 +11101,20 @@
             dailyAuction: Number(saved.dailyAuction) || 0,
             weeklyCrates: Number(saved.weeklyCrates) || 0,
             weeklyAuction: Number(saved.weeklyAuction) || 0,
+            dailyActionCounters: saved.dailyActionCounters && typeof saved.dailyActionCounters === 'object' ? { ...saved.dailyActionCounters } : {},
+            weeklyActionCounters: saved.weeklyActionCounters && typeof saved.weeklyActionCounters === 'object' ? { ...saved.weeklyActionCounters } : {},
+            dailyUniqueBoxes: Array.isArray(saved.dailyUniqueBoxes) ? [...saved.dailyUniqueBoxes] : [],
+            weeklyUniqueBoxes: Array.isArray(saved.weeklyUniqueBoxes) ? [...saved.weeklyUniqueBoxes] : [],
             claimed: {
                 dailyTech: false,
                 dailyAuction: false,
                 weeklyCrates: false,
                 weeklyAuction: false,
                 ...(saved.claimed || {})
+            },
+            claimedMissions: {
+                daily: { ...((saved.claimedMissions && saved.claimedMissions.daily) || {}) },
+                weekly: { ...((saved.claimedMissions && saved.claimedMissions.weekly) || {}) }
             }
         };
         state.collectorPotionEnds = state.collectorPotionEnds || {};
@@ -10599,6 +11122,30 @@
         restoreCollectorPotion('luck');
         restoreCollectorPotion('money');
         if (typeof refreshShopPotionBtns === 'function') refreshShopPotionBtns();
+    }
+
+    function buildRotatingCollectorMission(mission, period, progress) {
+        const counters = period === 'daily' ? progress.dailyActionCounters : progress.weeklyActionCounters;
+        const uniqueBoxes = period === 'daily' ? progress.dailyUniqueBoxes : progress.weeklyUniqueBoxes;
+        const counterValue = mission.metric === 'uniqueBoxes'
+            ? uniqueBoxes.length
+            : Number(counters[mission.metric]) || 0;
+        const reward = { ...mission.reward };
+        if (reward.type === 'coins') {
+            reward.amount = Math.max(reward.minimum || 0, Math.floor((Number(state.balance) || 0) * (reward.rate || 0)));
+            reward.label = `${reward.amount.toLocaleString('es-ES')} monedas`;
+        }
+        return {
+            id: mission.id,
+            period,
+            title: mission.title,
+            description: mission.description,
+            progress: Math.min(mission.target, counterValue),
+            target: mission.target,
+            reward,
+            completed: counterValue >= mission.target,
+            claimed: !!(progress.claimedMissions[period] && progress.claimedMissions[period][mission.id])
+        };
     }
 
     function collectorMissionsSnapshot() {
@@ -10649,7 +11196,11 @@
                 reward: { type: 'potion', amount: 1, label: 'Poción de dinero · 3 min' },
                 completed: p.weeklyAuction >= 5,
                 claimed: !!claimed.weeklyAuction
-            }
+            },
+            ...getRotatingCollectorMissions(COLLECTOR_DAILY_MISSION_POOL, p.dailyKey, 2)
+                .map(mission => buildRotatingCollectorMission(mission, 'daily', p)),
+            ...getRotatingCollectorMissions(COLLECTOR_WEEKLY_MISSION_POOL, p.weekKey, 3)
+                .map(mission => buildRotatingCollectorMission(mission, 'weekly', p))
         ];
     }
 
@@ -10670,7 +11221,186 @@
         });
     }
 
+    function openCollectorMissionsModal() {
+        if (!state.collectorMissionProgress) initializeCollectorSystems();
+        const overlay = document.getElementById('collectorMissionsOverlay');
+        if (!overlay) return;
+        overlay.classList.add('open');
+        renderCollectorMissions();
+    }
+
+    function closeCollectorMissionsModal() {
+        const overlay = document.getElementById('collectorMissionsOverlay');
+        if (overlay) overlay.classList.remove('open');
+    }
+
+    function renderCollectorMissions() {
+        const dailyContainer = document.getElementById('collectorDailyMissions');
+        const weeklyContainer = document.getElementById('collectorWeeklyMissions');
+        if (!dailyContainer || !weeklyContainer || !state.collectorMissionProgress) return;
+        const missions = collectorMissionsSnapshot();
+        const daily = missions.filter(mission => mission.period === 'daily');
+        const weekly = missions.filter(mission => mission.period === 'weekly');
+        const dailyTitle = document.querySelector('#collectorMissionsOverlay .collector-missions-group-title');
+        const weeklyTitle = document.querySelectorAll('#collectorMissionsOverlay .collector-missions-group-title')[1];
+        if (dailyTitle) dailyTitle.textContent = `☀️ MISIONES DIARIAS · ${daily.filter(m => m.completed || m.claimed).length}/${daily.length}`;
+        if (weeklyTitle) weeklyTitle.textContent = `🗓️ MISIONES SEMANALES · ${weekly.filter(m => m.completed || m.claimed).length}/${weekly.length}`;
+
+        const renderGroup = (container, entries) => {
+            container.innerHTML = '';
+            entries.forEach(mission => {
+                const card = document.createElement('article');
+                card.className = `collector-mission-card${mission.completed ? ' completed' : ''}${mission.claimed ? ' claimed' : ''}`;
+
+                const top = document.createElement('div');
+                top.className = 'collector-mission-top';
+                const title = document.createElement('div');
+                title.className = 'collector-mission-title';
+                title.textContent = mission.title;
+                const reward = document.createElement('div');
+                reward.className = 'collector-mission-reward';
+                reward.textContent = `🎁 ${mission.reward.label}`;
+                top.append(title, reward);
+
+                const description = document.createElement('div');
+                description.className = 'collector-mission-desc';
+                description.textContent = mission.description;
+
+                const progressRow = document.createElement('div');
+                progressRow.className = 'collector-mission-progress-row';
+                const track = document.createElement('div');
+                track.className = 'collector-mission-progress-track';
+                const fill = document.createElement('div');
+                fill.className = 'collector-mission-progress-fill';
+                fill.style.width = `${mission.target > 0 ? Math.min(100, mission.progress / mission.target * 100) : 0}%`;
+                track.appendChild(fill);
+                const progressText = document.createElement('span');
+                progressText.className = 'collector-mission-progress-text';
+                progressText.textContent = `${mission.progress}/${mission.target}`;
+                progressRow.append(track, progressText);
+
+                const footer = document.createElement('div');
+                footer.className = 'collector-mission-footer';
+                if (mission.claimed) {
+                    const claimed = document.createElement('span');
+                    claimed.className = 'collector-mission-progress-text';
+                    claimed.textContent = 'RECLAMADA ✓';
+                    footer.appendChild(claimed);
+                } else if (mission.completed) {
+                    const claimButton = document.createElement('button');
+                    claimButton.className = 'collector-mission-claim';
+                    claimButton.type = 'button';
+                    claimButton.textContent = 'RECLAMAR';
+                    claimButton.addEventListener('click', () => claimCollectorMission(mission.id));
+                    footer.appendChild(claimButton);
+                }
+
+                card.append(top, description, progressRow, footer);
+                container.appendChild(card);
+            });
+        };
+
+        renderGroup(dailyContainer, daily);
+        renderGroup(weeklyContainer, weekly);
+        const openButton = document.getElementById('collectorMissionsOpenBtn');
+        if (openButton) {
+            const claimable = missions.filter(mission => mission.completed && !mission.claimed).length;
+            openButton.textContent = claimable ? `📜  MISIONES · ${claimable} POR RECLAMAR` : '📜  MISIONES';
+        }
+    }
+
+    function openCollectorSkillsModal() {
+        if (!state.collectorMissionProgress) initializeCollectorSystems();
+        const overlay = document.getElementById('collectorSkillsOverlay');
+        if (!overlay) return;
+        overlay.classList.add('open');
+        renderCollectorSkillTree();
+    }
+
+    function closeCollectorSkillsModal() {
+        const overlay = document.getElementById('collectorSkillsOverlay');
+        if (overlay) overlay.classList.remove('open');
+    }
+
+    function renderCollectorSkillTree() {
+        const grid = document.getElementById('collectorSkillsGrid');
+        const pointsDisplay = document.getElementById('collectorSkillsPoints');
+        if (!grid || !pointsDisplay) return;
+        const availablePoints = Number(state.skillPoints) || 0;
+        pointsDisplay.textContent = `⭐ ${availablePoints} punto${availablePoints === 1 ? '' : 's'} disponible${availablePoints === 1 ? '' : 's'}`;
+        grid.innerHTML = '';
+
+        const icons = {
+            luck:'🍀',
+            money:'💰',
+            'chest-discount':'🗝️',
+            'museum-slots':'🏛️',
+            'coinflip-cooldown':'⏱️'
+        };
+
+        collectorSkillsSnapshot().forEach(skillState => {
+            const definition = COLLECTOR_SKILLS[skillState.id];
+            const level = skillState.level;
+            const isMaxed = level >= skillState.maxLevel;
+            const cost = skillState.cost;
+            const card = document.createElement('article');
+            card.className = `collector-skill-card${isMaxed ? ' maxed' : ''}`;
+
+            const top = document.createElement('div');
+            top.className = 'collector-skill-card-top';
+            const name = document.createElement('div');
+            name.className = 'collector-skill-name';
+            name.textContent = `${icons[skillState.id] || '✨'} ${skillState.name}`;
+            const levelLabel = document.createElement('div');
+            levelLabel.className = 'collector-skill-level';
+            levelLabel.textContent = `NIVEL ${level}/${skillState.maxLevel}`;
+            top.append(name, levelLabel);
+
+            const description = document.createElement('div');
+            description.className = 'collector-skill-description';
+            description.textContent = skillState.description;
+
+            const nodes = document.createElement('div');
+            nodes.className = 'collector-skill-nodes';
+            for (let index = 1; index <= skillState.maxLevel; index++) {
+                const node = document.createElement('span');
+                node.className = `collector-skill-node${index <= level ? ' filled' : ''}`;
+                nodes.appendChild(node);
+            }
+
+            const currentEffect = document.createElement('div');
+            currentEffect.className = 'collector-skill-effect';
+            currentEffect.textContent = level > 0 ? `ACTUAL: ${definition.effect(level)}` : 'ACTUAL: sin mejora activada';
+            const nextEffect = document.createElement('div');
+            nextEffect.className = 'collector-skill-next';
+            nextEffect.textContent = isMaxed ? 'Nivel máximo alcanzado' : `SIGUIENTE: ${definition.effect(level + 1)}`;
+
+            const buyButton = document.createElement('button');
+            buyButton.className = 'collector-skill-buy';
+            buyButton.type = 'button';
+            buyButton.disabled = isMaxed || availablePoints < cost;
+            buyButton.textContent = isMaxed
+                ? '✓ NIVEL MÁXIMO'
+                : availablePoints >= cost
+                    ? `MEJORAR · ${cost} PUNTO${cost === 1 ? '' : 'S'}`
+                    : `NECESITAS ${cost} PUNTO${cost === 1 ? '' : 'S'}`;
+            if (!isMaxed) buyButton.addEventListener('click', () => buyCollectorSkill(skillState.id));
+
+            card.append(top, description, nodes, currentEffect, nextEffect, buyButton);
+            grid.appendChild(card);
+        });
+
+        const openButton = document.getElementById('collectorSkillsOpenBtn');
+        if (openButton) openButton.textContent = availablePoints > 0
+            ? `🌳  ÁRBOL DE HABILIDADES · ${availablePoints} PTS`
+            : '🌳  ÁRBOL DE HABILIDADES';
+    }
+
     function postCollectorSnapshot() {
+        const missionsOverlay = document.getElementById('collectorMissionsOverlay');
+        if (missionsOverlay && missionsOverlay.classList.contains('open')) renderCollectorMissions();
+        const skillsOverlay = document.getElementById('collectorSkillsOverlay');
+        if (skillsOverlay && skillsOverlay.classList.contains('open')) renderCollectorSkillTree();
         if (!state.collectorMissionProgress || window.parent === window) return;
         synchronizeCollectorMissionPeriod();
         const level = Number(state.level) || 1;
@@ -10736,12 +11466,33 @@
         if (!state.collectorMissionProgress) return;
         synchronizeCollectorMissionPeriod();
         const progress = state.collectorMissionProgress;
+        const increment = (counters, metric, amount = 1) => {
+            counters[metric] = (Number(counters[metric]) || 0) + amount;
+        };
         if (type === 'crate') {
             progress.weeklyCrates = (Number(progress.weeklyCrates) || 0) + 1;
             if (boxKey === 'tech') progress.dailyTech = (Number(progress.dailyTech) || 0) + 1;
+            if (boxKey && !progress.dailyUniqueBoxes.includes(boxKey)) progress.dailyUniqueBoxes.push(boxKey);
+            if (boxKey && !progress.weeklyUniqueBoxes.includes(boxKey)) progress.weeklyUniqueBoxes.push(boxKey);
         } else if (type === 'auction') {
             progress.dailyAuction = (Number(progress.dailyAuction) || 0) + 1;
             progress.weeklyAuction = (Number(progress.weeklyAuction) || 0) + 1;
+        } else if (type === 'sell') {
+            const amount = Math.max(0, Math.floor(Number(boxKey) || 0));
+            increment(progress.dailyActionCounters, 'itemsSold', amount);
+            increment(progress.weeklyActionCounters, 'itemsSold', amount);
+        } else if (type === 'coin-win') {
+            increment(progress.dailyActionCounters, 'coinWins');
+            increment(progress.weeklyActionCounters, 'coinWins');
+        } else if (type === 'poker-win') {
+            increment(progress.dailyActionCounters, 'pokerWins');
+            increment(progress.weeklyActionCounters, 'pokerWins');
+        } else if (type === 'craft') {
+            increment(progress.dailyActionCounters, 'crafts');
+            increment(progress.weeklyActionCounters, 'crafts');
+        } else if (type === 'potion-purchase') {
+            increment(progress.dailyActionCounters, 'potionsBought');
+            increment(progress.weeklyActionCounters, 'potionsBought');
         }
         postCollectorSnapshot();
     }
@@ -10774,15 +11525,30 @@
             'weekly-crates': 'weeklyCrates',
             'weekly-auction': 'weeklyAuction'
         }[mission.id];
-        if (!claimedKey) return postCollectorSnapshot();
+        if (claimedKey) {
+            state.collectorMissionProgress.claimed[claimedKey] = true;
+        } else if (mission.period === 'daily' || mission.period === 'weekly') {
+            state.collectorMissionProgress.claimedMissions[mission.period][mission.id] = true;
+        } else {
+            return postCollectorSnapshot();
+        }
+        if (mission.period === 'daily') {
+            const weeklyCounters = state.collectorMissionProgress.weeklyActionCounters;
+            weeklyCounters.dailyClaims = (Number(weeklyCounters.dailyClaims) || 0) + 1;
+        }
 
-        state.collectorMissionProgress.claimed[claimedKey] = true;
         if (mission.reward.type === 'xp') {
             addXP(mission.reward.amount);
-        } else if (mission.id === 'daily-auction') {
-            grantCollectorPotion('luck', 5 * 60);
-        } else {
-            grantCollectorPotion('money', 3 * 60);
+        } else if (mission.reward.type === 'potion') {
+            const fallbackPotion = mission.id === 'daily-auction' ? 'luck' : 'money';
+            const fallbackDuration = mission.id === 'daily-auction' ? 5 * 60 : 3 * 60;
+            grantCollectorPotion(mission.reward.potion || fallbackPotion, mission.reward.durationSeconds || fallbackDuration);
+        } else if (mission.reward.type === 'coins') {
+            state.balance += Number(mission.reward.amount) || 0;
+            updateStats();
+        } else if (mission.reward.type === 'skillPoints') {
+            state.skillPoints = (Number(state.skillPoints) || 0) + (Number(mission.reward.amount) || 0);
+            updateLevelDisplay();
         }
         saveGame();
         postCollectorSnapshot();
