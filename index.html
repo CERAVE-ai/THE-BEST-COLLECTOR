@@ -177,6 +177,7 @@
             overflow-x: auto;
             padding-bottom: 16px;
             scrollbar-width: none;
+            overscroll-behavior-x: contain;
         }
 
         .tabs-scroll::-webkit-scrollbar { display: none; }
@@ -3830,14 +3831,14 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Cambios de balance: El poker se le ha aumentado un 35% la dificultad y ahora pasa de dar un x65 a un x45. Las subastas las hemos mejorado un 35% para que den mejores objetos. Mas una nueva mascota.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Ajuste de balance: el póker paga x15 tu apuesta. Las subastas siguen ofreciendo mejores objetos y hay una nueva mascota.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 ACTUALICACION &nbsp;15/ 10 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #50</div>
+        <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PROXIMA ACTUALICACION &nbsp;15/ 10 / 2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #65</div>
     </div>
 </div>
 
@@ -4653,7 +4654,7 @@
 <div id="pokerOverlay">
   <div id="pokerBox">
     <div class="poker-title">🃏 POKER</div>
-    <div class="poker-subtitle">5-CARD DRAW · GANA A LOS 3 BOTS · x45 TU APUESTA</div>
+    <div class="poker-subtitle">5-CARD DRAW · GANA A LOS 3 BOTS · x15 TU APUESTA</div>
 
     <!-- Bots -->
     <div class="poker-bots-row">
@@ -4855,7 +4856,7 @@
                 <div class="pocion-desc">+40% de suerte durante 5 minutos</div>
             </div>
             <button class="pocion-buy-btn" id="buyLuckPotion" style="background:linear-gradient(135deg,#d97706,#fbbf24);color:#0a0f1e;">
-                50.000 $
+                750.000 $
             </button>
         </div>
 
@@ -4867,7 +4868,7 @@
                 <div class="pocion-desc">Ruletas giran 35% más rápido durante 3 minutos</div>
             </div>
             <button class="pocion-buy-btn" id="buySpeedPotion" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:white;">
-                55.000 $
+                825.000 $
             </button>
         </div>
 
@@ -4879,7 +4880,7 @@
                 <div class="pocion-desc">Los objetos valen 30% más durante 3 minutos</div>
             </div>
             <button class="pocion-buy-btn" id="buyMoneyPotion" style="background:linear-gradient(135deg,#047857,#10b981);color:white;">
-                60.000 $
+                900.000 $
             </button>
         </div>
 
@@ -4891,7 +4892,7 @@
                 <div class="pocion-desc">+55% suerte, objetos valen 50% más y ruleta 40% más rápida durante 4 min</div>
             </div>
             <button class="pocion-buy-btn" id="buyDarkPotion" style="background:linear-gradient(135deg,#4c1d95,#7c3aed);color:white;">
-                300.000 $
+                4.500.000 $
             </button>
         </div>
 
@@ -4903,7 +4904,7 @@
                 <div class="pocion-desc">La ruleta gira un 100% más rápido durante 3 minutos</div>
             </div>
             <button class="pocion-buy-btn" id="buyFlashPotion" style="background:linear-gradient(135deg,#b45309,#fbbf24);color:#0a0f1e;">
-                250.000 $
+                3.750.000 $
             </button>
         </div>
 
@@ -4915,7 +4916,7 @@
                 <div class="pocion-desc">+200% suerte, +150% dinero y ruleta 200% más rápida durante 3 minutos</div>
             </div>
             <button class="pocion-buy-btn" id="buyCeravePotion" style="background:linear-gradient(135deg,#0369a1,#38bdf8);color:white;">
-                5.000.000 $
+                75.000.000 $
             </button>
         </div>
 
@@ -5381,6 +5382,20 @@
 
     function initTabs() {
         const c = document.getElementById('tabsContainer');
+        c.addEventListener('wheel', event => {
+            const maxScroll = c.scrollWidth - c.clientWidth;
+            if (maxScroll <= 0) return;
+            const rawDelta = Math.abs(event.deltaX) > Math.abs(event.deltaY)
+                ? event.deltaX
+                : event.deltaY;
+            if (!rawDelta) return;
+            const scale = event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? c.clientWidth : 1;
+            const nextScroll = Math.max(0, Math.min(maxScroll, c.scrollLeft + rawDelta * scale));
+            if (nextScroll === c.scrollLeft) return;
+            event.preventDefault();
+            c.scrollLeft = nextScroll;
+        }, { passive: false });
+
         Object.keys(boxes).forEach(k => {
             const b = boxes[k];
             const btn = document.createElement('button');
@@ -5458,24 +5473,42 @@
     }
 
     function getItemByRoll(items) {
-        const rand = Math.random() * 100;
-        let cum = 0;
+        const skillLuckLevel = getCollectorSkillLevel('luck');
+        const equippedPet = getEquippedPet();
+        const weightedItems = [];
+        let totalWeight = 0;
+
         for (const [k, info] of Object.entries(rarities)) {
-            let chance = info.chance;
+            let weight = info.chance;
             // Suerte Mítica: mítico pasa de 1% a 2%
-            if (currentEvent && currentEvent.id === 'suerte_mitica' && k === 'mitico') chance = 2;
-            // Poción de Suerte: +40% a todas las rarezas mejores que común
-            if (luckPotionActive && k !== 'comun') chance *= 1.4;
-            if (darkPotionActive && k !== 'comun') chance *= 1.55;
-            if (ceravePotionActive && k !== 'comun') chance *= 3.0;
-            if (k !== 'comun') chance *= 1 + getCollectorSkillLevel('luck') * 0.08;
-            // Mascota: bonus de suerte
-            const _petLuck = getEquippedPet();
-            if (_petLuck && _petLuck.luckBonus > 0 && k !== 'comun') chance *= (1 + _petLuck.luckBonus);
-            cum += chance;
-            if (rand <= cum) return items.find(i => i.rarity === k) || items[0];
+            if (currentEvent && currentEvent.id === 'suerte_mitica' && k === 'mitico') weight = 2;
+
+            if (k !== 'comun') {
+                // Los bonus modifican los pesos; el sorteo se normaliza con el total más abajo.
+                if (luckPotionActive) weight *= 1.4;
+                if (darkPotionActive) weight *= 1.55;
+                if (ceravePotionActive) weight *= 3.0;
+                weight *= 1 + skillLuckLevel * 0.08;
+                if (equippedPet && equippedPet.luckBonus > 0) {
+                    weight *= 1 + equippedPet.luckBonus;
+                }
+            }
+
+            const item = items.find(i => i.rarity === k);
+            if (item && Number.isFinite(weight) && weight > 0) {
+                weightedItems.push({ item, weight });
+                totalWeight += weight;
+            }
         }
-        return items[0];
+
+        if (totalWeight <= 0) return items[0];
+
+        let roll = Math.random() * totalWeight;
+        for (const entry of weightedItems) {
+            if (roll < entry.weight) return entry.item;
+            roll -= entry.weight;
+        }
+        return weightedItems[weightedItems.length - 1].item;
     }
 
     let lastTick = -1;
@@ -5892,8 +5925,8 @@
                 <div class="inv-card-bar" style="background:${item.source === 'anuncios-espana' ? item.accent : (rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24')}"></div>
                 <div class="fav-btn" title="${isFav ? 'Quitar favorito' : 'Marcar favorito'}">${isFav ? '⭐' : '☆'}</div>
                 ${item.infected && !item.parasiteUsed ? '<div class="infected-badge" title="¡Objeto infectado! Si lo guardas mucho tiempo...">🦠</div>' : ''}
-                <div class="inv-card-icon">${item.icon}</div>
-                <div class="inv-card-name">${item.name}</div>
+                <div class="inv-card-icon"></div>
+                <div class="inv-card-name"></div>
                 ${item.source === 'anuncios-espana' ? '<div class="mutation-badge anuncios-espana-badge">🇪🇸 ANUNCIOS ESPAÑA</div>' : (() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
                 <div class="inv-card-price">${salePrice.toLocaleString('es-ES')} ${itemCurrency}</div>
                 <div class="sell-overlay">
@@ -5901,6 +5934,8 @@
                     <div class="sell-overlay-price">${salePrice.toLocaleString('es-ES')} ${itemCurrency}</div>
                 </div>
             `;
+            d.querySelector('.inv-card-icon').textContent = item.icon;
+            d.querySelector('.inv-card-name').textContent = item.name;
             d.querySelector('.fav-btn').addEventListener('click', (e) => {
                 e.stopPropagation();
                 inventory[origIdx].favorite = !inventory[origIdx].favorite;
@@ -6793,21 +6828,20 @@
             const data = JSON.parse(raw);
             // ✅ FIX: Si por alguna razón se guardó un estado de game over, ignorarlo y empezar de cero
             if (data.state && (data.state.over === true)) { clearSave(); return false; }
+            const safeData = sanitizeImportedSave(data);
             // Restaurar state
-            Object.assign(state, data.state);
+            Object.assign(state, safeData.state);
             // Restaurar inventario
-            inventory = data.inventory || [];
+            inventory = safeData.inventory;
             // Restaurar logros
-            if (data.achievements) {
-                data.achievements.forEach(saved => {
-                    const a = achievements.find(x => x.id === saved.id);
-                    if (a) a.done = saved.done;
-                });
-            }
+            safeData.achievements.forEach(saved => {
+                const a = achievements.find(x => x.id === saved.id);
+                if (a) a.done = saved.done;
+            });
             // Restaurar cofre activo
-            if (data.currentKey && boxes[data.currentKey]) currentKey = data.currentKey;
+            if (safeData.currentKey && boxes[safeData.currentKey]) currentKey = safeData.currentKey;
             // Restaurar museo
-            if (data.museumSlots) museumSlots = data.museumSlots;
+            if (safeData.museumSlots) museumSlots = safeData.museumSlots;
             // Asignar _id a items que no tengan
             inventory.forEach(item => { if (!item._id) item._id = Date.now() + Math.floor(Math.random()*99999); });
             return true;
@@ -7040,6 +7074,195 @@
         fb.className = 'io-modal-feedback ok';
     }
 
+    function isPlainObject(value) {
+        if (!value || typeof value !== 'object' || Array.isArray(value)) return false;
+        const prototype = Object.getPrototypeOf(value);
+        return prototype === Object.prototype || prototype === null;
+    }
+
+    function sanitizeImportedText(value, maxLength = 120) {
+        if (typeof value !== 'string') return '';
+        return value
+            .replace(/[<>]/g, '')
+            .replace(/[\u0000-\u001F\u007F]/g, '')
+            .slice(0, maxLength)
+            .trim();
+    }
+
+    function sanitizeImportedJson(value, depth = 0) {
+        if (depth > 24) throw new Error('Partida demasiado profunda');
+        if (value === null || typeof value === 'boolean') return value;
+        if (typeof value === 'string') return sanitizeImportedText(value, 2048);
+        if (typeof value === 'number') {
+            if (!Number.isFinite(value) || Math.abs(value) > 1e100) {
+                throw new Error('Número inválido en la partida');
+            }
+            return value;
+        }
+        if (Array.isArray(value)) {
+            if (value.length > 50000) throw new Error('Lista demasiado grande');
+            return value.map(entry => sanitizeImportedJson(entry, depth + 1));
+        }
+        if (!isPlainObject(value)) throw new Error('Objeto inválido en la partida');
+
+        const clean = Object.create(null);
+        const entries = Object.entries(value);
+        if (entries.length > 10000) throw new Error('Objeto demasiado grande');
+        for (const [key, entry] of entries) {
+            if (!/^[A-Za-z0-9_-]{1,100}$/.test(key)) continue;
+            if (key === '__proto__' || key === 'prototype' || key === 'constructor') continue;
+            clean[key] = sanitizeImportedJson(entry, depth + 1);
+        }
+        return clean;
+    }
+
+    function sanitizeImportedItem(item) {
+        if (!isPlainObject(item)) throw new Error('Objeto de inventario inválido');
+
+        const name = sanitizeImportedText(item.name, 120);
+        const icon = sanitizeImportedText(item.icon, 32);
+        const price = item.price;
+        if (!name || !icon || typeof price !== 'number' || !Number.isFinite(price) ||
+            price < 0 || price > 1e100) {
+            throw new Error('Datos de objeto inválidos');
+        }
+        if (!Object.prototype.hasOwnProperty.call(rarities, item.rarity)) {
+            throw new Error('Rareza de objeto inválida');
+        }
+
+        const safeItem = {
+            _id: typeof item._id === 'number' && Number.isFinite(item._id)
+                ? item._id
+                : Date.now() + Math.floor(Math.random() * 99999),
+            name,
+            icon,
+            rarity: item.rarity,
+            price,
+            favorite: item.favorite === true,
+            mutation: Object.prototype.hasOwnProperty.call(mutations, item.mutation) || item.mutation === 'none'
+                ? item.mutation
+                : 'normal'
+        };
+
+        if (item.source === 'super' || item.source === 'hyper') {
+            safeItem.source = item.source;
+        } else if (item.source === 'anuncios-espana') {
+            // Los estilos y datos del premio se toman del catálogo del juego, nunca del archivo importado.
+            const officialAd = anunciosEspanaItems.find(entry => entry.name === name);
+            if (!officialAd) throw new Error('Premio de anuncios no reconocido');
+            Object.assign(safeItem, {
+                name: officialAd.name,
+                icon: officialAd.icon,
+                price: officialAd.price,
+                source: 'anuncios-espana',
+                currency: '€',
+                accent: officialAd.accent,
+                glow: officialAd.glow,
+                cardBg: officialAd.cardBg
+            });
+        } else if (item.currency === '$' || item.currency === '€') {
+            safeItem.currency = item.currency;
+        }
+
+        if (item.infected === true) safeItem.infected = true;
+        if (item.parasiteUsed === true) safeItem.parasiteUsed = true;
+        if (typeof item.infectedSince === 'number' && Number.isFinite(item.infectedSince)) {
+            safeItem.infectedSince = item.infectedSince;
+        }
+        return safeItem;
+    }
+
+    function sanitizeImportedSave(data) {
+        if (!isPlainObject(data) || !isPlainObject(data.state) || !Array.isArray(data.inventory)) {
+            throw new Error('Formato inválido');
+        }
+        if (data.inventory.length > 50000) throw new Error('Inventario demasiado grande');
+
+        const allowedStateKeys = new Set([
+            'balance', 'spent', 'invValue', 'opened', 'best', 'commonCount', 'miticoCount',
+            'consecutiveMiticos', 'lastWasmitico', 'timeInGame', 'gotSuerteMax', 'coinWinStreak',
+            'coinLoseStreak', 'ruletaCharges', 'miticosForRuleta', 'superRuletaCharges',
+            'miticosForSuperRuleta', 'hyperRuletaCharges', 'superSpinsForHyper', 'auctionWins',
+            'universalCount', 'potionsBought', 'pityCount', 'silenceCharges', 'prestige',
+            'ownedPets', 'equippedPet', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
+            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'loan', 'xp', 'level',
+            'skillPoints', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
+            'collectorPotionEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin'
+        ]);
+        const numericStateKeys = new Set([
+            'balance', 'spent', 'invValue', 'opened', 'best', 'commonCount', 'miticoCount',
+            'consecutiveMiticos', 'timeInGame', 'coinWinStreak', 'coinLoseStreak', 'ruletaCharges',
+            'miticosForRuleta', 'superRuletaCharges', 'miticosForSuperRuleta', 'hyperRuletaCharges',
+            'superSpinsForHyper', 'auctionWins', 'universalCount', 'potionsBought', 'pityCount',
+            'silenceCharges', 'prestige', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
+            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'xp', 'level', 'skillPoints'
+        ]);
+        const booleanStateKeys = new Set(['lastWasmitico', 'gotSuerteMax']);
+        const objectStateKeys = new Set([
+            'ownedPets', 'loan', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
+            'collectorPotionEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin'
+        ]);
+        const safeState = {};
+
+        for (const [key, value] of Object.entries(data.state)) {
+            if (!allowedStateKeys.has(key)) continue;
+            if (numericStateKeys.has(key)) {
+                if (typeof value !== 'number' || !Number.isFinite(value) ||
+                    Math.abs(value) > 1e100) {
+                    throw new Error(`Valor inválido: ${key}`);
+                }
+                safeState[key] = value;
+            } else if (booleanStateKeys.has(key)) {
+                if (typeof value !== 'boolean') throw new Error(`Valor inválido: ${key}`);
+                safeState[key] = value;
+            } else if (key === 'equippedPet') {
+                if (value !== null && typeof value !== 'string') throw new Error('Mascota equipada inválida');
+                safeState[key] = value === null ? null : sanitizeImportedText(value, 80);
+            } else if (objectStateKeys.has(key)) {
+                if (key === 'ownedPets') {
+                    if (!Array.isArray(value) || value.some(pet => typeof pet !== 'string')) {
+                        throw new Error('Lista de mascotas inválida');
+                    }
+                } else if (value !== null && !isPlainObject(value)) {
+                    throw new Error(`Objeto inválido: ${key}`);
+                }
+                safeState[key] = sanitizeImportedJson(value);
+            }
+        }
+
+        const safeSave = {
+            state: safeState,
+            inventory: data.inventory.map(sanitizeImportedItem),
+            achievements: [],
+            currentKey: typeof data.currentKey === 'string' && Object.prototype.hasOwnProperty.call(boxes, data.currentKey)
+                ? data.currentKey
+                : 'tech',
+            savedAt: typeof data.savedAt === 'number' && Number.isFinite(data.savedAt) ? data.savedAt : Date.now()
+        };
+
+        if (data.museumSlots !== undefined) {
+            if (!Array.isArray(data.museumSlots) || data.museumSlots.length > 1000) {
+                throw new Error('Vitrinas del museo inválidas');
+            }
+            safeSave.museumSlots = data.museumSlots.map(item => item === null ? null : sanitizeImportedItem(item));
+        }
+
+        if (data.achievements !== undefined) {
+            if (!Array.isArray(data.achievements) || data.achievements.length > 1000) {
+                throw new Error('Lista de logros inválida');
+            }
+            const knownAchievements = new Set(achievements.map(achievement => achievement.id));
+            safeSave.achievements = data.achievements
+                .filter(entry => isPlainObject(entry) &&
+                    typeof entry.id === 'string' &&
+                    knownAchievements.has(entry.id) &&
+                    typeof entry.done === 'boolean')
+                .map(entry => ({ id: entry.id, done: entry.done }));
+        }
+
+        return safeSave;
+    }
+
     // IMPORTAR PARTIDA
     function openImportModal() {
         document.getElementById('importCodeArea').value = '';
@@ -7058,10 +7281,8 @@
                 jsonStr = decodeURIComponent(escape(atob(jsonStr)));
             }
             const data = JSON.parse(jsonStr);
-            if (!data.state || !Array.isArray(data.inventory)) {
-                throw new Error('Formato inválido');
-            }
-            localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+            const safeSave = sanitizeImportedSave(data);
+            localStorage.setItem(SAVE_KEY, JSON.stringify(safeSave));
             fb.textContent = '✅ ¡Partida importada! Recargando...';
             fb.className = 'io-modal-feedback ok';
             setTimeout(() => location.reload(), 1200);
@@ -7441,6 +7662,21 @@
     };
 
     // POCIONES
+    const POTION_PRICE_MULTIPLIER = 15;
+    const POTION_PRICES = Object.freeze({
+        luck: 50000 * POTION_PRICE_MULTIPLIER,
+        speed: 55000 * POTION_PRICE_MULTIPLIER,
+        money: 60000 * POTION_PRICE_MULTIPLIER,
+        dark: 300000 * POTION_PRICE_MULTIPLIER,
+        flash: 250000 * POTION_PRICE_MULTIPLIER,
+        cerave: 5000000 * POTION_PRICE_MULTIPLIER,
+        silence: 75000
+    });
+
+    function formatPotionPrice(type) {
+        return `${POTION_PRICES[type].toLocaleString('es-ES')} $`;
+    }
+
     let luckPotionActive = false;
     let luckPotionSecondsLeft = 0;
     let speedPotionActive = false;
@@ -7567,21 +7803,21 @@
             lBtn.textContent = '⏳ En uso';
         } else {
             lBtn.disabled = loanBlocksPotions;
-            lBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '50.000 $';
+            lBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : formatPotionPrice('luck');
         }
         if (speedPotionActive) {
             sBtn.disabled = true;
             sBtn.textContent = '⏳ En uso';
         } else {
             sBtn.disabled = loanBlocksPotions;
-            sBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '55.000 $';
+            sBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : formatPotionPrice('speed');
         }
         if (moneyPotionActive) {
             mBtn.disabled = true;
             mBtn.textContent = '⏳ En uso';
         } else {
             mBtn.disabled = loanBlocksPotions;
-            mBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '60.000 $';
+            mBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : formatPotionPrice('money');
         }
         if (dBtn) {
             if (darkPotionActive) {
@@ -7589,7 +7825,7 @@
                 dBtn.textContent = '⏳ En uso';
             } else {
                 dBtn.disabled = loanBlocksPotions;
-                dBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '300.000 $';
+                dBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : formatPotionPrice('dark');
             }
         }
         if (fBtn) {
@@ -7598,7 +7834,7 @@
                 fBtn.textContent = '⏳ En uso';
             } else {
                 fBtn.disabled = loanBlocksPotions;
-                fBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '250.000 $';
+                fBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : formatPotionPrice('flash');
             }
         }
         const crvBtn = document.getElementById('buyCeravePotion');
@@ -7608,13 +7844,13 @@
                 crvBtn.textContent = '⏳ En uso';
             } else {
                 crvBtn.disabled = loanBlocksPotions;
-                crvBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '5.000.000 $';
+                crvBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : formatPotionPrice('cerave');
             }
         }
         const silBtn = document.getElementById('buySilencePotion');
         if (silBtn) {
             silBtn.disabled = loanBlocksPotions;
-            silBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : '75.000 $';
+            silBtn.textContent = loanBlocksPotions ? '🔒 Préstamo activo' : formatPotionPrice('silence');
         }
     }
 
@@ -7639,8 +7875,8 @@
         if (type === 'flash'  && flashPotionActive)  return;
         if (type === 'cerave' && ceravePotionActive) return;
 
-        const prices = { luck: 50000, speed: 55000, money: 60000, dark: 300000, flash: 250000, cerave: 5000000, silence: 75000 };
-        const price = prices[type];
+        const price = POTION_PRICES[type];
+        if (!Number.isFinite(price)) return;
         if (state.balance < price) {
             playSound('click');
             document.getElementById('balance').parentElement.classList.add('shake');
@@ -8601,7 +8837,7 @@
         caseEl.style.boxShadow = '0 0 60px rgba(132,204,22,0.5), inset 0 1px 0 rgba(255,255,255,0.05)';
 
         const reel = document.getElementById('idiotaRuletaReel');
-        const spinDur = ceravePotionActive ? Math.round(5000 * 0.333) : 5000;
+        const spinDur = 5000;
         reel.style.transition = `transform ${spinDur / 1000}s cubic-bezier(0.12, 0, 0.04, 1)`;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
@@ -8623,9 +8859,6 @@
             const cards = reel.querySelectorAll('.idiota-ruleta-card');
             const winner = cards[winIdx]._item;
             let finalPrice = bonusActive ? winner.price * 2 : winner.price;
-            if (moneyPotionActive)  finalPrice *= 1.3;
-            if (darkPotionActive)   finalPrice *= 1.5;
-            if (ceravePotionActive) finalPrice *= 2.5;
             const mut = getMutation();
             finalPrice = Math.round(finalPrice * mut.mult);
             finalPrice = Math.round(finalPrice * (1 + getCollectorSkillLevel('money') * 0.05));
@@ -8754,7 +8987,7 @@
         void reel.offsetWidth;
         caseEl.style.boxShadow = '0 0 70px rgba(239,68,68,0.5),0 0 52px rgba(251,191,36,0.42),inset 0 1px 0 rgba(255,255,255,0.1)';
 
-        const spinDur = ceravePotionActive ? Math.round(5400 * 0.333) : 5400;
+        const spinDur = 5400;
         const winIdx = 55;
         const cardW = window.innerWidth <= 700 ? 100 : 140;
         const tx = -((winIdx * cardW) - (caseEl.offsetWidth / 2) + cardW / 2);
@@ -9682,10 +9915,12 @@
             const d = document.createElement('div');
             d.className = 'craft-inv-item' + (isSelected ? ' selected' : '') + (isFull ? ' disabled' : '');
             d.innerHTML = `
-                <div class="craft-inv-icon">${item.icon}</div>
-                <div class="craft-inv-name">${item.name}</div>
+                <div class="craft-inv-icon"></div>
+                <div class="craft-inv-name"></div>
                 <div class="craft-inv-price">${item.price.toLocaleString()}$</div>
                 <div class="craft-inv-dot" style="background:${color}"></div>`;
+            d.querySelector('.craft-inv-icon').textContent = item.icon;
+            d.querySelector('.craft-inv-name').textContent = item.name;
             d.addEventListener('click', () => toggleCraftSlot(idx));
             grid.appendChild(d);
         });
@@ -9710,7 +9945,9 @@
                 if (!item) continue;
                 d.className = 'craft-slot filled';
                 d.title = `Quitar: ${item.name}`;
-                d.innerHTML = `<div style="font-size:22px">${item.icon}</div><div class="craft-slot-name">${item.name}</div>`;
+                d.innerHTML = `<div class="craft-slot-icon" style="font-size:22px"></div><div class="craft-slot-name"></div>`;
+                d.querySelector('.craft-slot-icon').textContent = item.icon;
+                d.querySelector('.craft-slot-name').textContent = item.name;
                 const capturedIdx = craftSlots[i];
                 d.addEventListener('click', () => toggleCraftSlot(capturedIdx));
             } else {
@@ -9950,12 +10187,14 @@
                 const col = (typeof rarities !== 'undefined' && rarities[item.rarity]) ? rarities[item.rarity].color : '#fbbf24';
                 spot.innerHTML = `
                     <div style="width:100%;display:flex;flex-direction:column;align-items:center;gap:2px;border-top:2px solid ${col};padding-top:5px;">
-                        <div class="museo-spot-icon">${item.icon}</div>
-                        <div class="museo-spot-name">${item.name}</div>
+                        <div class="museo-spot-icon"></div>
+                        <div class="museo-spot-name"></div>
                         <div class="museo-spot-price">${item.price.toLocaleString()} $</div>
                     </div>
                     <div class="museo-spot-remove">✕ RETIRAR</div>
                 `;
+                spot.querySelector('.museo-spot-icon').textContent = item.icon;
+                spot.querySelector('.museo-spot-name').textContent = item.name;
             } else {
                 const label = idx < 4 ? 'VITRINA' : 'PEDESTAL';
                 spot.innerHTML = `<div class="museo-spot-label">${label}</div>`;
@@ -9981,12 +10220,14 @@
                 const card = document.createElement('div');
                 card.className = 'museo-inv-card' + (inMuseo ? ' in-museo' : '') + (isSel ? ' selected' : '');
                 card.innerHTML = `
-                    <div class="museo-inv-icon">${item.icon}</div>
+                    <div class="museo-inv-icon"></div>
                     <div class="museo-inv-info">
-                        <div class="museo-inv-name">${item.name}</div>
+                        <div class="museo-inv-name"></div>
                         <div class="museo-inv-price">${item.price.toLocaleString()} $</div>
                     </div>
                 `;
+                card.querySelector('.museo-inv-icon').textContent = item.icon;
+                card.querySelector('.museo-inv-name').textContent = item.name;
                 if (!inMuseo) {
                     card.addEventListener('click', () => {
                         if (isSel) {
@@ -10760,20 +11001,45 @@
                 </div>`;
             return;
         }
-        let html = `<div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3b0764;text-align:center;margin-bottom:12px;">Tus Míticos Duplicados — Elige uno para intercambiar</div>`;
+        container.innerHTML = '';
+        const heading = document.createElement('div');
+        heading.style.cssText = 'font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#3b0764;text-align:center;margin-bottom:12px;';
+        heading.textContent = 'Tus Míticos Duplicados — Elige uno para intercambiar';
+        container.appendChild(heading);
+
         dupes.forEach(item => {
-            html += `
-            <div class="bm-item-card">
-                <div class="bm-item-icon">${item.icon}</div>
-                <div class="bm-item-info">
-                    <div class="bm-item-name">${item.name}</div>
-                    <div class="bm-item-price">${item.price.toLocaleString('es-ES')} $ · Recibirás: <span style="color:#a855f7;">❓❓❓</span></div>
-                </div>
-                <div class="bm-item-count">×${item.count}</div>
-                <button class="bm-trade-btn" onclick="bmTrade('${item.name.replace(/'/g,"\\'")}')">🔀 CAMBIAR</button>
-            </div>`;
+            const card = document.createElement('div');
+            card.className = 'bm-item-card';
+
+            const icon = document.createElement('div');
+            icon.className = 'bm-item-icon';
+            icon.textContent = item.icon;
+
+            const info = document.createElement('div');
+            info.className = 'bm-item-info';
+            const name = document.createElement('div');
+            name.className = 'bm-item-name';
+            name.textContent = item.name;
+            const price = document.createElement('div');
+            price.className = 'bm-item-price';
+            price.append(document.createTextNode(`${item.price.toLocaleString('es-ES')} $ · Recibirás: `));
+            const mystery = document.createElement('span');
+            mystery.style.color = '#a855f7';
+            mystery.textContent = '❓❓❓';
+            price.appendChild(mystery);
+            info.append(name, price);
+
+            const count = document.createElement('div');
+            count.className = 'bm-item-count';
+            count.textContent = `×${item.count}`;
+            const tradeButton = document.createElement('button');
+            tradeButton.className = 'bm-trade-btn';
+            tradeButton.textContent = '🔀 CAMBIAR';
+            tradeButton.addEventListener('click', () => bmTrade(item.name));
+
+            card.append(icon, info, count, tradeButton);
+            container.appendChild(card);
         });
-        container.innerHTML = html;
     }
 
     function bmTrade(itemName) {
@@ -11189,7 +11455,7 @@
     const POKER_RED = new Set(['♥','♦']);
     const POKER_BOT_NAMES = ['El Tiburón 🦈','La Sombra 🎭','El Maestro ♟️'];
     const POKER_BOT_AVAT  = ['🦈','🎭','♟️'];
-    const POKER_WIN_MULTIPLIER = 45;
+    const POKER_WIN_MULTIPLIER = 15;
     const POKER_BAD_LUCK_CHANCE = 0.35;
 
     let pks = { deck:[], player:[], bots:[[],[],[]], sel:new Set(), phase:'bet', bet:0 };
