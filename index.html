@@ -3430,7 +3430,7 @@
         }
         .museo-wall-row { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; }
         .museo-floor-section {
-            flex: 1; overflow: hidden; position: relative;
+            flex: 1; overflow-y: auto; overflow-x: hidden; position: relative;
             background: linear-gradient(180deg,#080d18 0%,#050810 100%);
         }
         .museo-floor-label {
@@ -7130,7 +7130,15 @@
             throw new Error('Rareza de objeto inválida');
         }
 
+        const safeExtras = sanitizeImportedJson(item);
+        [
+            '_id', 'name', 'icon', 'rarity', 'price', 'favorite', 'mutation',
+            'source', 'currency', 'infected', 'parasiteUsed', 'infectedSince',
+            'accent', 'glow', 'cardBg'
+        ].forEach(key => delete safeExtras[key]);
+
         const safeItem = {
+            ...safeExtras,
             _id: typeof item._id === 'number' && Number.isFinite(item._id)
                 ? item._id
                 : Date.now() + Math.floor(Math.random() * 99999),
@@ -7141,7 +7149,8 @@
             favorite: item.favorite === true,
             mutation: Object.prototype.hasOwnProperty.call(mutations, item.mutation) || item.mutation === 'none'
                 ? item.mutation
-                : 'normal'
+                : 'normal',
+            currency: item.currency === '€' ? '€' : '$'
         };
 
         if (item.source === 'super' || item.source === 'hyper') {
@@ -7160,8 +7169,6 @@
                 glow: officialAd.glow,
                 cardBg: officialAd.cardBg
             });
-        } else if (item.currency === '$' || item.currency === '€') {
-            safeItem.currency = item.currency;
         }
 
         if (item.infected === true) safeItem.infected = true;
@@ -7306,6 +7313,7 @@
         
         const hasSave = loadGame();
         initializeCollectorSystems();
+        updateSilenceBadge();
         initializeQolSettings();
         resumeLoanTimer();
         initBlackMarket();
@@ -7677,6 +7685,15 @@
         return `${POTION_PRICES[type].toLocaleString('es-ES')} $`;
     }
 
+    const TIMED_POTION_DURATIONS = {
+        luck: 5 * 60,
+        speed: 3 * 60,
+        money: 3 * 60,
+        dark: 4 * 60,
+        flash: 3 * 60,
+        cerave: 3 * 60
+    };
+
     let luckPotionActive = false;
     let luckPotionSecondsLeft = 0;
     let speedPotionActive = false;
@@ -7887,45 +7904,24 @@
         state.potionsBought++;
         recordCollectorMissionAction('potion-purchase');
         updateStats();
-        saveGame();
         playSound('win');
         confetti({ particleCount: 80, spread: 70, colors: ['#10b981','#fbbf24','#ffffff'] });
 
-        if (type === 'luck') {
-            luckPotionActive = true;
-            luckPotionSecondsLeft = 5 * 60;
-            document.getElementById('luckPotionInd').classList.add('active');
-        } else if (type === 'speed') {
-            speedPotionActive = true;
-            speedPotionSecondsLeft = 180;
-            document.getElementById('speedPotionInd').classList.add('active');
-        } else if (type === 'money') {
-            moneyPotionActive = true;
-            moneyPotionSecondsLeft = 3 * 60;
-            document.getElementById('moneyPotionInd').classList.add('active');
-        } else if (type === 'dark') {
-            darkPotionActive = true;
-            darkPotionSecondsLeft = 4 * 60;
-            document.getElementById('darkPotionInd').classList.add('active');
-        } else if (type === 'flash') {
-            flashPotionActive = true;
-            flashPotionSecondsLeft = 3 * 60;
-            document.getElementById('flashPotionInd').classList.add('active');
-        } else if (type === 'cerave') {
-            ceravePotionActive = true;
-            ceravePotionSecondsLeft = 3 * 60;
-            document.getElementById('ceravePotionInd').classList.add('active');
-        } else if (type === 'silence') {
+        if (type === 'silence') {
             state.silenceCharges = (state.silenceCharges || 0) + 1;
             updateSilenceBadge();
             const silInd = document.getElementById('silencePotionInd');
             if (silInd) {
                 silInd.classList.add('active');
-                document.getElementById('silencePotionCharges').textContent = state.silenceCharges;
+                const charges = document.getElementById('silencePotionCharges');
+                if (charges) charges.textContent = state.silenceCharges;
             }
+        } else if (Object.prototype.hasOwnProperty.call(TIMED_POTION_DURATIONS, type)) {
+            grantCollectorPotion(type, TIMED_POTION_DURATIONS[type]);
         }
         refreshShopPotionBtns();
         checkAchievements();
+        saveGame();
         closeShop();
     }
 
@@ -10177,7 +10173,53 @@
         runMuseoVisitors();
     }
 
+    function getMuseumSlotCapacity() {
+        const rawLevel = Number(state.collectorSkillLevels && state.collectorSkillLevels['museum-slots']);
+        const level = Number.isFinite(rawLevel)
+            ? Math.max(0, Math.min(5, Math.floor(rawLevel)))
+            : 0;
+        return MUSEO_SLOTS + level;
+    }
+
+    function syncMuseumSlotCapacity() {
+        const capacity = getMuseumSlotCapacity();
+        if (museumSlots.length > capacity) {
+            const overflow = museumSlots.splice(capacity);
+            overflow.forEach(item => {
+                if (item && !inventory.some(existing => existing && existing._id === item._id)) {
+                    inventory.push(item);
+                }
+            });
+        }
+        while (museumSlots.length < capacity) museumSlots.push(null);
+        return capacity;
+    }
+
+    function createMuseumSpot(index) {
+        const isWallSpot = index < 4;
+        const spot = document.createElement('div');
+        spot.className = `museo-spot ${isWallSpot ? 'museo-spot-wall' : 'museo-spot-pedestal'}`;
+        spot.dataset.slot = String(index);
+        const label = document.createElement('div');
+        label.className = 'museo-spot-label';
+        label.textContent = isWallSpot ? 'VITRINA' : 'PEDESTAL';
+        spot.appendChild(label);
+        return spot;
+    }
+
     function renderMuseoRoom() {
+        const wallRow = document.querySelector('.museo-wall-row');
+        const floorGrid = document.querySelector('.museo-floor-persp');
+        if (!wallRow || !floorGrid) return;
+
+        const capacity = syncMuseumSlotCapacity();
+        wallRow.replaceChildren();
+        floorGrid.replaceChildren();
+        for (let index = 0; index < capacity; index++) {
+            const spot = createMuseumSpot(index);
+            (index < 4 ? wallRow : floorGrid).appendChild(spot);
+        }
+
         document.querySelectorAll('.museo-spot').forEach(spot => {
             const idx = parseInt(spot.getAttribute('data-slot'));
             const item = museumSlots[idx];
@@ -10523,24 +10565,11 @@
                 <div class="museo-room">
                     <div class="museo-back-wall">
                         <div class="museo-wall-label">⬛ VITRINAS DE PARED</div>
-                        <div class="museo-wall-row">
-                            <div class="museo-spot museo-spot-wall" data-slot="0"><div class="museo-spot-label">VITRINA</div></div>
-                            <div class="museo-spot museo-spot-wall" data-slot="1"><div class="museo-spot-label">VITRINA</div></div>
-                            <div class="museo-spot museo-spot-wall" data-slot="2"><div class="museo-spot-label">VITRINA</div></div>
-                            <div class="museo-spot museo-spot-wall" data-slot="3"><div class="museo-spot-label">VITRINA</div></div>
-                        </div>
+                        <div class="museo-wall-row"></div>
                     </div>
                     <div class="museo-floor-section">
                         <div class="museo-floor-label">🏛️ PEDESTALES DE EXPOSICIÓN</div>
                         <div class="museo-floor-persp">
-                            <div class="museo-spot museo-spot-pedestal" data-slot="4"><div class="museo-spot-label">PEDESTAL</div></div>
-                            <div class="museo-spot museo-spot-pedestal" data-slot="5"><div class="museo-spot-label">PEDESTAL</div></div>
-                            <div class="museo-spot museo-spot-pedestal" data-slot="6"><div class="museo-spot-label">PEDESTAL</div></div>
-                            <div class="museo-spot museo-spot-pedestal" data-slot="7"><div class="museo-spot-label">PEDESTAL</div></div>
-                            <div class="museo-spot museo-spot-pedestal" data-slot="8"><div class="museo-spot-label">PEDESTAL</div></div>
-                            <div class="museo-spot museo-spot-pedestal" data-slot="9"><div class="museo-spot-label">PEDESTAL</div></div>
-                            <div class="museo-spot museo-spot-pedestal" data-slot="10"><div class="museo-spot-label">PEDESTAL</div></div>
-                            <div class="museo-spot museo-spot-pedestal" data-slot="11"><div class="museo-spot-label">PEDESTAL</div></div>
                         </div>
                         <div class="museo-visitor-lane" id="museoVisitorLane"></div>
                     </div>
@@ -11867,23 +11896,43 @@
     }
 
     function restoreCollectorPotion(type) {
-        const endAt = Number(state.collectorPotionEnds[type]) || 0;
+        if (!Object.prototype.hasOwnProperty.call(TIMED_POTION_DURATIONS, type)) return false;
+        const endAt = Number((state.collectorPotionEnds || {})[type]) || 0;
         const seconds = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
-        if (type === 'luck') {
-            luckPotionSecondsLeft = seconds;
-            luckPotionActive = seconds > 0;
-            const indicator = document.getElementById('luckPotionInd');
-            if (indicator) indicator.classList.toggle('active', luckPotionActive);
-            const timer = document.getElementById('luckPotionTimer');
-            if (timer && seconds) timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
-        } else if (type === 'money') {
-            moneyPotionSecondsLeft = seconds;
-            moneyPotionActive = seconds > 0;
-            const indicator = document.getElementById('moneyPotionInd');
-            if (indicator) indicator.classList.toggle('active', moneyPotionActive);
-            const timer = document.getElementById('moneyPotionTimer');
-            if (timer && seconds) timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        const active = seconds > 0;
+        switch (type) {
+            case 'luck':
+                luckPotionSecondsLeft = seconds;
+                luckPotionActive = active;
+                break;
+            case 'speed':
+                speedPotionSecondsLeft = seconds;
+                speedPotionActive = active;
+                break;
+            case 'money':
+                moneyPotionSecondsLeft = seconds;
+                moneyPotionActive = active;
+                break;
+            case 'dark':
+                darkPotionSecondsLeft = seconds;
+                darkPotionActive = active;
+                break;
+            case 'flash':
+                flashPotionSecondsLeft = seconds;
+                flashPotionActive = active;
+                break;
+            case 'cerave':
+                ceravePotionSecondsLeft = seconds;
+                ceravePotionActive = active;
+                break;
         }
+        const indicator = document.getElementById(`${type}PotionInd`);
+        if (indicator) indicator.classList.toggle('active', active);
+        const timer = document.getElementById(`${type}PotionTimer`);
+        if (timer) {
+            timer.textContent = `${String(Math.floor(seconds / 60)).padStart(2, '0')}:${String(seconds % 60).padStart(2, '0')}`;
+        }
+        return active;
     }
 
     function initializeCollectorSystems() {
@@ -11924,8 +11973,8 @@
         };
         state.collectorPotionEnds = state.collectorPotionEnds || {};
         synchronizeCollectorMissionPeriod();
-        restoreCollectorPotion('luck');
-        restoreCollectorPotion('money');
+        syncMuseumSlotCapacity();
+        Object.keys(TIMED_POTION_DURATIONS).forEach(restoreCollectorPotion);
         if (typeof refreshShopPotionBtns === 'function') refreshShopPotionBtns();
     }
 
@@ -12252,7 +12301,7 @@
         state.skillPoints = (Number(state.skillPoints) || 0) - cost;
         state.collectorSkillLevels[skillId] = level + 1;
         if (skillId === 'museum-slots') {
-            museumSlots.push(null);
+            syncMuseumSlotCapacity();
             const museum = document.getElementById('museoOverlay');
             if (museum && museum.classList.contains('open')) renderMuseo();
         }
@@ -12303,20 +12352,12 @@
     }
 
     function grantCollectorPotion(type, durationSeconds) {
+        if (!Object.prototype.hasOwnProperty.call(TIMED_POTION_DURATIONS, type)) return;
         const now = Date.now();
         state.collectorPotionEnds = state.collectorPotionEnds || {};
         const endAt = Math.max(now, Number(state.collectorPotionEnds[type]) || 0) + durationSeconds * 1000;
         state.collectorPotionEnds[type] = endAt;
-        const seconds = Math.ceil((endAt - now) / 1000);
-        if (type === 'luck') {
-            luckPotionActive = true;
-            luckPotionSecondsLeft = seconds;
-            document.getElementById('luckPotionInd').classList.add('active');
-        } else {
-            moneyPotionActive = true;
-            moneyPotionSecondsLeft = seconds;
-            document.getElementById('moneyPotionInd').classList.add('active');
-        }
+        restoreCollectorPotion(type);
         if (typeof refreshShopPotionBtns === 'function') refreshShopPotionBtns();
     }
 
