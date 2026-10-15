@@ -3263,70 +3263,6 @@
         .mascota-buy-btn.unequip:hover { background:rgba(255,255,255,0.15); color:#fff; }
         .mascota-buy-btn:disabled { opacity:0.35; pointer-events:none; }
 
-        /* ── BLACKJACK ────────────────────────────────────────────── */
-        #blackjackOverlay {
-            display:none; position:fixed; inset:0; z-index:9100; background:#08080e;
-            color:#e2e8f0; flex-direction:column; overflow:auto;
-        }
-        #blackjackOverlay.open { display:flex; }
-        .bj-topbar {
-            display:flex; align-items:center; gap:14px; padding:10px 20px;
-            background:rgba(0,0,0,.65); border-bottom:1px solid rgba(74,222,128,.2);
-        }
-        .bj-title { flex:1; font:700 18px 'Rajdhani',sans-serif; letter-spacing:4px; color:#4ade80; }
-        .bj-back,.bj-action {
-            border:1px solid rgba(74,222,128,.28); border-radius:9px; padding:9px 14px;
-            background:rgba(74,222,128,.08); color:#bbf7d0; font:700 12px 'Rajdhani',sans-serif;
-            letter-spacing:1px; cursor:pointer; transition:all .18s;
-        }
-        .bj-back:hover,.bj-action:hover:not(:disabled) { background:rgba(74,222,128,.18); transform:translateY(-1px); }
-        .bj-action:disabled { opacity:.4; cursor:not-allowed; }
-        .bj-content { width:min(1000px,100%); margin:auto; padding:clamp(14px,3vw,32px); }
-        .bj-table {
-            min-height:280px; padding:clamp(18px,4vw,34px); border:1px solid rgba(74,222,128,.22);
-            border-radius:24px; background:radial-gradient(ellipse at center,rgba(22,101,52,.25),rgba(3,10,12,.9) 72%);
-            box-shadow:inset 0 0 55px rgba(0,0,0,.5),0 0 35px rgba(74,222,128,.08);
-        }
-        .bj-hand { text-align:center; min-height:118px; margin-bottom:20px; }
-        .bj-hand-label { color:#64748b; font:700 11px 'Rajdhani',sans-serif; letter-spacing:3px; margin-bottom:9px; }
-        .bj-cards { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; min-height:82px; }
-        .bj-card {
-            width:58px; height:82px; display:flex; flex-direction:column; justify-content:space-between;
-            padding:7px; border-radius:9px; background:linear-gradient(145deg,#fff,#e2e8f0);
-            color:#0f172a; box-shadow:0 7px 18px rgba(0,0,0,.35); font:700 17px 'JetBrains Mono',monospace;
-        }
-        .bj-card.red { color:#dc2626; }
-        .bj-card-back { background:linear-gradient(145deg,#14532d,#052e16); color:#bbf7d0; border:1px solid rgba(74,222,128,.45); }
-        .bj-card-corner:last-child { align-self:flex-end; transform:rotate(180deg); }
-        .bj-hand-total { min-height:20px; margin-top:8px; color:#fbbf24; font:700 12px 'Rajdhani',sans-serif; letter-spacing:1px; }
-        .bj-controls {
-            display:flex; flex-direction:column; gap:12px; width:min(560px,100%); margin:22px auto 0;
-        }
-        .bj-bet-row,.bj-quick-row,.bj-action-row { display:flex; justify-content:center; gap:8px; flex-wrap:wrap; }
-        .bj-bet-input {
-            min-width:160px; flex:1; padding:12px; border:1px solid rgba(74,222,128,.25);
-            border-radius:9px; background:rgba(0,0,0,.45); color:#e2e8f0;
-            font:700 14px 'JetBrains Mono',monospace;
-        }
-        .bj-quick-row button {
-            flex:1; min-width:70px; padding:7px; border-radius:8px;
-            border:1px solid rgba(74,222,128,.18); background:rgba(74,222,128,.06);
-            color:#86efac; cursor:pointer; font:700 11px 'Rajdhani',sans-serif;
-        }
-        .bj-message {
-            min-height:48px; margin:18px auto 0; padding:12px; border-radius:10px;
-            color:#94a3b8; text-align:center; font:700 14px 'Rajdhani',sans-serif; letter-spacing:1px;
-        }
-        .bj-message.win { color:#4ade80; background:rgba(74,222,128,.09); }
-        .bj-message.lose { color:#f87171; background:rgba(248,113,113,.08); }
-        @media (max-width:600px) {
-            .bj-topbar { gap:8px; padding:9px 10px; }
-            .bj-title { font-size:14px; letter-spacing:2px; }
-            .bj-back { padding:8px 9px; font-size:10px; }
-            .bj-card { width:48px; height:70px; font-size:14px; }
-            .bj-table { min-height:240px; }
-        }
-
         /* ── MI MUSEO ─────────────────────────────────────────────── */
         #museoOverlay {
             display: none; position: fixed; inset: 0; z-index: 500;
@@ -4439,7 +4375,6 @@
         <button id="prestigioBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;">⭐ &nbsp;PRESTIGIO</button>
         <button id="mascotasBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#9d174d,#ec4899,#f43f5e);color:white;box-shadow:0 0 30px rgba(236,72,153,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;" onclick="openMascotas()">🐾 &nbsp;MASCOTAS</button>
         <button id="pokerBtn" onclick="openPoker()" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#14532d,#166534,#4ade80);color:white;box-shadow:0 0 30px rgba(74,222,128,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🃏 &nbsp;POKER</button>
-        <button id="blackjackBtn" onclick="openBlackjack()" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#14532d,#166534,#4ade80);color:white;box-shadow:0 0 30px rgba(74,222,128,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">♠️ &nbsp;BLACKJACK</button>
         <button id="loanBtn" onclick="openLoans()" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#7c2d12,#c2410c,#f97316);color:white;box-shadow:0 0 30px rgba(249,115,22,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">💳 &nbsp;PRÉSTAMOS</button>
         <button id="blackMarketBtn" onclick="openBlackMarket()" style="display:none;padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#0f0020,#1e003a,#2d006b);color:#c084fc;box-shadow:0 0 30px rgba(139,92,246,0.5),0 8px 24px rgba(0,0,0,0.6);transition:all 0.3s;position:relative;overflow:hidden;animation:bmPulse 1.5s ease-in-out infinite alternate;">🕵️ &nbsp;MERCADO NEGRO</button>
     </div>
@@ -5432,7 +5367,7 @@
 
     let currentKey = 'tech';
     let inventory = [];
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, blackjackPlayed:0, blackjackWon:0, blackjackProfit:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, skillPointMilestone:null, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
     state.dailyLogin = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
     const WIN_GOAL = 500000000000000;
 
@@ -5519,8 +5454,8 @@
     function randomItem() {
         const items = boxes[currentKey].items;
 
-        // Piedad: el mítico queda garantizado al llegar al umbral actual.
-        if (state.pityCount >= getMythicPityThreshold()) {
+        // Piedad: cada 100 cofres sin mítico, el siguiente es mítico garantizado
+        if (state.pityCount >= 100) {
             const miticos = items.filter(i => i.rarity === 'mitico');
             if (miticos.length) return miticos[Math.floor(Math.random() * miticos.length)];
         }
@@ -5538,7 +5473,7 @@
     }
 
     function getItemByRoll(items) {
-        const skillLuckLevel = getCollectorSkillValue('luck');
+        const skillLuckLevel = getCollectorSkillLevel('luck');
         const equippedPet = getEquippedPet();
         const weightedItems = [];
         let totalWeight = 0;
@@ -5691,7 +5626,7 @@
         // Aplicar mutación
         const mutation = getMutation();
         finalPrice = Math.round(finalPrice * mutation.mult);
-        finalPrice = Math.round(finalPrice * (1 + getCollectorSkillValue('money') * 0.05));
+        finalPrice = Math.round(finalPrice * (1 + getCollectorSkillLevel('money') * 0.05));
         const isInfected = isParasitesEnabled() && Math.random() < 0.10;
         const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id,
             _id: Date.now() + Math.floor(Math.random()*99999),
@@ -6821,8 +6756,6 @@
         document.getElementById('statLosses').textContent = rec.losses;
     }
 
-    let loadedSaveTimestamp = null;
-
     function saveGame() {
         // ✅ FIX: No guardar nunca si la partida ha terminado (evita re-guardar estado de derrota/victoria)
         if (state.over) return;
@@ -6864,15 +6797,11 @@
                 pokerWon: state.pokerWon,
                 pokerProfit: state.pokerProfit,
                 pokerMaxWin: state.pokerMaxWin,
-                blackjackPlayed: state.blackjackPlayed || 0,
-                blackjackWon: state.blackjackWon || 0,
-                blackjackProfit: state.blackjackProfit || 0,
                 playTime: state.playTime,
                 loan: state.loan,
                 xp: state.xp||0,
                 level: state.level||1,
                 skillPoints: state.skillPoints||0,
-                skillPointMilestone: state.skillPointMilestone,
                 blackMarket: state.blackMarket,
                 collectorSkillLevels: state.collectorSkillLevels||{},
                 collectorMissionProgress: state.collectorMissionProgress||null,
@@ -6902,7 +6831,6 @@
             const safeData = sanitizeImportedSave(data);
             // Restaurar state
             Object.assign(state, safeData.state);
-            loadedSaveTimestamp = Number(safeData.savedAt) || null;
             // Restaurar inventario
             inventory = safeData.inventory;
             // Restaurar logros
@@ -6919,16 +6847,6 @@
             return true;
         } catch(e) { return false; }
     }
-
-    window.addEventListener('pagehide', () => {
-        if (!state.over && typeof blackjackGame !== 'undefined' && blackjackGame.phase === 'player') {
-            settleBlackjack('lose');
-        }
-        if (!state.over) saveGame();
-    });
-    document.addEventListener('visibilitychange', () => {
-        if (document.visibilityState === 'hidden' && !state.over) saveGame();
-    });
 
     // RECOMPENSA DIARIA Y RACHA DE LOGIN
     let dailyLoginPromptedDate = null;
@@ -7274,9 +7192,8 @@
             'miticosForSuperRuleta', 'hyperRuletaCharges', 'superSpinsForHyper', 'auctionWins',
             'universalCount', 'potionsBought', 'pityCount', 'silenceCharges', 'prestige',
             'ownedPets', 'equippedPet', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
-            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'blackjackPlayed', 'blackjackWon',
-            'blackjackProfit', 'playTime', 'loan', 'xp', 'level',
-            'skillPoints', 'skillPointMilestone', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
+            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'loan', 'xp', 'level',
+            'skillPoints', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
             'collectorPotionEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin'
         ]);
         const numericStateKeys = new Set([
@@ -7285,8 +7202,7 @@
             'miticosForRuleta', 'superRuletaCharges', 'miticosForSuperRuleta', 'hyperRuletaCharges',
             'superSpinsForHyper', 'auctionWins', 'universalCount', 'potionsBought', 'pityCount',
             'silenceCharges', 'prestige', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
-            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'blackjackPlayed', 'blackjackWon',
-            'blackjackProfit', 'playTime', 'xp', 'level', 'skillPoints', 'skillPointMilestone'
+            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'xp', 'level', 'skillPoints'
         ]);
         const booleanStateKeys = new Set(['lastWasmitico', 'gotSuerteMax']);
         const objectStateKeys = new Set([
@@ -7396,14 +7312,7 @@
 
         
         const hasSave = loadGame();
-        state.level = Math.max(1, Math.min(LEVEL_MAX, Math.floor(Number(state.level) || 1)));
-        state.xp = state.level >= LEVEL_MAX ? 0 : Math.max(0, Number(state.xp) || 0);
-        const savedMilestone = state.skillPointMilestone;
-        state.skillPointMilestone = savedMilestone !== null && savedMilestone !== undefined && Number.isFinite(Number(savedMilestone))
-            ? Math.max(0, Math.floor(Number(savedMilestone)))
-            : Math.floor(state.level / 5);
         initializeCollectorSystems();
-        claimOfflineMuseumIncome(hasSave);
         updateSilenceBadge();
         initializeQolSettings();
         resumeLoanTimer();
@@ -7641,18 +7550,17 @@
     }
 
     function updatePityBar() {
-        const pityThreshold = getMythicPityThreshold();
-        const pct = Math.min(100, state.pityCount / pityThreshold * 100);
+        const pct = Math.min(state.pityCount, 100);
         const fill = document.getElementById('pityFill');
         const label = document.getElementById('pityLabel');
         const wrap = document.getElementById('pityWrap');
         if (!fill) return;
         fill.style.width = pct + '%';
-        if (state.pityCount >= pityThreshold) {
-            label.textContent = `🔥 PITY: ${pityThreshold} / ${pityThreshold} — ¡MÍTICO GARANTIZADO!`;
+        if (pct >= 100) {
+            label.textContent = '🔥 PITY: 100 / 100 — ¡MÍTICO GARANTIZADO!';
             wrap.classList.add('pity-full');
         } else {
-            label.textContent = `🎯 PITY: ${state.pityCount} / ${pityThreshold}`;
+            label.textContent = `🎯 PITY: ${pct} / 100`;
             wrap.classList.remove('pity-full');
         }
     }
@@ -7995,7 +7903,6 @@
         state.balance -= price;
         state.potionsBought++;
         recordCollectorMissionAction('potion-purchase');
-        recordCollectorMissionAction('potion-use');
         updateStats();
         playSound('win');
         confetti({ particleCount: 80, spread: 70, colors: ['#10b981','#fbbf24','#ffffff'] });
@@ -8368,7 +8275,7 @@
             checkEnd();
             document.getElementById('coinCloseBtn').classList.add('visible');
             // Start 180s cooldown
-            coinCooldown = Math.max(30, 180 - getCollectorSkillValue('coinflip-cooldown') * 20);
+            coinCooldown = Math.max(30, 180 - getCollectorSkillLevel('coinflip-cooldown') * 20);
             const btn = document.getElementById('coinBtn');
             btn.disabled = true;
         }, 2100);
@@ -8421,7 +8328,6 @@
             return;
         }
         state.ruletaCharges--;
-        recordCollectorMissionAction('special-roulette');
         updateRuletaBtn();
         updateRuletaProgress();
         updateSuperRuletaBtn();
@@ -8585,7 +8491,6 @@
             return;
         }
         state.superRuletaCharges--;
-        recordCollectorMissionAction('special-roulette');
         updateSuperRuletaBtn();
         // Cada 2 tiradas Súper = 1 tirada Hyper
         state.superSpinsForHyper++;
@@ -8752,7 +8657,6 @@
             return;
         }
         state.hyperRuletaCharges--;
-        recordCollectorMissionAction('special-roulette');
         updateHyperRuletaBtn();
         hyperRuletaSpinning = true;
         document.getElementById('hyperRuletaSpinBtn').disabled = true;
@@ -8915,7 +8819,6 @@
         }
         state.balance -= IDIOTA_SPIN_COST;
         state.spent += IDIOTA_SPIN_COST;
-        recordCollectorMissionAction('special-roulette');
         updateStats();
         saveGame();
         checkEnd();
@@ -8954,7 +8857,7 @@
             let finalPrice = bonusActive ? winner.price * 2 : winner.price;
             const mut = getMutation();
             finalPrice = Math.round(finalPrice * mut.mult);
-            finalPrice = Math.round(finalPrice * (1 + getCollectorSkillValue('money') * 0.05));
+            finalPrice = Math.round(finalPrice * (1 + getCollectorSkillLevel('money') * 0.05));
             const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mut.id, source:'hyper' };
             inventory.push(wonItem);
             state.invValue += wonItem.price;
@@ -9069,7 +8972,6 @@
 
         state.balance -= ANUNCIOS_ESPANA_SPIN_COST;
         state.spent += ANUNCIOS_ESPANA_SPIN_COST;
-        recordCollectorMissionAction('special-roulette');
         updateStats();
         saveGame();
 
@@ -9368,7 +9270,7 @@
         // Assign each bot a max budget (they know real value)
         const bots = BATTLE_BOTS.map(bp => ({
             ...bp,
-            maxBudget: Math.round(realValue * bp.budgetMult() * (1 - getCollectorSkillValue('auctioneer') * 0.015) / 50) * 50,
+            maxBudget: Math.round(realValue * bp.budgetMult() / 50) * 50,
             currentBid: 0,
             retired: false,
             frozen: false
@@ -9386,7 +9288,6 @@
             secondsLeft: 300,
             ended: false,
             playerIn: false,
-            usedFarol: false,
             spyUsed: false,
             battleStarted: false
         };
@@ -9592,7 +9493,6 @@
         state.balance -= boost;
         battle.playerBid = newBid;
         battle.currentHighBid = newBid;
-        battle.usedFarol = true;
 
         addBattleLog(`🎭 FAROL — puja sube a ${newBid.toLocaleString()} $`, 'event');
 
@@ -9719,7 +9619,6 @@
             if (mut.id === 'universal') state.universalCount++;
             state.auctionWins++;
             recordCollectorMissionAction('auction');
-            if (battle.usedFarol) recordCollectorMissionAction('auction-bluff-win');
             addXP(50);
             // Note: player already paid playerBid above; state.spent tracks it
             state.spent += playerBid;
@@ -10091,11 +9990,10 @@
         if (n > 0) {
             const cost = getExpectedCraftCost(probs);
             document.getElementById('craftCostDisplay').textContent = `~${cost.toLocaleString()}$`;
-            const avgBaseTime = Math.round(
+            const avgTime = Math.round(
                 ['comun','especial','epico','legendario','mitico']
                     .reduce((s, k) => s + (probs[k]||0) * (CRAFT_FUSION_TIME[k]||0), 0) / 100
             );
-            const avgTime = Math.max(1, Math.round(avgBaseTime * (1 - getCollectorSkillValue('forger') * 0.05)));
             document.getElementById('craftTimeDisplay').textContent = `~${getFusionTimeLabel(avgTime)}`;
         } else {
             document.getElementById('craftCostDisplay').textContent = '—';
@@ -10122,7 +10020,6 @@
             fusionTime = CRAFT_FUSION_TIME[output.rarity] || 5;
             cost = Math.round(output.price * 0.85);
         }
-        fusionTime = Math.max(1, Math.ceil(fusionTime * (1 - getCollectorSkillValue('forger') * 0.05)));
 
         // Check balance
         if (!fail && state.balance < cost) {
@@ -10281,7 +10178,7 @@
         const level = Number.isFinite(rawLevel)
             ? Math.max(0, Math.min(5, Math.floor(rawLevel)))
             : 0;
-        return MUSEO_SLOTS + level * 2;
+        return MUSEO_SLOTS + level;
     }
 
     function syncMuseumSlotCapacity() {
@@ -10438,26 +10335,6 @@
         calcMuseoStats();
         if (museoIncomePerSec > 0) { state.balance += Math.floor(museoIncomePerSec * prestigeMult()); updateStats(); }
     }, 1000);
-
-    function claimOfflineMuseumIncome(hasSave) {
-        if (!hasSave || !loadedSaveTimestamp) return 0;
-        const elapsedSeconds = Math.min(8 * 60 * 60, Math.max(0, (Date.now() - loadedSaveTimestamp) / 1000));
-        if (elapsedSeconds < 1) return 0;
-        calcMuseoStats();
-        const offlineIncome = Math.floor(museoIncomePerSec * elapsedSeconds * 0.35 * prestigeMult());
-        if (offlineIncome <= 0) return 0;
-        state.balance += offlineIncome;
-        state.earned = (Number(state.earned) || 0) + offlineIncome;
-        updateStats();
-        const toast = document.createElement('div');
-        toast.setAttribute('role', 'status');
-        toast.style.cssText = 'position:fixed;top:24px;left:50%;transform:translateX(-50%);z-index:9999;padding:14px 22px;border:1px solid rgba(74,222,128,.45);border-radius:14px;background:rgba(5,12,18,.96);box-shadow:0 0 28px rgba(74,222,128,.22);color:#4ade80;font-family:Rajdhani,sans-serif;font-size:15px;font-weight:700;letter-spacing:1px;text-align:center;max-width:calc(100vw - 32px);';
-        toast.textContent = `🏛️ Ingresos del museo: +${offlineIncome.toLocaleString('es-ES')} $ · hasta 8 h al 35%`;
-        document.body.appendChild(toast);
-        setTimeout(() => { toast.style.opacity = '0'; toast.style.transition = 'opacity .5s'; setTimeout(() => toast.remove(), 500); }, 6000);
-        saveGame();
-        return offlineIncome;
-    }
 
     // ─── RULETA DE CASINO ────────────────────────────────────────────────────────
     const RULETA_WHEEL_ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
@@ -10748,72 +10625,6 @@
     document.getElementById('ruletaBtnHeader').addEventListener('click', openRuletaCasino);
     document.getElementById('ruletaCasinoBackBtn').addEventListener('click', closeRuletaCasino);
     // ─────────────────────────────────────────────────────────────────────────────
-
-    // ─── BLACKJACK ────────────────────────────────────────────────────────────────
-    (function() {
-        const overlay = document.createElement('div');
-        overlay.id = 'blackjackOverlay';
-        overlay.innerHTML = `
-            <div class="bj-topbar">
-                <button class="bj-back" id="blackjackBackBtn" type="button">← VOLVER AL JUEGO</button>
-                <div class="bj-title">♠ BLACKJACK</div>
-                <div style="font:700 11px Rajdhani,sans-serif;color:#64748b;letter-spacing:1px;">BLACKJACK PAGA 3:2 · CRUPIER SE PLANTA EN 17</div>
-            </div>
-            <div class="bj-content">
-                <div class="bj-table">
-                    <div class="bj-hand">
-                        <div class="bj-hand-label">CRUPIER</div>
-                        <div class="bj-cards" id="bjDealerCards"></div>
-                        <div class="bj-hand-total" id="bjDealerTotal"></div>
-                    </div>
-                    <div class="bj-hand">
-                        <div class="bj-hand-label">TU MANO</div>
-                        <div class="bj-cards" id="bjPlayerCards"></div>
-                        <div class="bj-hand-total" id="bjPlayerTotal"></div>
-                    </div>
-                </div>
-                <div class="bj-controls">
-                    <div class="bj-bet-row" id="bjBetControls">
-                        <input class="bj-bet-input" id="bjBetInput" type="number" min="1" step="1" placeholder="Apuesta en monedas">
-                        <button class="bj-action" id="bjDealBtn" type="button">REPARTIR</button>
-                    </div>
-                    <div class="bj-quick-row" id="bjQuickControls">
-                        <button type="button" data-bj-bet="0.1">10%</button>
-                        <button type="button" data-bj-bet="0.25">25%</button>
-                        <button type="button" data-bj-bet="0.5">50%</button>
-                        <button type="button" data-bj-bet="1">TODO</button>
-                    </div>
-                    <div class="bj-action-row" id="bjPlayControls" style="display:none">
-                        <button class="bj-action" id="bjHitBtn" type="button">PEDIR CARTA</button>
-                        <button class="bj-action" id="bjStandBtn" type="button">PLANTARSE</button>
-                        <button class="bj-action" id="bjDoubleBtn" type="button">DOBLAR</button>
-                    </div>
-                    <div class="bj-action-row" id="bjAgainControls" style="display:none">
-                        <button class="bj-action" id="bjAgainBtn" type="button">OTRA MANO</button>
-                    </div>
-                </div>
-                <div class="bj-message" id="bjMessage" role="status">Elige tu apuesta y reparte.</div>
-            </div>
-        `;
-        document.body.appendChild(overlay);
-        document.getElementById('blackjackBtn').addEventListener('click', openBlackjack);
-        document.getElementById('blackjackBackBtn').addEventListener('click', closeBlackjack);
-        document.getElementById('bjDealBtn').addEventListener('click', dealBlackjack);
-        document.getElementById('bjHitBtn').addEventListener('click', hitBlackjack);
-        document.getElementById('bjStandBtn').addEventListener('click', () => standBlackjack());
-        document.getElementById('bjDoubleBtn').addEventListener('click', doubleBlackjack);
-        document.getElementById('bjAgainBtn').addEventListener('click', resetBlackjack);
-        overlay.querySelectorAll('[data-bj-bet]').forEach(button => {
-            button.addEventListener('click', () => {
-                const fraction = Number(button.dataset.bjBet);
-                const amount = Math.floor((Number(state.balance) || 0) * fraction);
-                document.getElementById('bjBetInput').value = amount > 0 ? String(amount) : '';
-            });
-        });
-        overlay.addEventListener('click', event => {
-            if (event.target === overlay && blackjackGame.phase !== 'player') closeBlackjack();
-        });
-    })();
 
     // ─── PARÁSITOS EN LA INTERFAZ ────────────────────────────────────────────────
     // Crear elementos de parásitos en el DOM
@@ -11313,31 +11124,21 @@
     // ═══════════════════ SISTEMA DE NIVEL ═══════════════════
     function xpForLevel(lvl) { return (lvl||1) * 3500; }
 
-    const LEVEL_MAX = 1000;
+    const LEVEL_MAX = 200;
 
     function addXP(amount) {
         if (state.over || !amount || amount <= 0) return;
         if ((state.level||1) >= LEVEL_MAX) return;
-        const xpMultiplier = 1 + getCollectorSkillValue('apprentice') * 0.05;
-        const earnedXP = Math.max(1, Math.floor(amount * xpMultiplier));
-        state.xp = (state.xp||0) + earnedXP;
+        state.xp = (state.xp||0) + amount;
         let levelsGained = 0;
-        let skillPointsGained = 0;
         while (state.xp >= xpForLevel(state.level) && (state.level||1) < LEVEL_MAX) {
             state.xp -= xpForLevel(state.level);
             state.level = (state.level||1) + 1;
-            const previousMilestone = Number.isFinite(Number(state.skillPointMilestone))
-                ? Number(state.skillPointMilestone)
-                : Math.floor((state.level - 1) / 5);
-            const currentMilestone = Math.floor(state.level / 5);
-            const earnedPoints = Math.max(0, currentMilestone - previousMilestone);
-            state.skillPointMilestone = currentMilestone;
-            state.skillPoints = (state.skillPoints||0) + earnedPoints;
-            skillPointsGained += earnedPoints;
+            state.skillPoints = (state.skillPoints||0) + 1;
             levelsGained++;
         }
         if ((state.level||1) >= LEVEL_MAX) state.xp = 0;
-        if (levelsGained > 0) triggerLevelUp(state.level, levelsGained, skillPointsGained);
+        if (levelsGained > 0) triggerLevelUp(state.level, levelsGained);
         updateLevelDisplay();
     }
 
@@ -11370,14 +11171,14 @@
         if (skillsOverlay && skillsOverlay.classList.contains('open')) renderCollectorSkillTree();
     }
 
-    function triggerLevelUp(newLevel, levelsGained, skillPointsGained = 0) {
+    function triggerLevelUp(newLevel, levelsGained) {
         playSound('win');
         const overlay = document.getElementById('levelUpOverlay');
         if (!overlay) return;
         document.getElementById('levelUpNum').textContent = newLevel;
-        document.getElementById('levelUpSP').textContent = skillPointsGained > 0
-            ? `⭐ +${skillPointsGained} Punto${skillPointsGained === 1 ? '' : 's'} de Habilidad`
-            : `📈 +${levelsGained} nivel${levelsGained === 1 ? '' : 'es'} · siguiente punto al nivel ${Math.min(LEVEL_MAX, (Math.floor(newLevel / 5) + 1) * 5)}`;
+        document.getElementById('levelUpSP').textContent = levelsGained === 1
+            ? '⭐ +1 Punto de Habilidad'
+            : `⭐ +${levelsGained} Puntos de Habilidad`;
         overlay.classList.remove('show');
         void overlay.offsetWidth;
         overlay.classList.add('show');
@@ -11959,194 +11760,6 @@
         const inp=document.getElementById('pokerBetInput');
         inp.value = v==='max'?Math.floor(state.balance):Math.min(v,Math.floor(state.balance));
     }
-
-    const BLACKJACK_SUITS = ['♠', '♥', '♦', '♣'];
-    const BLACKJACK_RANKS = ['2','3','4','5','6','7','8','9','10','J','Q','K','A'];
-    let blackjackGame = { deck:[], player:[], dealer:[], bet:0, phase:'bet', doubled:false, message:'Elige tu apuesta y reparte.', messageType:'' };
-
-    function createBlackjackDeck() {
-        const deck = [];
-        BLACKJACK_SUITS.forEach(suit => BLACKJACK_RANKS.forEach(rank => deck.push({ suit, rank })));
-        for (let i = deck.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [deck[i], deck[j]] = [deck[j], deck[i]];
-        }
-        return deck;
-    }
-
-    function blackjackHandValue(hand) {
-        let total = 0;
-        let aces = 0;
-        hand.forEach(card => {
-            if (card.rank === 'A') { total += 11; aces++; }
-            else total += ['K','Q','J'].includes(card.rank) ? 10 : Number(card.rank);
-        });
-        while (total > 21 && aces > 0) { total -= 10; aces--; }
-        return total;
-    }
-
-    function renderBlackjackCards(container, cards, hideHole = false) {
-        container.replaceChildren();
-        cards.forEach((card, index) => {
-            const element = document.createElement('div');
-            if (hideHole && index === 1) {
-                element.className = 'bj-card bj-card-back';
-                element.textContent = '✦';
-            } else {
-                const red = card.suit === '♥' || card.suit === '♦';
-                element.className = `bj-card${red ? ' red' : ''}`;
-                const top = document.createElement('span');
-                top.className = 'bj-card-corner';
-                top.textContent = `${card.rank}${card.suit}`;
-                const center = document.createElement('span');
-                center.style.cssText = 'font-size:25px;text-align:center;';
-                center.textContent = card.suit;
-                const bottom = document.createElement('span');
-                bottom.className = 'bj-card-corner';
-                bottom.textContent = `${card.rank}${card.suit}`;
-                element.append(top, center, bottom);
-            }
-            container.appendChild(element);
-        });
-    }
-
-    function renderBlackjack() {
-        const dealerHidden = blackjackGame.phase === 'player';
-        renderBlackjackCards(document.getElementById('bjDealerCards'), blackjackGame.dealer, dealerHidden);
-        renderBlackjackCards(document.getElementById('bjPlayerCards'), blackjackGame.player);
-        document.getElementById('bjDealerTotal').textContent = dealerHidden
-            ? `CARTA OCULTA · APUESTA ${blackjackGame.bet.toLocaleString('es-ES')} $`
-            : (blackjackGame.dealer.length ? `TOTAL: ${blackjackHandValue(blackjackGame.dealer)}` : '');
-        document.getElementById('bjPlayerTotal').textContent = blackjackGame.player.length
-            ? `TOTAL: ${blackjackHandValue(blackjackGame.player)}${blackjackGame.doubled ? ' · APUESTA DOBLADA' : ''}`
-            : '';
-        document.getElementById('bjMessage').textContent = blackjackGame.message;
-        document.getElementById('bjMessage').className = `bj-message${blackjackGame.messageType ? ` ${blackjackGame.messageType}` : ''}`;
-        document.getElementById('bjBetControls').style.display = blackjackGame.phase === 'bet' ? 'flex' : 'none';
-        document.getElementById('bjQuickControls').style.display = blackjackGame.phase === 'bet' ? 'flex' : 'none';
-        document.getElementById('bjPlayControls').style.display = blackjackGame.phase === 'player' ? 'flex' : 'none';
-        document.getElementById('bjAgainControls').style.display = blackjackGame.phase === 'done' ? 'flex' : 'none';
-        document.getElementById('bjDoubleBtn').disabled = blackjackGame.player.length !== 2 ||
-            blackjackGame.doubled || state.balance < blackjackGame.bet;
-    }
-
-    function openBlackjack() {
-        if (state.over) return;
-        playSound('click');
-        resetBlackjack();
-        document.getElementById('blackjackOverlay').classList.add('open');
-    }
-
-    function closeBlackjack() {
-        if (blackjackGame.phase === 'player') standBlackjack();
-        document.getElementById('blackjackOverlay').classList.remove('open');
-    }
-
-    function resetBlackjack() {
-        blackjackGame = { deck:[], player:[], dealer:[], bet:0, phase:'bet', doubled:false, message:'Elige tu apuesta y reparte.', messageType:'' };
-        const betInput = document.getElementById('bjBetInput');
-        if (betInput) betInput.value = Math.min(1000, Math.floor(Number(state.balance) || 0));
-        if (document.getElementById('bjDealerCards')) renderBlackjack();
-    }
-
-    function dealBlackjack() {
-        if (blackjackGame.phase !== 'bet' || state.over) return;
-        const input = document.getElementById('bjBetInput');
-        const bet = Math.floor(Number(input.value) || 0);
-        if (bet < 1 || bet > state.balance) {
-            blackjackGame.message = bet > state.balance ? 'Saldo insuficiente para esa apuesta.' : 'Introduce una apuesta de al menos 1 $.';
-            blackjackGame.messageType = 'lose';
-            renderBlackjack();
-            return;
-        }
-        blackjackGame = {
-            deck:createBlackjackDeck(), player:[], dealer:[], bet, phase:'player',
-            doubled:false, message:'Pide carta, plántate o dobla tu apuesta.', messageType:''
-        };
-        state.balance -= bet;
-        state.spent = (Number(state.spent) || 0) + bet;
-        blackjackGame.player.push(blackjackGame.deck.pop(), blackjackGame.deck.pop());
-        blackjackGame.dealer.push(blackjackGame.deck.pop(), blackjackGame.deck.pop());
-        updateStats();
-        const playerNatural = blackjackGame.player.length === 2 && blackjackHandValue(blackjackGame.player) === 21;
-        const dealerNatural = blackjackGame.dealer.length === 2 && blackjackHandValue(blackjackGame.dealer) === 21;
-        if (playerNatural && dealerNatural) settleBlackjack('push');
-        else if (playerNatural) settleBlackjack('blackjack');
-        else if (dealerNatural) settleBlackjack('lose');
-        else renderBlackjack();
-    }
-
-    function hitBlackjack() {
-        if (blackjackGame.phase !== 'player') return;
-        blackjackGame.player.push(blackjackGame.deck.pop());
-        if (blackjackHandValue(blackjackGame.player) > 21) settleBlackjack('lose');
-        else renderBlackjack();
-    }
-
-    function standBlackjack() {
-        if (blackjackGame.phase !== 'player') return;
-        while (blackjackHandValue(blackjackGame.dealer) < 17 && blackjackGame.deck.length) {
-            blackjackGame.dealer.push(blackjackGame.deck.pop());
-        }
-        const playerTotal = blackjackHandValue(blackjackGame.player);
-        const dealerTotal = blackjackHandValue(blackjackGame.dealer);
-        if (dealerTotal > 21 || playerTotal > dealerTotal) settleBlackjack('win');
-        else if (playerTotal === dealerTotal) settleBlackjack('push');
-        else settleBlackjack('lose');
-    }
-
-    function doubleBlackjack() {
-        if (blackjackGame.phase !== 'player' || blackjackGame.player.length !== 2 ||
-            blackjackGame.doubled || state.balance < blackjackGame.bet) return;
-        const extraBet = blackjackGame.bet;
-        state.balance -= extraBet;
-        state.spent = (Number(state.spent) || 0) + extraBet;
-        blackjackGame.bet += extraBet;
-        blackjackGame.doubled = true;
-        blackjackGame.player.push(blackjackGame.deck.pop());
-        updateStats();
-        if (blackjackHandValue(blackjackGame.player) > 21) settleBlackjack('lose');
-        else standBlackjack();
-    }
-
-    function settleBlackjack(outcome) {
-        if (blackjackGame.phase !== 'player') return;
-        blackjackGame.phase = 'done';
-        state.blackjackPlayed = (Number(state.blackjackPlayed) || 0) + 1;
-        let payout = 0;
-        let net = -blackjackGame.bet;
-        if (outcome === 'blackjack') {
-            payout = Math.floor(blackjackGame.bet * 2.5);
-            net = payout - blackjackGame.bet;
-            blackjackGame.message = `¡BLACKJACK! Premio total: ${payout.toLocaleString('es-ES')} $.`;
-            blackjackGame.messageType = 'win';
-        } else if (outcome === 'win') {
-            payout = blackjackGame.bet * 2;
-            net = blackjackGame.bet;
-            blackjackGame.message = `¡Ganas la mano! +${net.toLocaleString('es-ES')} $ netos.`;
-            blackjackGame.messageType = 'win';
-        } else if (outcome === 'push') {
-            payout = blackjackGame.bet;
-            net = 0;
-            blackjackGame.message = 'Empate: recuperas tu apuesta.';
-            blackjackGame.messageType = '';
-        } else {
-            blackjackGame.message = `Gana el crupier. -${blackjackGame.bet.toLocaleString('es-ES')} $.`;
-            blackjackGame.messageType = 'lose';
-        }
-        state.balance += payout;
-        state.blackjackProfit = (Number(state.blackjackProfit) || 0) + net;
-        if (net > 0) {
-            state.blackjackWon = (Number(state.blackjackWon) || 0) + 1;
-            recordCollectorMissionAction('blackjack-win');
-            addXP(30);
-        }
-        updateStats();
-        saveGame();
-        renderBlackjack();
-        checkEnd();
-    }
-
     // ═══════════════════ FIN POKER ═══════════════════
 
     // ═══════════════════ HABILIDADES Y MISIONES ═══════════════════
@@ -12156,63 +11769,35 @@
             description: 'Aumenta la probabilidad de obtener objetos poco comunes o mejores.',
             maxLevel: 5,
             costs: [1, 1, 2, 2, 3],
-            effect: level => `+${level * 16}% al peso de rarezas superiores a común`
+            effect: level => `+${level * 8}% de probabilidad para rarezas superiores a común`
         },
         money: {
             name: 'Tasador',
             description: 'Aumenta el valor de los objetos que consigues en cofres y subastas.',
             maxLevel: 5,
             costs: [1, 1, 2, 2, 3],
-            effect: level => `+${level * 10}% al valor de los objetos`
+            effect: level => `+${level * 5}% al valor de los objetos`
         },
         'chest-discount': {
             name: 'Negociador',
             description: 'Reduce el precio de apertura de todos los cofres.',
             maxLevel: 5,
             costs: [1, 1, 2, 2, 3],
-            effect: level => `-${level * 8}% al coste de los cofres`
+            effect: level => `-${level * 4}% al coste de los cofres`
         },
         'museum-slots': {
             name: 'Conservador',
             description: 'Añade espacios permanentes para exponer objetos en el museo.',
             maxLevel: 5,
             costs: [1, 1, 2, 2, 3],
-            effect: level => `+${level * 2} espacios de museo`
+            effect: level => `+${level} espacio${level === 1 ? '' : 's'} de museo`
         },
         'coinflip-cooldown': {
             name: 'Reflejos',
             description: 'Reduce el tiempo de espera entre partidas de cara o cruz.',
             maxLevel: 5,
             costs: [1, 1, 2, 2, 3],
-            effect: level => `-${level * 40} s de cooldown`
-        },
-        'pity-reducer': {
-            name: 'Rebajador de pity',
-            description: 'Adelanta la garantía de un objeto mítico en 10 cofres.',
-            maxLevel: 1,
-            costs: [5],
-            effect: () => 'Mítico garantizado a los 90 cofres'
-        },
-        auctioneer: {
-            name: 'Subastador',
-            description: 'Reduce ligeramente el presupuesto máximo de los bots en las subastas.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `-${level * 3}% al presupuesto de los bots`
-        },
-        apprentice: {
-            name: 'Aprendiz',
-            description: 'Aumenta la experiencia que recibes en todas las actividades.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `+${level * 10}% de XP`
-        },
-        forger: {
-            name: 'Forjador',
-            description: 'Reduce el tiempo de espera de las fusiones del taller.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `-${level * 10}% al tiempo de crafteo`
+            effect: level => `-${level * 20} s de cooldown`
         }
     };
 
@@ -12225,18 +11810,10 @@
         return Number.isFinite(level) ? Math.max(0, Math.min(maximum, Math.floor(level))) : 0;
     }
 
-    function getCollectorSkillValue(skillId) {
-        return getCollectorSkillLevel(skillId) * 2;
-    }
-
-    function getMythicPityThreshold() {
-        return getCollectorSkillLevel('pity-reducer') > 0 ? 90 : 100;
-    }
-
     function collectorCrateCost(baseCost) {
         let cost = Number(baseCost) || 0;
         if (currentEvent && currentEvent.id === 'suerte_max') cost = Math.round(cost * 0.5);
-        cost = Math.round(cost * (1 - getCollectorSkillValue('chest-discount') * 0.04));
+        cost = Math.round(cost * (1 - getCollectorSkillLevel('chest-discount') * 0.04));
         return Math.max(1, cost);
     }
 
@@ -12256,11 +11833,7 @@
         { id:'daily-poker', title:'Apuesta inteligente', description:'Gana una partida de póker.', metric:'pokerWins', target:1, reward:{ type:'potion', potion:'luck', durationSeconds:180, amount:1, label:'Poción de suerte · 3 min' } },
         { id:'daily-highroller', title:'Cara de la suerte', description:'Gana 2 lanzamientos de cara o cruz.', metric:'coinWins', target:2, reward:{ type:'coins', rate:0.01, minimum:250, amount:250, label:'Monedas extra' } },
         { id:'daily-crafter', title:'Manos de artesano', description:'Completa una fusión en el taller.', metric:'crafts', target:1, reward:{ type:'xp', amount:400, label:'400 XP' } },
-        { id:'daily-alchemist', title:'Alquimista del día', description:'Compra una poción en la tienda.', metric:'potionsBought', target:1, reward:{ type:'potion', potion:'money', durationSeconds:120, amount:1, label:'Poción de dinero · 2 min' } },
-        { id:'daily-potion-user', title:'Brebaje activo', description:'Usa 2 pociones en la tienda.', metric:'potionsUsed', target:2, reward:{ type:'xp', amount:500, label:'500 XP' } },
-        { id:'daily-bluff', title:'Cara de póker', description:'Gana una subasta después de usar un farol.', metric:'auctionBluffWins', target:1, reward:{ type:'potion', potion:'luck', durationSeconds:180, amount:1, label:'Poción de suerte · 3 min' } },
-        { id:'daily-special-roulette', title:'Ruletas especiales', description:'Gira 2 ruletas míticas o especiales.', metric:'specialRuletaSpins', target:2, reward:{ type:'coins', rate:0.02, minimum:500, amount:500, label:'Monedas extra' } },
-        { id:'daily-blackjack', title:'21 a la primera', description:'Gana una mano de blackjack.', metric:'blackjackWins', target:1, reward:{ type:'xp', amount:500, label:'500 XP' } }
+        { id:'daily-alchemist', title:'Alquimista del día', description:'Compra una poción en la tienda.', metric:'potionsBought', target:1, reward:{ type:'potion', potion:'money', durationSeconds:120, amount:1, label:'Poción de dinero · 2 min' } }
     ];
 
     const COLLECTOR_WEEKLY_MISSION_POOL = [
@@ -12270,11 +11843,7 @@
         { id:'weekly-poker', title:'Rey de la mesa', description:'Gana 4 partidas de póker.', metric:'pokerWins', target:4, reward:{ type:'xp', amount:1800, label:'1.800 XP' } },
         { id:'weekly-crafter', title:'Fábrica de tesoros', description:'Completa 3 fusiones en el taller.', metric:'crafts', target:3, reward:{ type:'potion', potion:'money', durationSeconds:300, amount:1, label:'Poción de dinero · 5 min' } },
         { id:'weekly-alchemist', title:'Preparativos de la semana', description:'Compra 3 pociones en la tienda.', metric:'potionsBought', target:3, reward:{ type:'xp', amount:1200, label:'1.200 XP' } },
-        { id:'weekly-quester', title:'Una misión cada día', description:'Reclama 6 misiones diarias esta semana.', metric:'dailyClaims', target:6, reward:{ type:'skillPoints', amount:1, label:'1 punto de habilidad' } },
-        { id:'weekly-potion-user', title:'Maestro de pociones', description:'Usa 10 pociones durante esta semana.', metric:'potionsUsed', target:10, reward:{ type:'xp', amount:2500, label:'2.500 XP' } },
-        { id:'weekly-bluff', title:'El gran farol', description:'Gana 3 subastas después de usar un farol.', metric:'auctionBluffWins', target:3, reward:{ type:'skillPoints', amount:1, label:'1 punto de habilidad' } },
-        { id:'weekly-special-roulette', title:'En la ruleta', description:'Gira 10 ruletas míticas o especiales.', metric:'specialRuletaSpins', target:10, reward:{ type:'potion', potion:'luck', durationSeconds:600, amount:1, label:'Poción de suerte · 10 min' } },
-        { id:'weekly-blackjack', title:'Veintiuna semanal', description:'Gana 5 manos de blackjack.', metric:'blackjackWins', target:5, reward:{ type:'xp', amount:3000, label:'3.000 XP' } }
+        { id:'weekly-quester', title:'Una misión cada día', description:'Reclama 6 misiones diarias esta semana.', metric:'dailyClaims', target:6, reward:{ type:'skillPoints', amount:1, label:'1 punto de habilidad' } }
     ];
 
     function collectorMissionHash(value) {
@@ -12689,7 +12258,7 @@
         if (!state.collectorMissionProgress || window.parent === window) return;
         synchronizeCollectorMissionPeriod();
         const level = Number(state.level) || 1;
-        const atMaxLevel = level >= (typeof LEVEL_MAX === 'number' ? LEVEL_MAX : 1000);
+        const atMaxLevel = level >= (typeof LEVEL_MAX === 'number' ? LEVEL_MAX : 200);
         window.parent.postMessage({
             channel: 'the-best-collector',
             type: 'snapshot',
@@ -12736,8 +12305,6 @@
             const museum = document.getElementById('museoOverlay');
             if (museum && museum.classList.contains('open')) renderMuseo();
         }
-        if (skillId === 'pity-reducer') updatePityBar();
-        if (skillId === 'forger') updateCraftUI();
 
         updateLevelDisplay();
         if (!state.spinning) switchBox(currentKey);
@@ -12780,18 +12347,6 @@
         } else if (type === 'potion-purchase') {
             increment(progress.dailyActionCounters, 'potionsBought');
             increment(progress.weeklyActionCounters, 'potionsBought');
-        } else if (type === 'potion-use') {
-            increment(progress.dailyActionCounters, 'potionsUsed');
-            increment(progress.weeklyActionCounters, 'potionsUsed');
-        } else if (type === 'auction-bluff-win') {
-            increment(progress.dailyActionCounters, 'auctionBluffWins');
-            increment(progress.weeklyActionCounters, 'auctionBluffWins');
-        } else if (type === 'special-roulette') {
-            increment(progress.dailyActionCounters, 'specialRuletaSpins');
-            increment(progress.weeklyActionCounters, 'specialRuletaSpins');
-        } else if (type === 'blackjack-win') {
-            increment(progress.dailyActionCounters, 'blackjackWins');
-            increment(progress.weeklyActionCounters, 'blackjackWins');
         }
         postCollectorSnapshot();
     }
