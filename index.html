@@ -2151,6 +2151,96 @@
             .pcard-suit{font-size:11px;}
         }
 
+        /* BLACKJACK */
+        #blackjackOverlay{
+            display:none;position:fixed;inset:0;z-index:10050;
+            align-items:center;justify-content:center;overflow-y:auto;padding:16px;
+            background:rgba(2,6,23,.94);backdrop-filter:blur(18px);
+        }
+        #blackjackOverlay.open{display:flex;}
+        #blackjackBox{
+            position:relative;width:min(760px,100%);margin:auto;padding:26px;
+            border:1px solid rgba(251,191,36,.4);border-radius:24px;
+            background:radial-gradient(ellipse at top,#14532d 0,#071b13 45%,#07110d 100%);
+            box-shadow:0 0 70px rgba(34,197,94,.16),0 24px 60px rgba(0,0,0,.65);
+        }
+        .bj-close{
+            position:absolute;top:14px;right:14px;width:36px;height:36px;
+            border:1px solid rgba(255,255,255,.12);border-radius:10px;
+            background:rgba(0,0,0,.25);color:#cbd5e1;font-size:18px;cursor:pointer;
+        }
+        .bj-title{
+            margin:0;text-align:center;color:#fbbf24;
+            font:34px 'Bebas Neue',sans-serif;letter-spacing:6px;
+            text-shadow:0 0 24px rgba(251,191,36,.35);
+        }
+        .bj-subtitle{
+            margin:2px 0 18px;text-align:center;color:#94a3b8;
+            font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+        }
+        .bj-table{
+            display:grid;grid-template-columns:1fr 1fr;gap:14px;
+            padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:18px;
+            background:rgba(0,0,0,.22);
+        }
+        .bj-hand{
+            min-width:0;padding:12px;border:1px solid rgba(255,255,255,.06);
+            border-radius:14px;background:rgba(255,255,255,.025);text-align:center;
+        }
+        .bj-hand-label{
+            display:block;margin-bottom:10px;color:#86efac;
+            font:18px 'Bebas Neue',sans-serif;letter-spacing:3px;
+        }
+        .bj-cards{min-height:100px;display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;}
+        .bj-card{
+            display:flex;flex-direction:column;align-items:center;justify-content:center;
+            width:58px;height:84px;border-radius:9px;border:1px solid rgba(0,0,0,.18);
+            background:linear-gradient(145deg,#fff,#e2e8f0);color:#0f172a;
+            box-shadow:0 5px 14px rgba(0,0,0,.3);font-weight:900;
+        }
+        .bj-card.red{color:#dc2626;}
+        .bj-card.back{
+            border:2px solid #86efac;background:repeating-linear-gradient(45deg,#14532d,#14532d 6px,#166534 6px,#166534 12px);
+            color:#fbbf24;font-size:27px;
+        }
+        .bj-card-rank{font:20px 'Bebas Neue',sans-serif;}
+        .bj-card-suit{font-size:23px;line-height:1;}
+        .bj-total{min-height:20px;margin-top:9px;color:#fbbf24;font:700 13px 'JetBrains Mono',monospace;}
+        .bj-message{
+            min-height:26px;margin:14px 0;text-align:center;color:#cbd5e1;
+            font-weight:700;letter-spacing:.5px;
+        }
+        .bj-balance{text-align:center;color:#94a3b8;font:700 12px 'JetBrains Mono',monospace;}
+        .bj-controls,.bj-actions{display:flex;justify-content:center;align-items:center;gap:8px;flex-wrap:wrap;}
+        .bj-controls{margin-top:8px;}
+        .bj-bet-input{
+            width:140px;padding:10px;border:1px solid rgba(255,255,255,.18);
+            border-radius:9px;background:rgba(0,0,0,.25);color:white;
+            font:700 15px 'JetBrains Mono',monospace;text-align:center;
+        }
+        .bj-preset,.bj-action{
+            min-height:40px;padding:9px 15px;border:1px solid rgba(255,255,255,.12);
+            border-radius:10px;background:rgba(255,255,255,.08);color:#e2e8f0;
+            font:700 13px 'Bebas Neue',sans-serif;letter-spacing:1px;cursor:pointer;
+        }
+        .bj-action.primary{border:0;background:linear-gradient(135deg,#ca8a04,#fbbf24);color:#111827;}
+        .bj-action.hit{background:linear-gradient(135deg,#15803d,#4ade80);color:#052e16;}
+        .bj-action.stand{background:linear-gradient(135deg,#1d4ed8,#60a5fa);color:#eff6ff;}
+        .bj-action.double{background:linear-gradient(135deg,#7c3aed,#c084fc);color:white;}
+        .bj-action:disabled{opacity:.4;cursor:not-allowed;}
+        .bj-actions{display:none;margin-top:12px;}
+        .bj-result-actions{display:none;justify-content:center;margin-top:12px;}
+        @media(max-width:560px){
+            #blackjackBox{padding:22px 14px 16px;}
+            .bj-title{font-size:29px;}
+            .bj-table{gap:8px;padding:9px;}
+            .bj-hand{padding:9px 4px;}
+            .bj-card{width:43px;height:64px;}
+            .bj-card-rank{font-size:16px;}
+            .bj-card-suit{font-size:18px;}
+            .bj-cards{min-height:76px;gap:5px;}
+        }
+
         /* COIN FLIP */
         #coinBtn {
             width: 48px; height: 48px;
@@ -3932,7 +4022,7 @@
     <div id="pityWrap">
         <div id="pityHeader">
             <span id="pityLabel">🎯 PITI: 0 / 100</span>
-            <span id="pityHint">¡Mítico garantizado al llegar a 100!</span>
+            <span id="pityHint">¡Mítico garantizado como máximo en el cofre 100!</span>
         </div>
         <div id="pityBar">
             <div id="pityFill"></div>
@@ -4375,6 +4465,7 @@
         <button id="prestigioBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;box-shadow:0 0 30px rgba(168,85,247,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;">⭐ &nbsp;PRESTIGIO</button>
         <button id="mascotasBtn" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#9d174d,#ec4899,#f43f5e);color:white;box-shadow:0 0 30px rgba(236,72,153,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;" onclick="openMascotas()">🐾 &nbsp;MASCOTAS</button>
         <button id="pokerBtn" onclick="openPoker()" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#14532d,#166534,#4ade80);color:white;box-shadow:0 0 30px rgba(74,222,128,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">🃏 &nbsp;POKER</button>
+        <button id="blackjackBtn" onclick="openBlackjack()" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#713f12,#ca8a04,#fbbf24);color:#111827;box-shadow:0 0 30px rgba(251,191,36,0.38),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">♠️ &nbsp;BLACKJACK</button>
         <button id="loanBtn" onclick="openLoans()" style="padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#7c2d12,#c2410c,#f97316);color:white;box-shadow:0 0 30px rgba(249,115,22,0.4),0 8px 24px rgba(0,0,0,0.4);transition:all 0.3s;position:relative;overflow:hidden;">💳 &nbsp;PRÉSTAMOS</button>
         <button id="blackMarketBtn" onclick="openBlackMarket()" style="display:none;padding:18px 40px;font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#0f0020,#1e003a,#2d006b);color:#c084fc;box-shadow:0 0 30px rgba(139,92,246,0.5),0 8px 24px rgba(0,0,0,0.6);transition:all 0.3s;position:relative;overflow:hidden;animation:bmPulse 1.5s ease-in-out infinite alternate;">🕵️ &nbsp;MERCADO NEGRO</button>
     </div>
@@ -4654,7 +4745,7 @@
 <div id="pokerOverlay">
   <div id="pokerBox">
     <div class="poker-title">🃏 POKER</div>
-    <div class="poker-subtitle">5-CARD DRAW · GANA A LOS 3 BOTS · x15 TU APUESTA</div>
+    <div class="poker-subtitle">5-CARD DRAW · GANA A LOS 3 BOTS · x15 · RANGOS YA EN MANO: −25% AL ROBAR</div>
 
     <!-- Bots -->
     <div class="poker-bots-row">
@@ -4748,6 +4839,45 @@
       <button class="poker-action-btn poker-btn-close" onclick="closePoker()">✕ CERRAR</button>
     </div>
   </div>
+</div>
+
+<!-- ══════════════ BLACKJACK ══════════════ -->
+<div id="blackjackOverlay" role="presentation" onclick="if(event.target===this) closeBlackjack()">
+  <section id="blackjackBox" role="dialog" aria-modal="true" aria-labelledby="blackjackTitle">
+    <button class="bj-close" type="button" aria-label="Cerrar blackjack" onclick="closeBlackjack()">✕</button>
+    <h2 class="bj-title" id="blackjackTitle">♠ BLACKJACK</h2>
+    <p class="bj-subtitle">Llega a 21 · el crupier se planta en 17 · blackjack natural paga 3:2</p>
+    <div class="bj-balance">SALDO DISPONIBLE: <span id="bjBalance">0 $</span></div>
+    <div class="bj-table">
+      <section class="bj-hand" aria-label="Mano del crupier">
+        <span class="bj-hand-label">CRUPIER</span>
+        <div class="bj-cards" id="bjDealerCards"></div>
+        <div class="bj-total" id="bjDealerTotal"></div>
+      </section>
+      <section class="bj-hand" aria-label="Tu mano">
+        <span class="bj-hand-label">TU MANO</span>
+        <div class="bj-cards" id="bjPlayerCards"></div>
+        <div class="bj-total" id="bjPlayerTotal"></div>
+      </section>
+    </div>
+    <div class="bj-message" id="bjMessage" role="status">Elige una apuesta para empezar.</div>
+    <div class="bj-controls" id="bjBetControls">
+      <input class="bj-bet-input" id="bjBetInput" type="number" min="1" step="1" value="250" aria-label="Apuesta de blackjack">
+      <button class="bj-preset" type="button" onclick="bjSetBet(100)">100</button>
+      <button class="bj-preset" type="button" onclick="bjSetBet(500)">500</button>
+      <button class="bj-preset" type="button" onclick="bjSetBet(1000)">1K</button>
+      <button class="bj-preset" type="button" onclick="bjSetBet('max')">MAX</button>
+      <button class="bj-action primary" id="bjDealBtn" type="button" onclick="startBlackjackRound()">REPARTIR</button>
+    </div>
+    <div class="bj-actions" id="bjPlayerActions">
+      <button class="bj-action hit" type="button" onclick="bjHit()">PEDIR</button>
+      <button class="bj-action stand" type="button" onclick="bjStand()">PLANTARSE</button>
+      <button class="bj-action double" id="bjDoubleBtn" type="button" onclick="bjDouble()">DOBLAR</button>
+    </div>
+    <div class="bj-result-actions" id="bjResultActions">
+      <button class="bj-action primary" type="button" onclick="bjNewRound()">OTRA PARTIDA</button>
+    </div>
+  </section>
 </div>
 
 <!-- ══════════════ PRESTIGIO MODAL ══════════════ -->
@@ -5365,10 +5495,81 @@
         return duration;
     }
 
+    // Definidas antes del arranque de subastas, que consulta niveles de habilidad al cargar.
+    const COLLECTOR_SKILLS = {
+        'pity-reducer': {
+            name: 'Rebajador de pity',
+            description: 'Reduce de 100 a 90 cofres el límite para garantizar un mítico.',
+            maxLevel: 1,
+            costs: [2],
+            effect: level => level > 0
+                ? 'Mítico garantizado en el cofre 90 (en lugar del 100)'
+                : 'Mítico garantizado en el cofre 100'
+        },
+        auctioneer: {
+            name: 'Subastador',
+            description: 'Reduce ligeramente el presupuesto máximo de los bots en las subastas.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `-${level * 3}% al presupuesto máximo de los bots`
+        },
+        apprentice: {
+            name: 'Aprendiz',
+            description: 'Aumenta toda la experiencia obtenida en el juego.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `+${level * 10}% de XP`
+        },
+        forger: {
+            name: 'Forjador',
+            description: 'Reduce el tiempo de espera de las fusiones del taller.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `-${level * 10}% al tiempo de crafteo`
+        },
+        luck: {
+            name: 'Suerte',
+            description: 'Aumenta la probabilidad de obtener objetos poco comunes o mejores.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `+${level * 8}% de probabilidad para rarezas superiores a común`
+        },
+        money: {
+            name: 'Tasador',
+            description: 'Aumenta el valor de los objetos que consigues en cofres y subastas.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `+${level * 5}% al valor de los objetos`
+        },
+        'chest-discount': {
+            name: 'Negociador',
+            description: 'Reduce el precio de apertura de todos los cofres.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `-${level * 4}% al coste de los cofres`
+        },
+        'museum-slots': {
+            name: 'Conservador',
+            description: 'Añade espacios permanentes para exponer objetos en el museo.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `+${level} espacio${level === 1 ? '' : 's'} de museo`
+        },
+        'coinflip-cooldown': {
+            name: 'Reflejos',
+            description: 'Reduce el tiempo de espera entre partidas de cara o cruz.',
+            maxLevel: 5,
+            costs: [1, 1, 2, 2, 3],
+            effect: level => `-${level * 20} s de cooldown`
+        }
+    };
+
     let currentKey = 'tech';
     let inventory = [];
+    const LEVEL_MAX = 1000;
     let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
     state.dailyLogin = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
+    state.blackjackRound = { phase:'bet', deck:[], player:[], dealer:[], bet:0, doubled:false, outcome:'', message:'', payout:0 };
     const WIN_GOAL = 500000000000000;
 
     const reel = document.getElementById('caseReel');
@@ -5454,8 +5655,8 @@
     function randomItem() {
         const items = boxes[currentKey].items;
 
-        // Piedad: cada 100 cofres sin mítico, el siguiente es mítico garantizado
-        if (state.pityCount >= 100) {
+        // El cofre que completa el umbral de pity queda garantizado.
+        if (state.pityCount >= getPityThreshold() - 1) {
             const miticos = items.filter(i => i.rarity === 'mitico');
             if (miticos.length) return miticos[Math.floor(Math.random() * miticos.length)];
         }
@@ -6738,6 +6939,8 @@
     // AUTOGUARDADO
     const SAVE_KEY = 'tbc_save_v3';
     const RECORD_KEY = 'tbc_record_v3';
+    const DAILY_LOGIN_STORAGE_KEY = 'tbc_daily_login_v1';
+    const MUSEUM_OFFLINE_STORAGE_KEY = 'tbc_museum_offline_v1';
 
     function getRecord() {
         try {
@@ -6808,7 +7011,8 @@
                 collectorPotionEnds: state.collectorPotionEnds||{},
                 qolSettings: state.qolSettings||{},
                 chestRarityStats: state.chestRarityStats||{},
-                dailyLogin: state.dailyLogin||{streak:0,lastClaimDate:null,missedStreak:0,recoveryLocked:false,lastRewardAmount:0}
+                dailyLogin: state.dailyLogin||{streak:0,lastClaimDate:null,missedStreak:0,recoveryLocked:false,lastRewardAmount:0},
+                blackjackRound: state.blackjackRound||{phase:'bet',deck:[],player:[],dealer:[],bet:0,doubled:false,outcome:'',message:'',payout:0}
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -6819,18 +7023,32 @@
         try {
             localStorage.setItem(SAVE_KEY, JSON.stringify(saveData));
         } catch(e) {}
+        persistDailyLoginState();
     }
 
     function loadGame() {
         try {
             const raw = localStorage.getItem(SAVE_KEY);
-            if (!raw) return false;
+            if (!raw) {
+                restoreDailyLoginState();
+                return false;
+            }
             const data = JSON.parse(raw);
             // ✅ FIX: Si por alguna razón se guardó un estado de game over, ignorarlo y empezar de cero
-            if (data.state && (data.state.over === true)) { clearSave(); return false; }
+            if (data.state && (data.state.over === true)) {
+                clearSave();
+                restoreDailyLoginState();
+                return false;
+            }
             const safeData = sanitizeImportedSave(data);
             // Restaurar state
             Object.assign(state, safeData.state);
+            if (Object.prototype.hasOwnProperty.call(safeData.state, 'dailyLogin')) {
+                normalizeDailyLoginState();
+                persistDailyLoginState();
+            } else {
+                restoreDailyLoginState();
+            }
             // Restaurar inventario
             inventory = safeData.inventory;
             // Restaurar logros
@@ -6845,20 +7063,48 @@
             // Asignar _id a items que no tengan
             inventory.forEach(item => { if (!item._id) item._id = Date.now() + Math.floor(Math.random()*99999); });
             return true;
-        } catch(e) { return false; }
+        } catch(e) {
+            restoreDailyLoginState();
+            return false;
+        }
     }
 
     // RECOMPENSA DIARIA Y RACHA DE LOGIN
     let dailyLoginPromptedDate = null;
 
+    function sanitizeDailyLoginState(value) {
+        const source = value && typeof value === 'object' && !Array.isArray(value) ? value : {};
+        const date = typeof source.lastClaimDate === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(source.lastClaimDate)
+            ? source.lastClaimDate
+            : null;
+        return {
+            streak: Math.max(0, Math.floor(Number(source.streak) || 0)),
+            lastClaimDate: date,
+            missedStreak: Math.max(0, Math.floor(Number(source.missedStreak) || 0)),
+            recoveryLocked: !!source.recoveryLocked,
+            lastRewardAmount: Math.max(0, Math.floor(Number(source.lastRewardAmount) || 0))
+        };
+    }
+
     function normalizeDailyLoginState() {
-        const defaults = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
-        if (!state.dailyLogin || typeof state.dailyLogin !== 'object') state.dailyLogin = {};
-        state.dailyLogin = { ...defaults, ...state.dailyLogin };
-        state.dailyLogin.streak = Math.max(0, Math.floor(Number(state.dailyLogin.streak) || 0));
-        state.dailyLogin.missedStreak = Math.max(0, Math.floor(Number(state.dailyLogin.missedStreak) || 0));
-        state.dailyLogin.recoveryLocked = !!state.dailyLogin.recoveryLocked;
-        state.dailyLogin.lastRewardAmount = Math.max(0, Number(state.dailyLogin.lastRewardAmount) || 0);
+        state.dailyLogin = sanitizeDailyLoginState(state.dailyLogin);
+    }
+
+    function persistDailyLoginState(value = state.dailyLogin) {
+        try {
+            localStorage.setItem(DAILY_LOGIN_STORAGE_KEY, JSON.stringify(sanitizeDailyLoginState(value)));
+        } catch (error) {}
+    }
+
+    function restoreDailyLoginState() {
+        try {
+            const saved = localStorage.getItem(DAILY_LOGIN_STORAGE_KEY);
+            if (!saved) return false;
+            state.dailyLogin = sanitizeDailyLoginState(JSON.parse(saved));
+            return true;
+        } catch (error) {
+            return false;
+        }
     }
 
     function getDailyLoginDateKey(date = new Date()) {
@@ -6876,11 +7122,10 @@
         return Math.round((Date.UTC(to[0], to[1] - 1, to[2]) - Date.UTC(from[0], from[1] - 1, from[2])) / 86400000);
     }
 
-    function getDailyLoginRewardAmount(streak, balance = state.balance) {
-        const streakDay = Math.max(1, Math.min(7, Math.floor(Number(streak) || 1)));
-        const rewardRate = 0.005 + (streakDay - 1) * 0.0025;
-        const currentBalance = Math.max(0, Number(balance) || 0);
-        return Math.max(250, Math.floor(currentBalance * rewardRate));
+    function getDailyLoginRewardAmount(streak) {
+        const streakDay = Math.max(1, Math.floor(Number(streak) || 1));
+        const reward = 250 * Math.pow(1.75, streakDay - 1);
+        return Math.floor(Math.min(Number.MAX_SAFE_INTEGER, reward));
     }
 
     function getDailyLoginRecoveryCost() {
@@ -6918,7 +7163,7 @@
             messageEl.textContent = 'La fecha del último reclamo es posterior a la fecha actual del dispositivo. Podrás reclamar cuando el calendario alcance ese día.';
         } else if (lostStreak) {
             const recoveryCost = getDailyLoginRecoveryCost();
-            const recoveredReward = getDailyLoginRewardAmount(daily.missedStreak + 1, Math.max(0, state.balance - recoveryCost));
+            const recoveredReward = getDailyLoginRewardAmount(daily.missedStreak + 1);
             if (daily.recoveryLocked) {
                 messageEl.textContent = `Perdiste una racha de ${daily.missedStreak} días. Esta racha no se puede recuperar porque la anterior ya se recuperó; reclama el bono para empezar de nuevo.`;
             } else {
@@ -6933,7 +7178,7 @@
             const intro = daily.lastClaimDate
                 ? `La racha seguirá desde el día ${normalNextStreak}.`
                 : '¡Tu primer bono diario está listo!';
-            messageEl.textContent = `${intro} Reclama hoy para mantener la racha. El premio sube hasta el día 7 y después se mantiene.`;
+            messageEl.textContent = `${intro} Reclama hoy para mantener la racha. El premio se multiplica ×1,75 cada día consecutivo.`;
             recoverBtn.style.display = 'none';
             recoverBtn.disabled = true;
         }
@@ -6970,7 +7215,10 @@
             daily.streak = 0;
             changed = true;
         }
-        if (changed) saveGame();
+        if (changed) {
+            persistDailyLoginState(daily);
+            saveGame();
+        }
         updateDailyLoginUI();
 
         if (showPrompt && daily.lastClaimDate !== today && today >= (daily.lastClaimDate || today) && dailyLoginPromptedDate !== today) {
@@ -7019,6 +7267,7 @@
         daily.recoveryLocked = !!useRecovery;
         daily.lastRewardAmount = reward;
 
+        persistDailyLoginState(daily);
         updateStats();
         saveGame();
         updateDailyLoginUI();
@@ -7194,7 +7443,7 @@
             'ownedPets', 'equippedPet', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
             'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'loan', 'xp', 'level',
             'skillPoints', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
-            'collectorPotionEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin'
+            'collectorPotionEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'blackjackRound'
         ]);
         const numericStateKeys = new Set([
             'balance', 'spent', 'invValue', 'opened', 'best', 'commonCount', 'miticoCount',
@@ -7225,6 +7474,10 @@
             } else if (key === 'equippedPet') {
                 if (value !== null && typeof value !== 'string') throw new Error('Mascota equipada inválida');
                 safeState[key] = value === null ? null : sanitizeImportedText(value, 80);
+            } else if (key === 'dailyLogin') {
+                safeState[key] = sanitizeDailyLoginState(value);
+            } else if (key === 'blackjackRound') {
+                safeState[key] = sanitizeBlackjackRound(value);
             } else if (objectStateKeys.has(key)) {
                 if (key === 'ownedPets') {
                     if (!Array.isArray(value) || value.some(pet => typeof pet !== 'string')) {
@@ -7235,6 +7488,11 @@
                 }
                 safeState[key] = sanitizeImportedJson(value);
             }
+        }
+
+        if (Number.isFinite(safeState.level)) {
+            safeState.level = Math.max(1, Math.min(LEVEL_MAX, Math.floor(safeState.level)));
+            if (safeState.level >= LEVEL_MAX) safeState.xp = 0;
         }
 
         const safeSave = {
@@ -7290,6 +7548,9 @@
             const data = JSON.parse(jsonStr);
             const safeSave = sanitizeImportedSave(data);
             localStorage.setItem(SAVE_KEY, JSON.stringify(safeSave));
+            if (Object.prototype.hasOwnProperty.call(safeSave.state, 'dailyLogin')) {
+                persistDailyLoginState(safeSave.state.dailyLogin);
+            }
             fb.textContent = '✅ ¡Partida importada! Recargando...';
             fb.className = 'io-modal-feedback ok';
             setTimeout(() => location.reload(), 1200);
@@ -7331,6 +7592,7 @@
             showSaveNotice();
         }
         updateStats();
+        claimMuseumOfflineIncome();
         updateRecordDisplay();
         updateMascotaIndicator();
         checkDailyLoginStatus(true);
@@ -7410,9 +7672,10 @@
         {
             icon:'🌳',
             title:'EXPERIENCIA Y ÁRBOL DE HABILIDADES',
-            intro:'Gana XP jugando. Al subir de nivel recibes puntos que puedes gastar en mejoras permanentes.',
+            intro:'Gana XP jugando. Cada cinco niveles recibes un punto que puedes gastar en mejoras permanentes.',
             points:[
                 'Suerte mejora las rarezas; Tasador aumenta el valor; Negociador abarata los cofres.',
+                'Rebajador de pity adelanta el mítico; Subastador reduce los presupuestos; Aprendiz aumenta la XP y Forjador acelera el taller.',
                 'Conservador añade espacios de museo y Reflejos reduce el enfriamiento de Cara o Cruz.',
                 'Abre ÁRBOL DE HABILIDADES para ver el coste y el siguiente efecto antes de comprar.'
             ]
@@ -7530,8 +7793,7 @@
     }
 
     function startFromSplash() {
-        if (hasSeenGameTutorial()) startGame();
-        else openGameTutorial(true);
+        startGame();
     }
 
     function showSaveNotice() {
@@ -7550,17 +7812,22 @@
     }
 
     function updatePityBar() {
-        const pct = Math.min(state.pityCount, 100);
+        const threshold = getPityThreshold();
+        const pityCount = Math.max(0, Math.floor(Number(state.pityCount) || 0));
+        const pct = Math.min(100, pityCount / threshold * 100);
+        const nextChestGuaranteed = pityCount >= threshold - 1;
         const fill = document.getElementById('pityFill');
         const label = document.getElementById('pityLabel');
+        const hint = document.getElementById('pityHint');
         const wrap = document.getElementById('pityWrap');
         if (!fill) return;
         fill.style.width = pct + '%';
-        if (pct >= 100) {
-            label.textContent = '🔥 PITY: 100 / 100 — ¡MÍTICO GARANTIZADO!';
+        if (hint) hint.textContent = `¡Mítico garantizado como máximo en el cofre ${threshold}!`;
+        if (nextChestGuaranteed) {
+            label.textContent = `🔥 PITY: ${pityCount} / ${threshold} — ¡MÍTICO EN EL PRÓXIMO COFRE!`;
             wrap.classList.add('pity-full');
         } else {
-            label.textContent = `🎯 PITY: ${pct} / 100`;
+            label.textContent = `🎯 PITY: ${pityCount} / ${threshold}`;
             wrap.classList.remove('pity-full');
         }
     }
@@ -8328,6 +8595,7 @@
             return;
         }
         state.ruletaCharges--;
+        recordCollectorMissionAction('special-roulette-spin');
         updateRuletaBtn();
         updateRuletaProgress();
         updateSuperRuletaBtn();
@@ -8491,6 +8759,7 @@
             return;
         }
         state.superRuletaCharges--;
+        recordCollectorMissionAction('special-roulette-spin');
         updateSuperRuletaBtn();
         // Cada 2 tiradas Súper = 1 tirada Hyper
         state.superSpinsForHyper++;
@@ -8657,6 +8926,7 @@
             return;
         }
         state.hyperRuletaCharges--;
+        recordCollectorMissionAction('special-roulette-spin');
         updateHyperRuletaBtn();
         hyperRuletaSpinning = true;
         document.getElementById('hyperRuletaSpinBtn').disabled = true;
@@ -8824,6 +9094,7 @@
         checkEnd();
         if (state.over) return;
 
+        recordCollectorMissionAction('special-roulette-spin');
         idiotaRuletaSpinning = true;
         document.getElementById('idiotaRuletaSpinBtn').disabled = true;
         setupIdiotaRuleta();
@@ -8972,6 +9243,7 @@
 
         state.balance -= ANUNCIOS_ESPANA_SPIN_COST;
         state.spent += ANUNCIOS_ESPANA_SPIN_COST;
+        recordCollectorMissionAction('special-roulette-spin');
         updateStats();
         saveGame();
 
@@ -9268,9 +9540,10 @@
         const realValue = item.price;
 
         // Assign each bot a max budget (they know real value)
+        const budgetMultiplier = 1 - getCollectorSkillLevel('auctioneer') * 0.03;
         const bots = BATTLE_BOTS.map(bp => ({
             ...bp,
-            maxBudget: Math.round(realValue * bp.budgetMult() / 50) * 50,
+            maxBudget: Math.round(realValue * bp.budgetMult() * budgetMultiplier / 50) * 50,
             currentBid: 0,
             retired: false,
             frozen: false
@@ -9491,6 +9764,7 @@
             return;
         }
         state.balance -= boost;
+        battle.farolUsed = true;
         battle.playerBid = newBid;
         battle.currentHighBid = newBid;
 
@@ -9515,6 +9789,7 @@
     function useSilence() {
         if (!battle || battle.ended || (state.silenceCharges || 0) <= 0) return;
         state.silenceCharges--;
+        recordCollectorMissionAction('potion-use');
         updateSilenceBadge();
         saveGame();
 
@@ -9619,6 +9894,7 @@
             if (mut.id === 'universal') state.universalCount++;
             state.auctionWins++;
             recordCollectorMissionAction('auction');
+            if (battle.farolUsed) recordCollectorMissionAction('auction-farol-win');
             addXP(50);
             // Note: player already paid playerBid above; state.spent tracks it
             state.spent += playerBid;
@@ -9878,6 +10154,11 @@
         return s > 0 ? `${m}m ${s}s` : `${m}m`;
     }
 
+    function collectorCraftTime(baseSeconds) {
+        const speedMultiplier = 1 - getCollectorSkillLevel('forger') * 0.10;
+        return Math.max(1, Math.round((Number(baseSeconds) || 1) * speedMultiplier));
+    }
+
     function openCraftModal() {
         document.getElementById('craftModal').classList.add('open');
         if (craftActive) {
@@ -9990,10 +10271,10 @@
         if (n > 0) {
             const cost = getExpectedCraftCost(probs);
             document.getElementById('craftCostDisplay').textContent = `~${cost.toLocaleString()}$`;
-            const avgTime = Math.round(
+            const avgTime = collectorCraftTime(Math.round(
                 ['comun','especial','epico','legendario','mitico']
                     .reduce((s, k) => s + (probs[k]||0) * (CRAFT_FUSION_TIME[k]||0), 0) / 100
-            );
+            ));
             document.getElementById('craftTimeDisplay').textContent = `~${getFusionTimeLabel(avgTime)}`;
         } else {
             document.getElementById('craftCostDisplay').textContent = '—';
@@ -10008,7 +10289,7 @@
         const n    = craftSlots.length;
         const fail = Math.random() * 100 < (CRAFT_FAIL_CHANCE[n] ?? 100);
 
-        let output = null, fusionTime = 5, cost = 0;
+        let output = null, fusionTime = collectorCraftTime(5), cost = 0;
         if (!fail) {
             const power = getCraftPower();
             const probs = getCraftProbabilities(power);
@@ -10017,7 +10298,7 @@
             output.price    = Math.round(output.price * mut.mult);
             output.mutation = mut.id;
             output.favorite = false;
-            fusionTime = CRAFT_FUSION_TIME[output.rarity] || 5;
+            fusionTime = collectorCraftTime(CRAFT_FUSION_TIME[output.rarity] || 5);
             cost = Math.round(output.price * 0.85);
         }
 
@@ -10139,6 +10420,9 @@
     let selectedMuseoItem = null;
     let museoIncomePerSec = 0;
     let museoVisitorTimer = null;
+    let museumOfflineClaimInitialized = false;
+    const MUSEUM_OFFLINE_CAP_SECONDS = 8 * 60 * 60;
+    const MUSEUM_OFFLINE_PAYOUT_RATE = 0.5;
 
     const VISITOR_EMOJIS = ['🧑‍🎨','👨‍🦳','👩‍🦱','🧑','👨‍🦰','👩','🧓','👴','🧑‍💼','👩‍💼'];
 
@@ -10164,6 +10448,44 @@
         museoIncomePerSec = Math.floor(total * 0.00005);
         const visitors = Math.min(Math.floor(total / 50000), 25);
         return { total, visitors };
+    }
+
+    function storeMuseumOfflineTimestamp() {
+        if (!museumOfflineClaimInitialized) return;
+        try { localStorage.setItem(MUSEUM_OFFLINE_STORAGE_KEY, String(Date.now())); } catch (error) {}
+    }
+
+    function showMuseumOfflineIncome(amount) {
+        if (amount <= 0) return;
+        const toast = document.createElement('div');
+        toast.setAttribute('role', 'status');
+        toast.style.cssText = 'position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:14000;max-width:calc(100vw - 24px);padding:12px 20px;border:1px solid #fbbf24;border-radius:12px;background:#111827;color:#fbbf24;font:700 14px Rajdhani,sans-serif;letter-spacing:1px;text-align:center;box-shadow:0 8px 28px rgba(0,0,0,.55);';
+        toast.textContent = `🏛️ Museo: +${amount.toLocaleString('es-ES')} $ de ingresos mientras no estabas (50%, máximo 8 h)`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 6000);
+    }
+
+    function claimMuseumOfflineIncome() {
+        const now = Date.now();
+        let lastAt = 0;
+        try { lastAt = Number(localStorage.getItem(MUSEUM_OFFLINE_STORAGE_KEY)) || 0; } catch (error) {}
+        try { localStorage.setItem(MUSEUM_OFFLINE_STORAGE_KEY, String(now)); } catch (error) {}
+        museumOfflineClaimInitialized = true;
+        if (!lastAt || now <= lastAt || state.over) return 0;
+
+        const elapsedSeconds = Math.min(MUSEUM_OFFLINE_CAP_SECONDS, (now - lastAt) / 1000);
+        calcMuseoStats();
+        const amount = Math.floor(
+            museoIncomePerSec * elapsedSeconds * MUSEUM_OFFLINE_PAYOUT_RATE * prestigeMult()
+        );
+        if (amount <= 0) return 0;
+
+        state.balance += amount;
+        updateStats();
+        saveGame();
+        showMuseumOfflineIncome(amount);
+        checkEnd();
+        return amount;
     }
 
     function renderMuseo() {
@@ -10331,10 +10653,21 @@
 
     // Passive museum income every second
     setInterval(() => {
-        if (state.over) return;
+        if (state.over || document.hidden) return;
         calcMuseoStats();
         if (museoIncomePerSec > 0) { state.balance += Math.floor(museoIncomePerSec * prestigeMult()); updateStats(); }
     }, 1000);
+
+    document.addEventListener('visibilitychange', () => {
+        if (!museumOfflineClaimInitialized) return;
+        if (document.hidden) storeMuseumOfflineTimestamp();
+        else claimMuseumOfflineIncome();
+    });
+    window.addEventListener('pagehide', storeMuseumOfflineTimestamp);
+    window.addEventListener('beforeunload', storeMuseumOfflineTimestamp);
+    setInterval(() => {
+        if (museumOfflineClaimInitialized && !document.hidden) storeMuseumOfflineTimestamp();
+    }, 30000);
 
     // ─── RULETA DE CASINO ────────────────────────────────────────────────────────
     const RULETA_WHEEL_ORDER = [0,32,15,19,4,21,2,25,17,34,6,27,13,36,11,30,8,23,10,5,24,16,33,1,20,14,31,9,22,18,29,7,28,12,35,3,26];
@@ -11124,21 +11457,24 @@
     // ═══════════════════ SISTEMA DE NIVEL ═══════════════════
     function xpForLevel(lvl) { return (lvl||1) * 3500; }
 
-    const LEVEL_MAX = 200;
-
     function addXP(amount) {
         if (state.over || !amount || amount <= 0) return;
         if ((state.level||1) >= LEVEL_MAX) return;
-        state.xp = (state.xp||0) + amount;
+        const xpMultiplier = 1 + getCollectorSkillLevel('apprentice') * 0.10;
+        state.xp = (state.xp||0) + Math.max(1, Math.round(amount * xpMultiplier));
         let levelsGained = 0;
+        let skillPointsGained = 0;
         while (state.xp >= xpForLevel(state.level) && (state.level||1) < LEVEL_MAX) {
             state.xp -= xpForLevel(state.level);
             state.level = (state.level||1) + 1;
-            state.skillPoints = (state.skillPoints||0) + 1;
+            if (state.level % 5 === 0) {
+                state.skillPoints = (state.skillPoints||0) + 1;
+                skillPointsGained++;
+            }
             levelsGained++;
         }
         if ((state.level||1) >= LEVEL_MAX) state.xp = 0;
-        if (levelsGained > 0) triggerLevelUp(state.level, levelsGained);
+        if (levelsGained > 0) triggerLevelUp(state.level, skillPointsGained);
         updateLevelDisplay();
     }
 
@@ -11171,14 +11507,14 @@
         if (skillsOverlay && skillsOverlay.classList.contains('open')) renderCollectorSkillTree();
     }
 
-    function triggerLevelUp(newLevel, levelsGained) {
+    function triggerLevelUp(newLevel, skillPointsGained) {
         playSound('win');
         const overlay = document.getElementById('levelUpOverlay');
         if (!overlay) return;
         document.getElementById('levelUpNum').textContent = newLevel;
-        document.getElementById('levelUpSP').textContent = levelsGained === 1
-            ? '⭐ +1 Punto de Habilidad'
-            : `⭐ +${levelsGained} Puntos de Habilidad`;
+        document.getElementById('levelUpSP').textContent = skillPointsGained > 0
+            ? `⭐ +${skillPointsGained} Punto${skillPointsGained === 1 ? '' : 's'} de Habilidad`
+            : `⭐ Próximo punto de habilidad en nivel ${Math.min(LEVEL_MAX, (Math.floor(newLevel / 5) + 1) * 5)}`;
         overlay.classList.remove('show');
         void overlay.offsetWidth;
         overlay.classList.add('show');
@@ -11485,7 +11821,7 @@
     const POKER_BOT_NAMES = ['El Tiburón 🦈','La Sombra 🎭','El Maestro ♟️'];
     const POKER_BOT_AVAT  = ['🦈','🎭','♟️'];
     const POKER_WIN_MULTIPLIER = 15;
-    const POKER_BAD_LUCK_CHANCE = 0.35;
+    const POKER_MATCHED_RANK_WEIGHT = 0.75;
 
     let pks = { deck:[], player:[], bots:[[],[],[]], sel:new Set(), phase:'bet', bet:0 };
 
@@ -11496,19 +11832,23 @@
         return d;
     }
 
-    // El jugador tiene un 35% de mala suerte en cada extracción:
-    // en vez de recibir la carta superior, recibe una de las más bajas
-    // que todavía quedan disponibles en el mazo.
-    function pkTakePlayerCard() {
+    // En los cambios, las cartas de rangos que ya conserva el jugador pesan un 25% menos.
+    function pkTakePlayerCard(heldCards = []) {
         if (!pks.deck.length) return null;
-        if (Math.random() < POKER_BAD_LUCK_CHANCE) {
-            let worstIndex = 0;
-            for (let i = 1; i < pks.deck.length; i++) {
-                if (pks.deck[i].v < pks.deck[worstIndex].v) worstIndex = i;
+        const heldRanks = new Set(heldCards.map(card => card.v));
+        if (!heldRanks.size) return pks.deck.shift();
+
+        const weights = pks.deck.map(card =>
+            heldRanks.has(card.v) ? POKER_MATCHED_RANK_WEIGHT : 1
+        );
+        let draw = Math.random() * weights.reduce((sum, weight) => sum + weight, 0);
+        for (let i = 0; i < pks.deck.length; i++) {
+            draw -= weights[i];
+            if (draw < 0) {
+                return pks.deck.splice(i, 1)[0];
             }
-            return pks.deck.splice(worstIndex, 1)[0];
         }
-        return pks.deck.shift();
+        return pks.deck.pop();
     }
 
     function pkEval(cards) {
@@ -11675,7 +12015,13 @@
         document.getElementById('pokerDiscardHint').textContent='Los bots están pensando...';
 
         // Replace selected player cards
-        pks.sel.forEach(i=>{pks.player[i]=pkTakePlayerCard();});
+        const keptCards = pks.player.filter((_, index) => !pks.sel.has(index));
+        const replacementCards = [];
+        [...pks.sel].forEach(index => {
+            const card = pkTakePlayerCard([...keptCards, ...replacementCards]);
+            pks.player[index] = card;
+            if (card) replacementCards.push(card);
+        });
         pks.sel=new Set();
         pkRenderPlayer(false);
 
@@ -11760,47 +12106,260 @@
         const inp=document.getElementById('pokerBetInput');
         inp.value = v==='max'?Math.floor(state.balance):Math.min(v,Math.floor(state.balance));
     }
+
+    const BLACKJACK_SUITS = ['♠','♥','♦','♣'];
+    const BLACKJACK_RANKS = ['A','2','3','4','5','6','7','8','9','10','J','Q','K'];
+
+    function sanitizeBlackjackCard(card) {
+        if (!isPlainObject(card)) return null;
+        const rank = String(card.r || '');
+        const suit = String(card.s || '');
+        if (!BLACKJACK_RANKS.includes(rank) || !BLACKJACK_SUITS.includes(suit)) return null;
+        return { r:rank, s:suit };
+    }
+
+    function sanitizeBlackjackRound(value) {
+        const empty = { phase:'bet', deck:[], player:[], dealer:[], bet:0, doubled:false, outcome:'', message:'', payout:0 };
+        if (!isPlainObject(value)) return empty;
+        const allowedPhases = new Set(['bet','player','result']);
+        const cards = list => Array.isArray(list) ? list.slice(0,52).map(sanitizeBlackjackCard).filter(Boolean) : [];
+        const phase = allowedPhases.has(value.phase) ? value.phase : 'bet';
+        const outcome = ['win','lose','push','blackjack'].includes(value.outcome) ? value.outcome : '';
+        return {
+            phase,
+            deck:cards(value.deck),
+            player:cards(value.player),
+            dealer:cards(value.dealer),
+            bet:Math.max(0, Math.floor(Math.min(Number.MAX_SAFE_INTEGER, Number(value.bet) || 0))),
+            doubled:!!value.doubled,
+            outcome,
+            message:typeof value.message === 'string' ? value.message.slice(0,180) : '',
+            payout:Math.max(0, Math.floor(Math.min(Number.MAX_SAFE_INTEGER, Number(value.payout) || 0)))
+        };
+    }
+
+    function createBlackjackDeck() {
+        const deck = [];
+        BLACKJACK_SUITS.forEach(s => BLACKJACK_RANKS.forEach(r => deck.push({ r, s })));
+        for (let i = deck.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [deck[i], deck[j]] = [deck[j], deck[i]];
+        }
+        return deck;
+    }
+
+    function blackjackCardValue(card) {
+        if (card.r === 'A') return 11;
+        if (['J','Q','K'].includes(card.r)) return 10;
+        return Number(card.r) || 0;
+    }
+
+    function blackjackHandValue(cards) {
+        let total = cards.reduce((sum, card) => sum + blackjackCardValue(card), 0);
+        let aces = cards.filter(card => card.r === 'A').length;
+        while (total > 21 && aces > 0) {
+            total -= 10;
+            aces--;
+        }
+        return total;
+    }
+
+    function renderBlackjackCard(card, faceDown = false) {
+        const element = document.createElement('div');
+        element.className = 'bj-card' + (faceDown ? ' back' : '') +
+            (!faceDown && ['♥','♦'].includes(card.s) ? ' red' : '');
+        if (faceDown) {
+            element.textContent = '🂠';
+            return element;
+        }
+        const rank = document.createElement('span');
+        rank.className = 'bj-card-rank';
+        rank.textContent = card.r;
+        const suit = document.createElement('span');
+        suit.className = 'bj-card-suit';
+        suit.textContent = card.s;
+        element.append(rank, suit);
+        return element;
+    }
+
+    function renderBlackjack() {
+        const round = state.blackjackRound || (state.blackjackRound = {
+            phase:'bet', deck:[], player:[], dealer:[], bet:0, doubled:false, outcome:'', message:'', payout:0
+        });
+        const playerTurn = round.phase === 'player';
+        const showResult = round.phase === 'result';
+        const dealerCards = document.getElementById('bjDealerCards');
+        const playerCards = document.getElementById('bjPlayerCards');
+        dealerCards.replaceChildren();
+        playerCards.replaceChildren();
+
+        round.dealer.forEach((card, index) => {
+            dealerCards.appendChild(renderBlackjackCard(card, playerTurn && index === 1));
+        });
+        round.player.forEach(card => playerCards.appendChild(renderBlackjackCard(card)));
+
+        const dealerVisibleTotal = playerTurn && round.dealer.length > 1
+            ? blackjackHandValue([round.dealer[0]])
+            : blackjackHandValue(round.dealer);
+        document.getElementById('bjDealerTotal').textContent = round.dealer.length
+            ? (playerTurn && round.dealer.length > 1 ? `Visible: ${dealerVisibleTotal}` : `Total: ${dealerVisibleTotal}`)
+            : '';
+        document.getElementById('bjPlayerTotal').textContent = round.player.length
+            ? `Total: ${blackjackHandValue(round.player)}`
+            : '';
+        document.getElementById('bjBalance').textContent = `${Math.floor(state.balance).toLocaleString('es-ES')} $`;
+        document.getElementById('bjMessage').textContent = round.message ||
+            (playerTurn ? `Apuesta: ${round.bet.toLocaleString('es-ES')} $ · Elige pedir o plantarte.` : 'Elige una apuesta para empezar.');
+        document.getElementById('bjBetControls').style.display = round.phase === 'bet' ? 'flex' : 'none';
+        document.getElementById('bjPlayerActions').style.display = playerTurn ? 'flex' : 'none';
+        document.getElementById('bjResultActions').style.display = showResult ? 'flex' : 'none';
+        document.getElementById('bjDoubleBtn').disabled =
+            !playerTurn || round.player.length !== 2 || round.doubled || state.balance < round.bet;
+    }
+
+    function openBlackjack() {
+        if (state.over) return;
+        playSound('click');
+        state.blackjackRound = sanitizeBlackjackRound(state.blackjackRound);
+        document.getElementById('blackjackOverlay').classList.add('open');
+        if (state.blackjackRound.phase === 'bet') {
+            const input = document.getElementById('bjBetInput');
+            input.value = Math.min(250, Math.floor(state.balance));
+        }
+        renderBlackjack();
+    }
+
+    function closeBlackjack() {
+        document.getElementById('blackjackOverlay').classList.remove('open');
+        saveGame();
+    }
+
+    function bjSetBet(amount) {
+        const input = document.getElementById('bjBetInput');
+        const value = amount === 'max' ? Math.floor(state.balance) : Math.floor(Number(amount) || 0);
+        input.value = Math.max(1, Math.min(value, Math.floor(state.balance)));
+    }
+
+    function startBlackjackRound() {
+        if (state.over || state.blackjackRound.phase === 'player') return;
+        const bet = Math.floor(Number(document.getElementById('bjBetInput').value) || 0);
+        if (!Number.isSafeInteger(bet) || bet < 1 || bet > state.balance) {
+            document.getElementById('bjMessage').textContent = 'Introduce una apuesta válida dentro de tu saldo.';
+            return;
+        }
+
+        const deck = createBlackjackDeck();
+        state.balance -= bet;
+        state.spent += bet;
+        state.blackjackRound = {
+            phase:'player',
+            deck,
+            player:[deck.pop(), deck.pop()],
+            dealer:[deck.pop(), deck.pop()],
+            bet,
+            doubled:false,
+            outcome:'',
+            message:'',
+            payout:0
+        };
+        updateStats();
+        const round = state.blackjackRound;
+        const playerNatural = round.player.length === 2 && blackjackHandValue(round.player) === 21;
+        const dealerNatural = round.dealer.length === 2 && blackjackHandValue(round.dealer) === 21;
+        if (playerNatural && dealerNatural) bjResolveRound('push');
+        else if (playerNatural) bjResolveRound('blackjack');
+        else if (dealerNatural) bjResolveRound('lose');
+        else {
+            renderBlackjack();
+            saveGame();
+        }
+        playSound('click');
+    }
+
+    function bjResolveRound(outcome) {
+        const round = state.blackjackRound;
+        if (!round || round.phase !== 'player') return;
+        const payouts = {
+            win:round.bet * 2,
+            lose:0,
+            push:round.bet,
+            blackjack:Math.floor(round.bet * 2.5)
+        };
+        const labels = {
+            win:'¡Ganas! El crupier se pasó.',
+            lose:'Gana el crupier.',
+            push:'Empate: se devuelve la apuesta.',
+            blackjack:'¡Blackjack natural! Premio 3:2.'
+        };
+        round.phase = 'result';
+        round.outcome = outcome;
+        round.payout = payouts[outcome];
+        round.message = `${labels[outcome]} ${outcome === 'lose' ? `−${round.bet.toLocaleString('es-ES')}` : `Balance neto: ${outcome === 'push' ? '0' : '+' + (round.payout - round.bet).toLocaleString('es-ES')}`} $.`;
+        state.balance += round.payout;
+        updateStats();
+        renderBlackjack();
+        saveGame();
+        checkEnd();
+    }
+
+    function bjHit() {
+        const round = state.blackjackRound;
+        if (!round || round.phase !== 'player' || !round.deck.length) return;
+        round.player.push(round.deck.pop());
+        if (blackjackHandValue(round.player) > 21) bjResolveRound('lose');
+        else {
+            if (blackjackHandValue(round.player) === 21) {
+                bjStand();
+                return;
+            }
+            renderBlackjack();
+            saveGame();
+        }
+    }
+
+    function bjStand() {
+        const round = state.blackjackRound;
+        if (!round || round.phase !== 'player') return;
+        while (blackjackHandValue(round.dealer) < 17 && round.deck.length) {
+            round.dealer.push(round.deck.pop());
+        }
+        const playerTotal = blackjackHandValue(round.player);
+        const dealerTotal = blackjackHandValue(round.dealer);
+        const outcome = dealerTotal > 21 || playerTotal > dealerTotal
+            ? 'win'
+            : playerTotal === dealerTotal ? 'push' : 'lose';
+        bjResolveRound(outcome);
+    }
+
+    function bjDouble() {
+        const round = state.blackjackRound;
+        if (!round || round.phase !== 'player' || round.player.length !== 2 || round.doubled) return;
+        if (state.balance < round.bet) {
+            renderBlackjack();
+            return;
+        }
+        state.balance -= round.bet;
+        state.spent += round.bet;
+        round.bet *= 2;
+        round.doubled = true;
+        if (round.deck.length) round.player.push(round.deck.pop());
+        if (blackjackHandValue(round.player) > 21) bjResolveRound('lose');
+        else bjStand();
+    }
+
+    function bjNewRound() {
+        if (state.over) return;
+        state.blackjackRound = {
+            phase:'bet', deck:[], player:[], dealer:[], bet:0,
+            doubled:false, outcome:'', message:'Elige una apuesta para empezar.', payout:0
+        };
+        document.getElementById('bjBetInput').value = Math.min(250, Math.floor(state.balance));
+        renderBlackjack();
+        saveGame();
+    }
     // ═══════════════════ FIN POKER ═══════════════════
 
     // ═══════════════════ HABILIDADES Y MISIONES ═══════════════════
-    const COLLECTOR_SKILLS = {
-        luck: {
-            name: 'Suerte',
-            description: 'Aumenta la probabilidad de obtener objetos poco comunes o mejores.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `+${level * 8}% de probabilidad para rarezas superiores a común`
-        },
-        money: {
-            name: 'Tasador',
-            description: 'Aumenta el valor de los objetos que consigues en cofres y subastas.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `+${level * 5}% al valor de los objetos`
-        },
-        'chest-discount': {
-            name: 'Negociador',
-            description: 'Reduce el precio de apertura de todos los cofres.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `-${level * 4}% al coste de los cofres`
-        },
-        'museum-slots': {
-            name: 'Conservador',
-            description: 'Añade espacios permanentes para exponer objetos en el museo.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `+${level} espacio${level === 1 ? '' : 's'} de museo`
-        },
-        'coinflip-cooldown': {
-            name: 'Reflejos',
-            description: 'Reduce el tiempo de espera entre partidas de cara o cruz.',
-            maxLevel: 5,
-            costs: [1, 1, 2, 2, 3],
-            effect: level => `-${level * 20} s de cooldown`
-        }
-    };
-
     let collectorSnapshotTimer = null;
 
     function getCollectorSkillLevel(skillId) {
@@ -11808,6 +12367,10 @@
         const level = Number(raw);
         const maximum = COLLECTOR_SKILLS[skillId] ? COLLECTOR_SKILLS[skillId].maxLevel : 0;
         return Number.isFinite(level) ? Math.max(0, Math.min(maximum, Math.floor(level))) : 0;
+    }
+
+    function getPityThreshold() {
+        return getCollectorSkillLevel('pity-reducer') > 0 ? 90 : 100;
     }
 
     function collectorCrateCost(baseCost) {
@@ -11833,7 +12396,9 @@
         { id:'daily-poker', title:'Apuesta inteligente', description:'Gana una partida de póker.', metric:'pokerWins', target:1, reward:{ type:'potion', potion:'luck', durationSeconds:180, amount:1, label:'Poción de suerte · 3 min' } },
         { id:'daily-highroller', title:'Cara de la suerte', description:'Gana 2 lanzamientos de cara o cruz.', metric:'coinWins', target:2, reward:{ type:'coins', rate:0.01, minimum:250, amount:250, label:'Monedas extra' } },
         { id:'daily-crafter', title:'Manos de artesano', description:'Completa una fusión en el taller.', metric:'crafts', target:1, reward:{ type:'xp', amount:400, label:'400 XP' } },
-        { id:'daily-alchemist', title:'Alquimista del día', description:'Compra una poción en la tienda.', metric:'potionsBought', target:1, reward:{ type:'potion', potion:'money', durationSeconds:120, amount:1, label:'Poción de dinero · 2 min' } }
+        { id:'daily-alchemist', title:'Alquimista del día', description:'Compra una poción en la tienda.', metric:'potionsBought', target:1, reward:{ type:'potion', potion:'money', durationSeconds:120, amount:1, label:'Poción de dinero · 2 min' } },
+        { id:'daily-potion-use', title:'Elixir en acción', description:'Activa o usa una poción.', metric:'potionsUsed', target:1, reward:{ type:'xp', amount:350, label:'350 XP' } },
+        { id:'daily-special-roulette', title:'Giro especial', description:'Gira una ruleta especial.', metric:'specialRouletteSpins', target:1, reward:{ type:'potion', potion:'luck', durationSeconds:180, amount:1, label:'Poción de suerte · 3 min' } }
     ];
 
     const COLLECTOR_WEEKLY_MISSION_POOL = [
@@ -11843,6 +12408,9 @@
         { id:'weekly-poker', title:'Rey de la mesa', description:'Gana 4 partidas de póker.', metric:'pokerWins', target:4, reward:{ type:'xp', amount:1800, label:'1.800 XP' } },
         { id:'weekly-crafter', title:'Fábrica de tesoros', description:'Completa 3 fusiones en el taller.', metric:'crafts', target:3, reward:{ type:'potion', potion:'money', durationSeconds:300, amount:1, label:'Poción de dinero · 5 min' } },
         { id:'weekly-alchemist', title:'Preparativos de la semana', description:'Compra 3 pociones en la tienda.', metric:'potionsBought', target:3, reward:{ type:'xp', amount:1200, label:'1.200 XP' } },
+        { id:'weekly-farol', title:'Farol ganador', description:'Gana una subasta después de usar FAROL.', metric:'farolAuctionWins', target:1, reward:{ type:'xp', amount:2000, label:'2.000 XP' } },
+        { id:'weekly-special-roulette', title:'Colección de ruletas', description:'Gira 5 ruletas especiales esta semana.', metric:'specialRouletteSpins', target:5, reward:{ type:'skillPoints', amount:1, label:'1 punto de habilidad' } },
+        { id:'weekly-potion-use', title:'Maestro de pociones', description:'Activa o usa 5 pociones.', metric:'potionsUsed', target:5, reward:{ type:'potion', potion:'money', durationSeconds:300, amount:1, label:'Poción de dinero · 5 min' } },
         { id:'weekly-quester', title:'Una misión cada día', description:'Reclama 6 misiones diarias esta semana.', metric:'dailyClaims', target:6, reward:{ type:'skillPoints', amount:1, label:'1 punto de habilidad' } }
     ];
 
@@ -12185,6 +12753,10 @@
         grid.innerHTML = '';
 
         const icons = {
+            'pity-reducer':'🎯',
+            auctioneer:'🏷️',
+            apprentice:'📚',
+            forger:'⚗️',
             luck:'🍀',
             money:'💰',
             'chest-discount':'🗝️',
@@ -12258,7 +12830,7 @@
         if (!state.collectorMissionProgress || window.parent === window) return;
         synchronizeCollectorMissionPeriod();
         const level = Number(state.level) || 1;
-        const atMaxLevel = level >= (typeof LEVEL_MAX === 'number' ? LEVEL_MAX : 200);
+        const atMaxLevel = level >= LEVEL_MAX;
         window.parent.postMessage({
             channel: 'the-best-collector',
             type: 'snapshot',
@@ -12347,6 +12919,15 @@
         } else if (type === 'potion-purchase') {
             increment(progress.dailyActionCounters, 'potionsBought');
             increment(progress.weeklyActionCounters, 'potionsBought');
+        } else if (type === 'potion-use') {
+            increment(progress.dailyActionCounters, 'potionsUsed');
+            increment(progress.weeklyActionCounters, 'potionsUsed');
+        } else if (type === 'special-roulette-spin') {
+            increment(progress.dailyActionCounters, 'specialRouletteSpins');
+            increment(progress.weeklyActionCounters, 'specialRouletteSpins');
+        } else if (type === 'auction-farol-win') {
+            increment(progress.dailyActionCounters, 'farolAuctionWins');
+            increment(progress.weeklyActionCounters, 'farolAuctionWins');
         }
         postCollectorSnapshot();
     }
@@ -12358,6 +12939,7 @@
         const endAt = Math.max(now, Number(state.collectorPotionEnds[type]) || 0) + durationSeconds * 1000;
         state.collectorPotionEnds[type] = endAt;
         restoreCollectorPotion(type);
+        recordCollectorMissionAction('potion-use');
         if (typeof refreshShopPotionBtns === 'function') refreshShopPotionBtns();
     }
 
