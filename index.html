@@ -2763,6 +2763,38 @@
             50% { filter: brightness(1.18); }
         }
 
+        .cerave-ruleta-card {
+            min-width:140px;width:140px;height:90%;display:flex;flex-direction:column;
+            align-items:center;justify-content:center;gap:3px;padding:9px 8px;text-align:center;
+            border:1px solid rgba(103,232,249,.75);border-top:4px solid #67e8f9;border-radius:10px;
+            background:radial-gradient(circle at 50% 0%,rgba(103,232,249,.22),transparent 62%),linear-gradient(145deg,#071624,#102b3c);
+            box-shadow:0 0 18px rgba(34,211,238,.22),inset 0 0 16px rgba(34,211,238,.1);
+        }
+        .cerave-ruleta-card .cr-icon {font-size:32px;line-height:1;margin-bottom:3px;}
+        .cerave-ruleta-card .cr-name {font-size:8px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:#ecfeff;line-height:1.2;}
+        .cerave-ruleta-card .cr-price {font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;color:#67e8f9;margin-top:2px;}
+        .cerave-ruleta-card .cr-odds {font-size:8px;color:#a5f3fc;}
+        .inv-card-cerave {
+            border-top:4px solid #67e8f9 !important;
+            background:radial-gradient(circle at 50% 0%,rgba(34,211,238,.17),transparent 68%),rgba(8,20,32,.98) !important;
+            box-shadow:0 0 18px rgba(34,211,238,.16),inset 0 0 16px rgba(34,211,238,.08) !important;
+        }
+        .inv-card-cerave .inv-card-bar {background:#67e8f9 !important;}
+        .inv-card-cerave .inv-card-name,.inv-card-cerave .inv-card-price {color:#a5f3fc;}
+        .cerave-inventory-badge {color:#67e8f9;border:1px solid rgba(103,232,249,.55);background:rgba(34,211,238,.1);}
+        #ceraveRuletaModal {
+            display:none;position:fixed;inset:0;z-index:830;align-items:center;justify-content:center;
+            padding:18px;background:rgba(2,8,18,.92);backdrop-filter:blur(16px);
+        }
+        #ceraveRuletaModal.show {display:flex;}
+        #ceraveRuletaModalBox {
+            width:min(500px,94vw);padding:34px 26px;text-align:center;position:relative;overflow:hidden;
+            border:2px solid #67e8f9;border-radius:24px;background:linear-gradient(145deg,#071624,#102b3c);
+            box-shadow:0 0 60px rgba(34,211,238,.24),0 24px 60px rgba(0,0,0,.7);
+            transform:scale(.88) translateY(24px);opacity:0;transition:all .4s cubic-bezier(.23,1,.32,1);
+        }
+        #ceraveRuletaModalBox.open {transform:scale(1) translateY(0);opacity:1;}
+
         #idiotaRuletaModal {
             display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.88);
             backdrop-filter: blur(16px); z-index: 800; align-items: center; justify-content: center;
@@ -3905,6 +3937,7 @@
             cursor:pointer; transition:all 0.2s;
         }
         .collector-skills-open-btn:hover { background:rgba(168,85,247,0.2); }
+        .collector-skills-open-btn:disabled { opacity:.48;cursor:not-allowed; }
         @media(max-width:600px) {
             .collector-skills-box { padding:20px 14px; }
             .collector-skills-grid { grid-template-columns:1fr; }
@@ -3921,14 +3954,14 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Blackjack paga x5 la apuesta en las victorias. Nueva mascota: Eñaut El Gigante Colosal. Objetivo final multiplicado por 4.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Blackjack paga x5 la apuesta en las victorias. Nueva mascota: Eñaut El Gigante Colosal. Objetivo final multiplicado por 100.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.000.000.000.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 200.000.000.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PROXIMA ACTUALICACION &nbsp;29/ 10 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #67</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #68</div>
     </div>
 </div>
 
@@ -4348,6 +4381,24 @@
         </div>
         <div class="ruleta-cost-info">Precio por tirada: <span style="color:#ffe08a;">70.000.000.000 €</span> · 5 premios publicitarios exclusivos</div>
         <button class="ruleta-spin-btn" id="anunciosEspanaRuletaSpinBtn" style="background:linear-gradient(115deg,#991b1b,#dc2626 42%,#b45309 72%,#eab308);box-shadow:0 0 34px rgba(220,38,38,0.48),0 0 20px rgba(251,191,36,0.32),0 8px 24px rgba(0,0,0,0.5);">🇪🇸 GIRAR ANUNCIOS ESPAÑA</button>
+    </div>
+
+    <!-- RULETA ESPECIAL: CERAVE TRASCENDENCIA ABSOLUTA -->
+    <div id="ceraveRuletaSection" style="margin-top:26px;margin-bottom:28px;padding:22px 18px 26px;border:1px solid rgba(103,232,249,.4);border-radius:22px;background:radial-gradient(ellipse at 50% 0%,rgba(34,211,238,.13),transparent 65%),linear-gradient(145deg,rgba(5,18,30,.9),rgba(7,12,24,.96));box-shadow:0 0 38px rgba(34,211,238,.11),inset 0 1px 0 rgba(255,255,255,.06);">
+        <div class="inventory-header">
+            <div class="inventory-title" style="background:linear-gradient(90deg,#22d3ee,#a5f3fc,#f0fdfa,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">🧴 Ruleta CeraVe Trascendencia Absoluta</div>
+            <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#67e8f9;">Ocho premios de colección · Más valor, menor probabilidad</div>
+        </div>
+        <div style="text-align:center;margin-bottom:16px;">
+            <div class="box-badge" style="border-color:#67e8f9;color:#a5f3fc;background:rgba(34,211,238,.08);box-shadow:0 0 22px rgba(34,211,238,.16);">🧴 CeraVe · TRASCENDENCIA ABSOLUTA</div>
+        </div>
+        <div id="ceraveRequirementsStatus" role="status" aria-live="polite" style="max-width:820px;margin:0 auto 14px;text-align:center;color:#cbd5e1;font-size:12px;font-weight:700;line-height:1.8;"></div>
+        <div class="ruleta-wrap" id="ceraveRuletaCase" style="border-color:rgba(103,232,249,.58);box-shadow:0 0 42px rgba(34,211,238,.15),inset 0 1px 0 rgba(255,255,255,.05);">
+            <div class="ruleta-marker" style="background:#a5f3fc;box-shadow:0 0 18px #67e8f9,0 0 42px rgba(34,211,238,.5);"></div>
+            <div class="ruleta-reel" id="ceraveRuletaReel"></div>
+        </div>
+        <div class="ruleta-cost-info">Precio por tirada: <span style="color:#67e8f9;">2.000.000.000.000.000 $</span> · Los premios más caros tienen menos probabilidad</div>
+        <button class="ruleta-spin-btn" id="ceraveRuletaSpinBtn" type="button" onclick="spinCeraveRuleta()" style="background:linear-gradient(135deg,#0e7490,#0891b2,#67e8f9);box-shadow:0 0 30px rgba(34,211,238,.32),0 8px 24px rgba(0,0,0,.4);">🧴 GIRAR CERAVE TRASCENDENCIA ABSOLUTA</button>
     </div>
 
     <!-- BATALLAS DE SUBASTAS EN VIVO -->
@@ -5172,6 +5223,21 @@
     </div>
 </div>
 
+<!-- RULETA CERAVE TRASCENDENCIA ABSOLUTA MODAL -->
+<div id="ceraveRuletaModal">
+    <section id="ceraveRuletaModalBox" role="dialog" aria-modal="true" aria-labelledby="ceraveRuletaModalName">
+        <div style="position:absolute;top:-75px;left:50%;transform:translateX(-50%);width:230px;height:230px;border-radius:50%;background:linear-gradient(135deg,#22d3ee,#a5f3fc);filter:blur(70px);opacity:.2;pointer-events:none;"></div>
+        <div style="position:relative;font-size:10px;font-weight:800;letter-spacing:4px;text-transform:uppercase;color:#67e8f9;margin-bottom:12px;">🧴 PREMIO CERAVE TRASCENDENTE</div>
+        <div id="ceraveRuletaModalIcon" style="position:relative;font-size:90px;line-height:1;margin:16px 0;filter:drop-shadow(0 0 30px rgba(34,211,238,.4));">🧴</div>
+        <h2 id="ceraveRuletaModalName" style="position:relative;font-family:'Bebas Neue',sans-serif;font-size:30px;letter-spacing:3px;margin:0 auto 16px;color:white;max-width:420px;line-height:1.15;"></h2>
+        <div style="position:relative;background:rgba(0,0,0,.38);border:1px solid rgba(103,232,249,.3);border-radius:14px;padding:16px;margin-bottom:24px;">
+            <div style="font-size:9px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#94a3b8;margin-bottom:4px;">Valor del premio</div>
+            <div id="ceraveRuletaModalPrice" style="font-family:'JetBrains Mono',monospace;font-size:clamp(20px,5vw,30px);font-weight:700;color:#67e8f9;"></div>
+        </div>
+        <button class="modal-close-btn" id="ceraveRuletaModalCloseBtn" style="background:linear-gradient(135deg,#0e7490,#22d3ee);color:#04121c;">COLECCIONAR 🧴</button>
+    </section>
+</div>
+
 <!-- ACHIEVEMENT TOAST -->
 <div id="achievement-toast">
     <div id="achievement-toast-icon">🏅</div>
@@ -5443,15 +5509,15 @@
             {name:"Dialga",rarity:"comun",icon:"💎",price:325000},
             {name:"Palkia",rarity:"especial",icon:"🌀",price:375000},
             {name:"Giratina",rarity:"epico",icon:"👻",price:1250000},
-            {name:"Mega-Mewtwo X",rarity:"legendario",icon:"🧬",price:3500000},
+            {name:"Mega-Mewtwo Y",rarity:"legendario",icon:"🧬",price:3500000},
             {name:"Arceus",rarity:"mitico",icon:"⚪",price:6000000}
         ]},
         jojo: { label:"JoJo's", emoji:"🌟", cost:450000, color:"#ec4899", title:"Cofre JoJo's Bizarre Adventure", items:[
             {name:"Tooru",rarity:"comun",icon:"🐛",price:400000},
             {name:"Enrico Pucci",rarity:"especial",icon:"⛪",price:435000},
             {name:"DIO",rarity:"epico",icon:"🧛",price:2000000},
-            {name:"Giorno Giovanna",rarity:"legendario",icon:"🌸",price:5500000},
-            {name:"Jotaro Kujo",rarity:"mitico",icon:"🐬",price:8000000}
+            {name:"Jotaro Kujo",rarity:"legendario",icon:"🐬",price:5500000},
+            {name:"Giorno Giovanna",rarity:"mitico",icon:"🌸",price:8000000}
         ]},
         cerave: { label:"Cerave", emoji:"🧴", cost:650000, color:"#38bdf8", title:"Santuario Cerave", items:[
             {name:"Copia Barata",rarity:"comun",icon:"🧴",price:590000},
@@ -5569,9 +5635,25 @@
     let inventory = [];
     const LEVEL_MAX = 1000;
     let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
+    state.anunciosEspanaSpins = 0;
     state.dailyLogin = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
     state.blackjackRound = { phase:'bet', deck:[], player:[], dealer:[], bet:0, doubled:false, outcome:'', message:'', payout:0 };
-    const WIN_GOAL = 2000000000000000;
+    const WIN_GOAL = 200000000000000000;
+    const CERAVE_SPIN_COST = 2000000000000000;
+    const CERAVE_REQUIRED_LEVEL = 1000;
+    const CERAVE_REQUIRED_AD_SPINS = 25;
+    const CERAVE_REQUIRED_PET_ID = 'enaute_gigante_colosal';
+    const CERAVE_ITEMS = [
+        { name:'CeraVe Veraniego', icon:'☀️', price:2500000000000000 },
+        { name:'CeraVe Navideño', icon:'🎄', price:2250000000000000 },
+        { name:'CeraVe Otoñal', icon:'🍂', price:1500000000000000 },
+        { name:'CeraVe Primaveral', icon:'🌸', price:750000000000000 },
+        { name:'CeraVe Espeluznante', icon:'👻', price:4000000000000000 },
+        { name:'CeraVe de la Hispanidad', icon:'🇪🇸', price:7000000000000000 },
+        { name:'CeraVe Carnaval', icon:'🎭', price:2000000000000000 },
+        { name:'CeraVe de la Suerte', icon:'🍀', price:1250000000000000 }
+    ];
+    const CERAVE_LOWEST_ITEM_PRICE = Math.min(...CERAVE_ITEMS.map(item => item.price));
 
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
@@ -6117,6 +6199,7 @@
             if (item.source === 'hyper') invCardClass += ' inv-card-hyper';
             else if (item.source === 'super') invCardClass += ' inv-card-super';
             else if (item.source === 'anuncios-espana') invCardClass += ' inv-card-anuncios-espana';
+            else if (item.source === 'cerave-trascendencia') invCardClass += ' inv-card-cerave';
             d.className = invCardClass;
             if (item.source === 'anuncios-espana') {
                 d.style.setProperty('--aes-accent', item.accent || '#fbbf24');
@@ -6124,12 +6207,12 @@
                 d.style.setProperty('--aes-card-bg', item.cardBg || 'rgba(15,23,42,0.95)');
             }
             d.innerHTML = `
-                <div class="inv-card-bar" style="background:${item.source === 'anuncios-espana' ? item.accent : (rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24')}"></div>
+                <div class="inv-card-bar" style="background:${item.source === 'anuncios-espana' ? item.accent : item.source === 'cerave-trascendencia' ? '#67e8f9' : (rarities[item.rarity] ? rarities[item.rarity].color : '#fbbf24')}"></div>
                 <div class="fav-btn" title="${isFav ? 'Quitar favorito' : 'Marcar favorito'}">${isFav ? '⭐' : '☆'}</div>
                 ${item.infected && !item.parasiteUsed ? '<div class="infected-badge" title="¡Objeto infectado! Si lo guardas mucho tiempo...">🦠</div>' : ''}
                 <div class="inv-card-icon"></div>
                 <div class="inv-card-name"></div>
-                ${item.source === 'anuncios-espana' ? '<div class="mutation-badge anuncios-espana-badge">🇪🇸 ANUNCIOS ESPAÑA</div>' : (() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
+                ${item.source === 'anuncios-espana' ? '<div class="mutation-badge anuncios-espana-badge">🇪🇸 ANUNCIOS ESPAÑA</div>' : item.source === 'cerave-trascendencia' ? '<div class="mutation-badge cerave-inventory-badge">🧴 CERAVE TRASCENDENCIA</div>' : (() => { const m = mutations[item.mutation] || mutations.normal; return `<div class="mutation-badge mutation-${m.id}">${m.icon} ${m.label}</div>`; })()}
                 <div class="inv-card-price">${salePrice.toLocaleString('es-ES')} ${itemCurrency}</div>
                 <div class="sell-overlay">
                     <div class="sell-overlay-text">💰 VENDER</div>
@@ -6240,6 +6323,7 @@
         if (state.balance > (state.maxBalance||0)) state.maxBalance = state.balance;
         if (typeof updateIdiotaRuletaBtn === 'function') updateIdiotaRuletaBtn();
         if (typeof updateAnunciosEspanaRuletaBtn === 'function') updateAnunciosEspanaRuletaBtn();
+        if (typeof updateCeraveRuletaBtn === 'function') updateCeraveRuletaBtn();
         if (typeof updatePrestigioBtn === 'function') updatePrestigioBtn();
     }
 
@@ -7018,6 +7102,7 @@
                 collectorSkillLevels: state.collectorSkillLevels||{},
                 collectorMissionProgress: state.collectorMissionProgress||null,
                 collectorPotionEnds: state.collectorPotionEnds||{},
+                anunciosEspanaSpins: state.anunciosEspanaSpins||0,
                 qolSettings: state.qolSettings||{},
                 chestRarityStats: state.chestRarityStats||{},
                 dailyLogin: state.dailyLogin||{streak:0,lastClaimDate:null,missedStreak:0,recoveryLocked:false,lastRewardAmount:0},
@@ -7427,6 +7512,16 @@
                 glow: officialAd.glow,
                 cardBg: officialAd.cardBg
             });
+        } else if (item.source === 'cerave-trascendencia') {
+            const officialCerave = CERAVE_ITEMS.find(entry => entry.name === name);
+            if (!officialCerave) throw new Error('Premio CeraVe no reconocido');
+            Object.assign(safeItem, {
+                name: officialCerave.name,
+                icon: officialCerave.icon,
+                price: officialCerave.price,
+                source: 'cerave-trascendencia',
+                currency: '$'
+            });
         }
 
         if (item.infected === true) safeItem.infected = true;
@@ -7452,14 +7547,14 @@
             'ownedPets', 'equippedPet', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
             'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'loan', 'xp', 'level',
             'skillPoints', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
-            'collectorPotionEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'blackjackRound'
+            'collectorPotionEnds', 'anunciosEspanaSpins', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'blackjackRound'
         ]);
         const numericStateKeys = new Set([
             'balance', 'spent', 'invValue', 'opened', 'best', 'commonCount', 'miticoCount',
             'consecutiveMiticos', 'timeInGame', 'coinWinStreak', 'coinLoseStreak', 'ruletaCharges',
             'miticosForRuleta', 'superRuletaCharges', 'miticosForSuperRuleta', 'hyperRuletaCharges',
             'superSpinsForHyper', 'auctionWins', 'universalCount', 'potionsBought', 'pityCount',
-            'silenceCharges', 'prestige', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
+            'silenceCharges', 'prestige', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed', 'anunciosEspanaSpins',
             'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'xp', 'level', 'skillPoints'
         ]);
         const booleanStateKeys = new Set(['lastWasmitico', 'gotSuerteMax']);
@@ -7502,6 +7597,9 @@
         if (Number.isFinite(safeState.level)) {
             safeState.level = Math.max(1, Math.min(LEVEL_MAX, Math.floor(safeState.level)));
             if (safeState.level >= LEVEL_MAX) safeState.xp = 0;
+        }
+        if (Number.isFinite(safeState.anunciosEspanaSpins)) {
+            safeState.anunciosEspanaSpins = Math.max(0, Math.floor(safeState.anunciosEspanaSpins));
         }
 
         const safeSave = {
@@ -9295,6 +9393,7 @@
                 source: 'anuncios-espana',
                 currency: '€'
             };
+            state.anunciosEspanaSpins = (Number(state.anunciosEspanaSpins) || 0) + 1;
             inventory.push(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
@@ -9354,6 +9453,186 @@
     });
     setupAnunciosEspanaRuleta();
     updateAnunciosEspanaRuletaBtn();
+
+    // ─── RULETA ESPECIAL: CERAVE TRASCENDENCIA ABSOLUTA ──────────────────────────
+    let ceraveRuletaSpinning = false;
+
+    function getCeraveRuletaRequirements() {
+        const level = Math.max(1, Math.floor(Number(state.level) || 1));
+        const anunciosSpins = Math.max(0, Math.floor(Number(state.anunciosEspanaSpins) || 0));
+        const ownsRequiredPet = Array.isArray(state.ownedPets) && state.ownedPets.includes(CERAVE_REQUIRED_PET_ID);
+        return {
+            level,
+            anunciosSpins,
+            ownsRequiredPet,
+            unlocked: level >= CERAVE_REQUIRED_LEVEL &&
+                anunciosSpins >= CERAVE_REQUIRED_AD_SPINS &&
+                ownsRequiredPet
+        };
+    }
+
+    function ceraveItemWeight(item) {
+        return CERAVE_LOWEST_ITEM_PRICE / item.price;
+    }
+
+    function getCeraveItemOdds(item) {
+        const totalWeight = CERAVE_ITEMS.reduce((sum, entry) => sum + ceraveItemWeight(entry), 0);
+        return totalWeight > 0 ? ceraveItemWeight(item) / totalWeight : 0;
+    }
+
+    function pickCeraveItem() {
+        const totalWeight = CERAVE_ITEMS.reduce((sum, item) => sum + ceraveItemWeight(item), 0);
+        let roll = Math.random() * totalWeight;
+        for (const item of CERAVE_ITEMS) {
+            roll -= ceraveItemWeight(item);
+            if (roll < 0) return item;
+        }
+        return CERAVE_ITEMS[CERAVE_ITEMS.length - 1];
+    }
+
+    function setupCeraveRuleta() {
+        const reel = document.getElementById('ceraveRuletaReel');
+        if (!reel) return;
+        reel.innerHTML = '';
+        const cardW = window.innerWidth <= 700 ? 100 : 140;
+        for (let i = 0; i < 60; i++) {
+            const item = pickCeraveItem();
+            const card = document.createElement('div');
+            card.className = 'cerave-ruleta-card';
+            card.style.minWidth = cardW + 'px';
+            card.style.width = cardW + 'px';
+            card.innerHTML = `
+                <div class="cr-icon">${item.icon}</div>
+                <div class="cr-name">${item.name}</div>
+                <div class="cr-price">${item.price.toLocaleString('es-ES')} $</div>
+                <div class="cr-odds">${(getCeraveItemOdds(item) * 100).toLocaleString('es-ES', {maximumFractionDigits:2})}%</div>
+            `;
+            card._item = item;
+            reel.appendChild(card);
+        }
+        reel.style.transition = 'none';
+        reel.style.transform = 'translateX(0px)';
+    }
+
+    function updateCeraveRuletaBtn() {
+        const button = document.getElementById('ceraveRuletaSpinBtn');
+        const status = document.getElementById('ceraveRequirementsStatus');
+        if (!button || !status) return;
+        const requirements = getCeraveRuletaRequirements();
+        const petLabel = requirements.ownsRequiredPet
+            ? '✅ Eñaut El Gigante Colosal'
+            : '🔒 Eñaut El Gigante Colosal';
+        status.textContent =
+            `Nivel ${requirements.level}/${CERAVE_REQUIRED_LEVEL} · ` +
+            `Anuncios España: ${Math.min(requirements.anunciosSpins, CERAVE_REQUIRED_AD_SPINS)}/${CERAVE_REQUIRED_AD_SPINS} tiradas · ` +
+            petLabel;
+        status.style.color = requirements.unlocked ? '#a5f3fc' : '#cbd5e1';
+        const affordable = state.balance >= CERAVE_SPIN_COST;
+        button.disabled = state.over || state.spinning || ceraveRuletaSpinning ||
+            !requirements.unlocked || !affordable;
+        button.textContent = !requirements.unlocked
+            ? '🔒 CUMPLE LOS REQUISITOS PARA DESBLOQUEAR'
+            : !affordable
+                ? 'NECESITAS 2.000.000.000.000.000 $'
+                : '🧴 GIRAR CERAVE TRASCENDENCIA ABSOLUTA';
+        button.style.opacity = button.disabled ? '0.45' : '1';
+        button.style.cursor = button.disabled ? 'not-allowed' : 'pointer';
+    }
+
+    function spinCeraveRuleta() {
+        if (state.over || state.spinning || ceraveRuletaSpinning) return;
+        const requirements = getCeraveRuletaRequirements();
+        if (!requirements.unlocked || state.balance < CERAVE_SPIN_COST) {
+            updateCeraveRuletaBtn();
+            return;
+        }
+
+        state.balance -= CERAVE_SPIN_COST;
+        state.spent += CERAVE_SPIN_COST;
+        recordCollectorMissionAction('special-roulette-spin');
+        updateStats();
+        saveGame();
+
+        ceraveRuletaSpinning = true;
+        updateCeraveRuletaBtn();
+        setupCeraveRuleta();
+        const reel = document.getElementById('ceraveRuletaReel');
+        const caseEl = document.getElementById('ceraveRuletaCase');
+        const spinDuration = 5400;
+        const winIndex = 55;
+        const cardWidth = window.innerWidth <= 700 ? 100 : 140;
+        const translateX = -((winIndex * cardWidth) - (caseEl.offsetWidth / 2) + cardWidth / 2);
+        reel.style.transition = `transform ${spinDuration / 1000}s cubic-bezier(0.12,0,0.04,1)`;
+        reel.style.transform = `translateX(${translateX}px)`;
+
+        let lastTickIndex = -1;
+        const tickCheck = () => {
+            if (!ceraveRuletaSpinning) return;
+            const rect = reel.getBoundingClientRect();
+            const index = Math.floor((window.innerWidth / 2 - rect.left) / cardWidth);
+            if (index !== lastTickIndex && index >= 0) {
+                playSound('tick');
+                lastTickIndex = index;
+            }
+            requestAnimationFrame(tickCheck);
+        };
+        tickCheck();
+
+        setTimeout(() => {
+            const winnerCard = reel.querySelectorAll('.cerave-ruleta-card')[winIndex];
+            const winner = winnerCard ? winnerCard._item : pickCeraveItem();
+            const wonItem = {
+                ...winner,
+                rarity:'mitico',
+                favorite:false,
+                mutation:'normal',
+                source:'cerave-trascendencia',
+                currency:'$'
+            };
+            inventory.push(wonItem);
+            state.invValue += wonItem.price;
+            if (wonItem.price > state.best) state.best = wonItem.price;
+            renderInventory();
+            updateStats();
+            checkAchievements();
+            saveGame();
+            showCeraveRuletaModal(wonItem);
+            ceraveRuletaSpinning = false;
+            updateCeraveRuletaBtn();
+            checkEnd();
+        }, spinDuration + 200);
+    }
+
+    function showCeraveRuletaModal(item) {
+        const overlay = document.getElementById('ceraveRuletaModal');
+        const box = document.getElementById('ceraveRuletaModalBox');
+        document.getElementById('ceraveRuletaModalIcon').textContent = item.icon;
+        document.getElementById('ceraveRuletaModalName').textContent = item.name;
+        document.getElementById('ceraveRuletaModalPrice').textContent = `${item.price.toLocaleString('es-ES')} $`;
+        overlay.classList.add('show');
+        setTimeout(() => box.classList.add('open'), 10);
+        confetti({particleCount:360,spread:150,colors:['#22d3ee','#a5f3fc','#ffffff','#67e8f9']});
+        setTimeout(() => confetti({particleCount:140,spread:95,origin:{x:.12,y:.5},colors:['#22d3ee','#a5f3fc','#ffffff']}),300);
+        setTimeout(() => confetti({particleCount:140,spread:95,origin:{x:.88,y:.5},colors:['#67e8f9','#a5f3fc','#ffffff']}),500);
+        playSound('win');
+    }
+
+    function closeCeraveRuletaModal() {
+        const box = document.getElementById('ceraveRuletaModalBox');
+        box.classList.remove('open');
+        setTimeout(() => {
+            document.getElementById('ceraveRuletaModal').classList.remove('show');
+            checkEnd();
+        }, 350);
+    }
+
+    document.getElementById('ceraveRuletaModalCloseBtn').addEventListener('click', closeCeraveRuletaModal);
+    document.getElementById('ceraveRuletaModal').addEventListener('click', function(event) {
+        if (event.target === this) closeCeraveRuletaModal();
+    });
+    setupCeraveRuleta();
+    updateCeraveRuletaBtn();
+    window.spinCeraveRuleta = spinCeraveRuleta;
 
     // ─── MÁQUINA DE JACKPOT ─────────────────────────────────────────────────────
     const slotSymbols = [
@@ -11514,6 +11793,8 @@
         }
         const skillsOverlay = document.getElementById('collectorSkillsOverlay');
         if (skillsOverlay && skillsOverlay.classList.contains('open')) renderCollectorSkillTree();
+        updateCollectorSkillsAccessButton();
+        updateCeraveRuletaBtn();
     }
 
     function triggerLevelUp(newLevel, skillPointsGained) {
@@ -12740,7 +13021,32 @@
         }
     }
 
+    function collectorSkillTreeUnlocked() {
+        return Math.floor(Number(state.level) || 1) >= 250;
+    }
+
+    function updateCollectorSkillsAccessButton() {
+        const button = document.getElementById('collectorSkillsOpenBtn');
+        if (!button) return collectorSkillTreeUnlocked();
+        const unlocked = collectorSkillTreeUnlocked();
+        const availablePoints = Number(state.skillPoints) || 0;
+        button.disabled = !unlocked;
+        button.title = unlocked
+            ? 'Abre el árbol para mejorar tus habilidades.'
+            : `Desbloquea el árbol de habilidades al nivel 250. Nivel actual: ${Math.floor(Number(state.level) || 1)}.`;
+        button.textContent = !unlocked
+            ? '🔒 ÁRBOL DE HABILIDADES · NIVEL 250'
+            : availablePoints > 0
+                ? `🌳  ÁRBOL DE HABILIDADES · ${availablePoints} PTS`
+                : '🌳  ÁRBOL DE HABILIDADES';
+        return unlocked;
+    }
+
     function openCollectorSkillsModal() {
+        if (!collectorSkillTreeUnlocked()) {
+            updateCollectorSkillsAccessButton();
+            return;
+        }
         if (!state.collectorMissionProgress) initializeCollectorSystems();
         const overlay = document.getElementById('collectorSkillsOverlay');
         if (!overlay) return;
@@ -12825,10 +13131,7 @@
             grid.appendChild(card);
         });
 
-        const openButton = document.getElementById('collectorSkillsOpenBtn');
-        if (openButton) openButton.textContent = availablePoints > 0
-            ? `🌳  ÁRBOL DE HABILIDADES · ${availablePoints} PTS`
-            : '🌳  ÁRBOL DE HABILIDADES';
+        updateCollectorSkillsAccessButton();
     }
 
     function postCollectorSnapshot() {
@@ -12873,6 +13176,11 @@
     }
 
     function buyCollectorSkill(skillId) {
+        if (!collectorSkillTreeUnlocked()) {
+            closeCollectorSkillsModal();
+            updateCollectorSkillsAccessButton();
+            return postCollectorSnapshot();
+        }
         const skill = COLLECTOR_SKILLS[skillId];
         const level = getCollectorSkillLevel(skillId);
         if (!skill || level >= skill.maxLevel) return postCollectorSnapshot();
