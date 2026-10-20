@@ -5480,7 +5480,7 @@
         { id:'dragon_fantasma',  icon:'👻', name:'Dragón Fantasma',               price:250000000,       moneyBonus:0.40, luckBonus:0.40, speedBonus:0,    desc:'+40% dinero · +40% suerte' },
         { id:'dragon_segador',   icon:'☠️', name:'Dragón Segador De La Muerte',   price:100000000000,    moneyBonus:2.50, luckBonus:2.00, speedBonus:2.50, desc:'+250% dinero · +200% suerte · +250% ruleta' },
         { id:'erlantz_calvo_definitivo', icon:'👑', name:'Erlantz Calvo Definitivo', price:250000000000, currency:'€', moneyBonus:5.00, luckBonus:4.50, speedBonus:3.00, desc:'+500% dinero · +450% suerte · +300% ruleta' },
-        { id:'enaute_gigante_colosal', icon:'🗿', name:'Eñaut El Gigante Colosal', price:500000000000, moneyBonus:5.00, luckBonus:4.50, speedBonus:0, desc:'+500% dinero · +450% suerte' }
+        { id:'enaute_gigante_colosal', icon:'🗿', name:'Eñaut El Gigante Colosal', price:750000000000, moneyBonus:12.50, luckBonus:1.00, speedBonus:0, desc:'+1250% dinero · +100% suerte' }
     ];
 
     function getEquippedPet() {
@@ -6361,6 +6361,7 @@
     }
 
     function checkEnd() {
+        if (state.over) return;
         if (state.balance >= WIN_GOAL) {
             // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
             clearSave();
@@ -6371,7 +6372,10 @@
             updateRecordDisplay();
             checkAchievements();
             triggerWinAnimation();
-        } else if ((state.balance + state.invValue) < 80 && !state.spinning) {
+        } else if ((state.balance + inventory.reduce((total, item) => {
+            const itemValue = Number(item && item.price);
+            return total + (Number.isFinite(itemValue) && itemValue > 0 ? itemValue : 0);
+        }, 0)) < 80 && !state.spinning) {
             // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
             clearSave();
             state.over = true;
@@ -6380,6 +6384,10 @@
             saveRecord(rec.wins, newLosses);
             updateRecordDisplay();
             checkAchievements();
+            // Las pantallas de casino tienen más z-index que la pantalla de derrota.
+            // Cerrarlas permite que la derrota se vea al acabar la ruleta o el blackjack.
+            document.getElementById('blackjackOverlay')?.classList.remove('open');
+            document.getElementById('ruletaCasinoOverlay')?.classList.remove('open');
             triggerLoseAnimation();
         }
     }
