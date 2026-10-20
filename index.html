@@ -3921,10 +3921,10 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Ajuste de balance: el póker paga x15 tu apuesta. Las subastas siguen ofreciendo mejores objetos y hay una nueva mascota.</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Blackjack paga x5 la apuesta en las victorias. Nueva mascota: Eñaut El Gigante Colosal. Objetivo final multiplicado por 4.</div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
-        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 500.000.000.000.000 monedas</div>
+        <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 2.000.000.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PROXIMA ACTUALICACION &nbsp;15/ 10 / 2026</div>
@@ -3963,7 +3963,7 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 500.000.000.000.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 2.000.000.000.000.000 monedas · By Aritz</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;" id="header-right">
             <div id="bonusBox" style="text-align:center;">
@@ -4846,7 +4846,7 @@
   <section id="blackjackBox" role="dialog" aria-modal="true" aria-labelledby="blackjackTitle">
     <button class="bj-close" type="button" aria-label="Cerrar blackjack" onclick="closeBlackjack()">✕</button>
     <h2 class="bj-title" id="blackjackTitle">♠ BLACKJACK</h2>
-    <p class="bj-subtitle">Llega a 21 · el crupier se planta en 17 · blackjack natural paga 3:2</p>
+    <p class="bj-subtitle">Llega a 21 · el crupier se planta en 17 · premio total x5 la apuesta en las victorias</p>
     <div class="bj-balance">SALDO DISPONIBLE: <span id="bjBalance">0 $</span></div>
     <div class="bj-table">
       <section class="bj-hand" aria-label="Mano del crupier">
@@ -5479,7 +5479,8 @@
         { id:'dragon_rojo',      icon:'🔥', name:'Dragón Rojo',                   price:100000000,       moneyBonus:0.50, luckBonus:0.20, speedBonus:0,    desc:'+50% dinero · +20% suerte' },
         { id:'dragon_fantasma',  icon:'👻', name:'Dragón Fantasma',               price:250000000,       moneyBonus:0.40, luckBonus:0.40, speedBonus:0,    desc:'+40% dinero · +40% suerte' },
         { id:'dragon_segador',   icon:'☠️', name:'Dragón Segador De La Muerte',   price:100000000000,    moneyBonus:2.50, luckBonus:2.00, speedBonus:2.50, desc:'+250% dinero · +200% suerte · +250% ruleta' },
-        { id:'erlantz_calvo_definitivo', icon:'👑', name:'Erlantz Calvo Definitivo', price:250000000000, currency:'€', moneyBonus:5.00, luckBonus:4.50, speedBonus:3.00, desc:'+500% dinero · +450% suerte · +300% ruleta' }
+        { id:'erlantz_calvo_definitivo', icon:'👑', name:'Erlantz Calvo Definitivo', price:250000000000, currency:'€', moneyBonus:5.00, luckBonus:4.50, speedBonus:3.00, desc:'+500% dinero · +450% suerte · +300% ruleta' },
+        { id:'enaute_gigante_colosal', icon:'🗿', name:'Eñaut El Gigante Colosal', price:500000000000, moneyBonus:5.00, luckBonus:4.50, speedBonus:0, desc:'+500% dinero · +450% suerte' }
     ];
 
     function getEquippedPet() {
@@ -5570,7 +5571,7 @@
     let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
     state.dailyLogin = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
     state.blackjackRound = { phase:'bet', deck:[], player:[], dealer:[], bet:0, doubled:false, outcome:'', message:'', payout:0 };
-    const WIN_GOAL = 500000000000000;
+    const WIN_GOAL = 2000000000000000;
 
     const reel = document.getElementById('caseReel');
     const spinBtn = document.getElementById('spinBtn');
@@ -12280,16 +12281,16 @@
         const round = state.blackjackRound;
         if (!round || round.phase !== 'player') return;
         const payouts = {
-            win:round.bet * 2,
+            win:round.bet * 5,
             lose:0,
             push:round.bet,
-            blackjack:Math.floor(round.bet * 2.5)
+            blackjack:round.bet * 5
         };
         const labels = {
-            win:'¡Ganas! El crupier se pasó.',
+            win:'¡Ganas! Premio total x5. El crupier se pasó.',
             lose:'Gana el crupier.',
             push:'Empate: se devuelve la apuesta.',
-            blackjack:'¡Blackjack natural! Premio 3:2.'
+            blackjack:'¡Blackjack natural! Premio total x5.'
         };
         round.phase = 'result';
         round.outcome = outcome;
