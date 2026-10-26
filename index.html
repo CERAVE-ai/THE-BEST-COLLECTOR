@@ -4043,6 +4043,15 @@
 
     <!-- TABS -->
     <div class="tabs-scroll" id="tabsContainer"></div>
+    <div style="display:flex;justify-content:center;margin:12px 0 20px"><button id="vitrinaOpenBtn" type="button" style="padding:12px 24px;border:1px solid #fbbf24;border-radius:12px;background:linear-gradient(135deg,#312e81,#581c87);color:#fff;font-weight:800;cursor:pointer;font-size:15px">🏆 VITRINA · <span id="vitrinaProgressTop">0/160</span></button></div>
+    <div id="vitrinaModal" style="display:none;position:fixed;inset:0;z-index:10050;background:rgba(2,6,23,.92);overflow:auto;padding:20px;backdrop-filter:blur(8px)">
+      <div style="max-width:1100px;margin:20px auto;background:#0f172a;border:1px solid #334155;border-radius:18px;padding:20px;color:#e2e8f0">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2 style="margin:0;color:#fbbf24">🏆 Vitrina</h2><p id="vitrinaSummary" style="margin:6px 0;color:#94a3b8">Colecciona todos los objetos del juego.</p></div><button id="vitrinaCloseBtn" type="button" style="padding:8px 14px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:white;cursor:pointer">Cerrar ✕</button></div>
+        <div id="vitrinaRewardStatus" style="margin:14px 0;padding:12px;background:#111827;border-radius:10px"></div>
+        <div id="vitrinaTabs" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"></div>
+        <div id="vitrinaGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px"></div>
+      </div>
+    </div>
 
     <!-- BOX INFO -->
     <div class="box-info">
@@ -5869,6 +5878,95 @@
         universal:  { id: 'universal',   label: 'Universal',   mult: 2.75, color: '#fbbf24', icon: '✨' }
     };
 
+    // VITRINA: colección permanente independiente del inventario y de la partida.
+    const VITRINA_STORAGE_KEY = 'tbc_vitrina_discoveries_v1';
+    const VITRINA_MUTATIONS = ['normal','roto','radiactivo','cosmico','universal'];
+    let vitrinaSection = 'normal';
+    let vitrinaData = { normal: [], roto: [], radiactivo: [], cosmico: [], universal: [], claimed: [] };
+    function vitrinaCatalog() {
+        const list = [];
+        Object.entries(boxes).forEach(([boxKey, box]) => box.items.forEach(item => list.push({ id: 'box:' + boxKey + ':' + item.name, name:item.name, icon:item.icon, rarity:item.rarity, source:box.title })));
+        if (typeof superMiticos !== 'undefined' && Array.isArray(superMiticos)) superMiticos.forEach(item => list.push({id:'super:'+item.name,name:item.name,icon:item.icon||'🎁',rarity:'mitico',source:'Súper Ruleta Mítica'}));
+        if (typeof hyperMiticos !== 'undefined' && Array.isArray(hyperMiticos)) hyperMiticos.forEach(item => list.push({id:'hyper:'+item.name,name:item.name,icon:item.icon||'🎁',rarity:'mitico',source:'Ruleta Hyper Mítica'}));
+        if (typeof idiotaItems !== 'undefined') idiotaItems.forEach(item => list.push({id:'idiota:'+item.name,name:item.name,icon:item.icon||'🎁',rarity:'mitico',source:'Ruleta de Idiotas'}));
+        if (typeof anunciosEspanaItems !== 'undefined') anunciosEspanaItems.forEach(item => list.push({id:'anuncios:'+item.name,name:item.name,icon:item.icon,rarity:'mitico',source:'Anuncios España'}));
+        if (typeof CERAVE_ITEMS !== 'undefined') CERAVE_ITEMS.forEach(item => list.push({id:'cerave:'+item.name,name:item.name,icon:item.icon,rarity:'mitico',source:'CeraVe Trascendencia'}));
+        // Ruleta de Idiotas: el catálogo se toma de los objetos que realmente se hayan conseguido.
+        return list;
+    }
+    function loadVitrinaData() {
+        try {
+            const raw = JSON.parse(localStorage.getItem(VITRINA_STORAGE_KEY) || '{}');
+            VITRINA_MUTATIONS.forEach(m => { vitrinaData[m] = Array.isArray(raw[m]) ? [...new Set(raw[m].filter(x => typeof x === 'string'))] : []; });
+            vitrinaData.claimed = Array.isArray(raw.claimed) ? [...new Set(raw.claimed.filter(x => [25,50,100,160].includes(x)))] : [];
+        } catch(e) { vitrinaData = {normal:[],roto:[],radiactivo:[],cosmico:[],universal:[],claimed:[]}; }
+    }
+    function saveVitrinaData() { try { localStorage.setItem(VITRINA_STORAGE_KEY, JSON.stringify(vitrinaData)); } catch(e) {} }
+    function vitrinaItemId(item) {
+        if (!item || typeof item.name !== 'string') return null;
+        if (item.source === 'super') return 'super:' + item.name;
+        if (item.source === 'hyper') return 'hyper:' + item.name;
+        if (item.source === 'idiota') return 'idiota:' + item.name;
+        if (item.source === 'anuncios-espana') return 'anuncios:' + item.name;
+        if (item.source === 'cerave-trascendencia') return 'cerave:' + item.name;
+        for (const [key, box] of Object.entries(boxes)) if (box.items.some(x => x.name === item.name)) return 'box:' + key + ':' + item.name;
+        return null;
+    }
+    function registerVitrinaItem(item) {
+        const id = vitrinaItemId(item); if (!id) return;
+        const mutation = VITRINA_MUTATIONS.includes(item.mutation) ? item.mutation : 'normal';
+        if (!vitrinaData[mutation].includes(id)) { vitrinaData[mutation].push(id); saveVitrinaData(); updateVitrinaUI(); }
+    }
+    function syncVitrinaFromInventory() { inventory.forEach(registerVitrinaItem); }
+    function vitrinaNormalCount() { return vitrinaData.normal.length; }
+    function restoreVitrinaBuffs() { const b=state.vitrinaBuffEnds||{}; const now=Date.now(); if(Number(b.luck)>now){luckyActive=true;luckySecondsLeft=Math.max(luckySecondsLeft||0,Math.ceil((b.luck-now)/1000));} if(Number(b.money)>now){bonusActive=true;bonusSecondsLeft=Math.max(bonusSecondsLeft||0,Math.ceil((b.money-now)/1000));} }
+    function claimVitrinaRewards() {
+        const count = vitrinaNormalCount();
+        const rewards = [
+            {n:25, luck:300, money:0, label:'×2 suerte · 5 minutos'},
+            {n:50, luck:0, money:600, label:'×2 dinero · 10 minutos'},
+            {n:100, luck:1200, money:1200, label:'×2 suerte y ×2 dinero · 20 minutos'},
+            {n:160, luck:3600, money:1800, label:'×2 suerte · 60 minutos y ×2 dinero · 30 minutos'}
+        ];
+        rewards.forEach(r => {
+            if (count >= r.n && !vitrinaData.claimed.includes(r.n)) {
+                vitrinaData.claimed.push(r.n);
+                if (r.luck) { luckyActive = true; luckySecondsLeft = Math.max(luckySecondsLeft||0, r.luck); }
+                if (r.money) { bonusActive = true; bonusSecondsLeft = Math.max(bonusSecondsLeft||0, r.money); }
+                const endLuck = Date.now() + (r.luck||0)*1000;
+                const endMoney = Date.now() + (r.money||0)*1000;
+                state.vitrinaBuffEnds = state.vitrinaBuffEnds || {};
+                if (r.luck) state.vitrinaBuffEnds.luck = Math.max(Number(state.vitrinaBuffEnds.luck)||0, endLuck);
+                if (r.money) state.vitrinaBuffEnds.money = Math.max(Number(state.vitrinaBuffEnds.money)||0, endMoney);
+                if (typeof showToast === 'function') showToast('🏆 Vitrina: recompensa desbloqueada — ' + r.label);
+            }
+        });
+        saveVitrinaData(); saveGame();
+    }
+    function renderVitrina() {
+        const catalog = vitrinaCatalog();
+        const tabs = document.getElementById('vitrinaTabs');
+        const grid = document.getElementById('vitrinaGrid'); if (!tabs || !grid) return;
+        const labels = {normal:'⬜ Objetos normales',roto:'💔 Roto',radiactivo:'☢️ Radiactivo',cosmico:'🌌 Cósmico',universal:'✨ Universal'};
+        tabs.innerHTML = '';
+        VITRINA_MUTATIONS.forEach(m => { const b=document.createElement('button'); b.type='button'; b.textContent=labels[m]; b.style.cssText='padding:9px 12px;border-radius:8px;border:1px solid '+(vitrinaSection===m?'#fbbf24':'#475569')+';background:'+(vitrinaSection===m?'#312e81':'#1e293b')+';color:white;cursor:pointer'; b.onclick=()=>{vitrinaSection=m;renderVitrina();}; tabs.appendChild(b); });
+        const ids = new Set(vitrinaData[vitrinaSection]);
+        const sectionCatalog = catalog;
+        const count = sectionCatalog.filter(x=>ids.has(x.id)).length;
+        grid.innerHTML = '';
+        sectionCatalog.forEach(item => { const got=ids.has(item.id); const card=document.createElement('div'); card.style.cssText='padding:12px;border-radius:10px;border:1px solid '+(got?'#22c55e':'#334155')+';background:'+(got?'rgba(34,197,94,.08)':'#111827')+';text-align:center;min-height:105px'; card.innerHTML='<div style="font-size:28px">'+(got?item.icon:'❔')+'</div><div style="font-weight:700;font-size:12px;margin-top:6px">'+(got?item.name:'Objeto desconocido')+'</div><div style="font-size:10px;color:#94a3b8;margin-top:5px">'+(got?item.source:'???')+'</div>'; grid.appendChild(card); });
+        const normalCount=vitrinaNormalCount();
+        document.getElementById('vitrinaSummary').textContent = count+' / '+sectionCatalog.length+' descubiertos en esta sección. Colección normal: '+normalCount+' / 160.';
+        document.getElementById('vitrinaProgressTop').textContent = normalCount+'/160';
+        const rewardText = [{n:25,t:'×2 suerte · 5 min'},{n:50,t:'×2 dinero · 10 min'},{n:100,t:'×2 suerte y dinero · 20 min'},{n:160,t:'×2 suerte · 60 min + ×2 dinero · 30 min'}].map(r=>'<div style="margin:5px 0">'+(normalCount>=r.n?'✅':'🔒')+' <b>'+r.n+' objetos base:</b> '+r.t+(vitrinaData.claimed.includes(r.n)?' · Reclamada':'')+'</div>').join('');
+        document.getElementById('vitrinaRewardStatus').innerHTML='<b>Progreso de recompensas (solo objetos base, sin mutaciones)</b>'+rewardText;
+    }
+    function updateVitrinaUI() { const top=document.getElementById('vitrinaProgressTop'); if(top) top.textContent=vitrinaNormalCount()+'/160'; claimVitrinaRewards(); if(document.getElementById('vitrinaModal')?.style.display==='block') renderVitrina(); }
+    loadVitrinaData();
+    document.getElementById('vitrinaOpenBtn').addEventListener('click',()=>{restoreVitrinaBuffs();syncVitrinaFromInventory();renderVitrina();document.getElementById('vitrinaModal').style.display='block';});
+    document.getElementById('vitrinaCloseBtn').addEventListener('click',()=>document.getElementById('vitrinaModal').style.display='none');
+    document.getElementById('vitrinaModal').addEventListener('click',e=>{if(e.target.id==='vitrinaModal')e.currentTarget.style.display='none';});
+
     function getMutation() {
         const r = Math.random() * 100;
         if (r < 35) return mutations.normal;
@@ -5918,6 +6016,7 @@
         state.invValue += finalPrice;
         if (finalPrice > state.best) state.best = finalPrice;
         inventory.push(bonusWinner);
+        registerVitrinaItem(bonusWinner);
         if (mutation.id === 'universal') state.universalCount++;
 
         // Efecto visual en la carta ganadora
@@ -7056,6 +7155,7 @@
         // ✅ FIX: No guardar nunca si la partida ha terminado (evita re-guardar estado de derrota/victoria)
         if (state.over) return;
 
+        syncVitrinaFromInventory();
         const saveData = {
             state: {
                 balance: state.balance,
@@ -7102,6 +7202,7 @@
                 collectorSkillLevels: state.collectorSkillLevels||{},
                 collectorMissionProgress: state.collectorMissionProgress||null,
                 collectorPotionEnds: state.collectorPotionEnds||{},
+                vitrinaBuffEnds: state.vitrinaBuffEnds||{},
                 anunciosEspanaSpins: state.anunciosEspanaSpins||0,
                 qolSettings: state.qolSettings||{},
                 chestRarityStats: state.chestRarityStats||{},
@@ -7496,7 +7597,7 @@
             currency: item.currency === '€' ? '€' : '$'
         };
 
-        if (item.source === 'super' || item.source === 'hyper') {
+        if (item.source === 'super' || item.source === 'hyper' || item.source === 'idiota') {
             safeItem.source = item.source;
         } else if (item.source === 'anuncios-espana') {
             // Los estilos y datos del premio se toman del catálogo del juego, nunca del archivo importado.
@@ -7547,7 +7648,7 @@
             'ownedPets', 'equippedPet', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
             'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'loan', 'xp', 'level',
             'skillPoints', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
-            'collectorPotionEnds', 'anunciosEspanaSpins', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'blackjackRound'
+            'collectorPotionEnds', 'vitrinaBuffEnds', 'anunciosEspanaSpins', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'blackjackRound'
         ]);
         const numericStateKeys = new Set([
             'balance', 'spent', 'invValue', 'opened', 'best', 'commonCount', 'miticoCount',
@@ -7560,7 +7661,7 @@
         const booleanStateKeys = new Set(['lastWasmitico', 'gotSuerteMax']);
         const objectStateKeys = new Set([
             'ownedPets', 'loan', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
-            'collectorPotionEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin'
+            'collectorPotionEnds', 'vitrinaBuffEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin'
         ]);
         const safeState = {};
 
@@ -8749,6 +8850,7 @@
             finalPrice = Math.round(finalPrice * mutationR.mult);
             const wonItem = { ...winner, price: finalPrice, favorite: false, mutation: mutationR.id };
             inventory.push(wonItem);
+        registerVitrinaItem(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
             if (mutationR.id === 'universal') state.universalCount++;
@@ -8919,6 +9021,7 @@
             finalPrice = Math.round(finalPrice * mutationSR.mult);
             const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationSR.id, source:'super' };
             inventory.push(wonItem);
+        registerVitrinaItem(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
             if (mutationSR.id === 'universal') state.universalCount++;
@@ -9075,6 +9178,7 @@
             finalPrice = Math.round(finalPrice * mutationHR.mult);
             const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mutationHR.id, source:'hyper' };
             inventory.push(wonItem);
+        registerVitrinaItem(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
             if (mutationHR.id === 'universal') state.universalCount++;
@@ -9236,8 +9340,9 @@
             const mut = getMutation();
             finalPrice = Math.round(finalPrice * mut.mult);
             finalPrice = Math.round(finalPrice * (1 + getCollectorSkillLevel('money') * 0.05));
-            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mut.id, source:'hyper' };
+            const wonItem = { ...winner, rarity:'mitico', price: finalPrice, favorite: false, mutation: mut.id, source:'idiota' };
             inventory.push(wonItem);
+        registerVitrinaItem(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
             if (mut.id === 'universal') state.universalCount++;
@@ -9395,6 +9500,7 @@
             };
             state.anunciosEspanaSpins = (Number(state.anunciosEspanaSpins) || 0) + 1;
             inventory.push(wonItem);
+        registerVitrinaItem(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
             renderInventory();
@@ -9590,6 +9696,7 @@
                 currency:'$'
             };
             inventory.push(wonItem);
+        registerVitrinaItem(wonItem);
             state.invValue += wonItem.price;
             if (wonItem.price > state.best) state.best = wonItem.price;
             renderInventory();
@@ -10176,6 +10283,7 @@
 
             const wonItem = { ...item, price: finalPrice, favorite: false, mutation: mut.id };
             inventory.push(wonItem);
+        registerVitrinaItem(wonItem);
             state.invValue += finalPrice;
             if (finalPrice > state.best) state.best = finalPrice;
             state.opened++;
@@ -10643,6 +10751,7 @@
         closeCraftModal();
         if (result) {
             inventory.push(result);
+        registerVitrinaItem(result);
             state.invValue += result.price;
             if (result.price > state.best) state.best = result.price;
             state.crafted = (state.crafted||0) + 1;
@@ -10798,6 +10907,7 @@
             overflow.forEach(item => {
                 if (item && !inventory.some(existing => existing && existing._id === item._id)) {
                     inventory.push(item);
+        registerVitrinaItem(item);
                 }
             });
         }
@@ -11706,6 +11816,7 @@
         const received = pool[Math.floor(Math.random() * pool.length)];
         const newItem = { ...received, favorite: false, mutation: 'none', _id: Date.now() + Math.random() };
         inventory.push(newItem);
+        registerVitrinaItem(newItem);
         state.invValue += newItem.price;
         addXP(150);
 
