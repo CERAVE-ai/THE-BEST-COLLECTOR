@@ -3956,15 +3956,24 @@
     <div class="splash-glow"></div>
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
-        <div style="margin-bottom:20px;padding:12px 24px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:480px;text-align:center;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:1px;line-height:1.5;">Blackjack paga x5 la apuesta en las victorias. Nueva mascota: Eñaut El Gigante Colosal. Objetivo final multiplicado por 100.</div>
+        <div style="margin-bottom:20px;padding:14px 22px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:560px;width:calc(100% - 28px);box-sizing:border-box;text-align:left;">
+            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#f43f5e;letter-spacing:2px;text-align:center;margin-bottom:7px;">🆕 NOVEDADES DE LA VERSIÓN #70</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:#e2e8f0;line-height:1.45;">
+                • <b>Vitrina:</b> registra los objetos que descubres y conserva tu colección.<br>
+                • <b>Prestigio renovado:</b> asciende para conseguir fragmentos y comprar mejoras permanentes.<br>
+                • <b>4 mejoras:</b> Comerciante, Mecenas del museo, Ojo de coleccionista y Aprendiz eterno.<br>
+                • <b>Comerciante:</b> el +10% por nivel solo afecta a objetos procedentes de cofres, no a las ruletas especiales.<br>
+                • <b>Ascensión:</b> reinicia la partida, pero conserva la Vitrina, las mascotas, los fragmentos y las mejoras de Prestigio.<br>
+                • Fortuna colocada encima del contador de eventos, tutorial ampliado y recompensa de racha diaria limitada al 25% de la meta final.<br>
+                • Blackjack con premio x5 en victorias, nueva mascota Eñaut El Gigante Colosal y objetivo final multiplicado por 100.
+            </div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 200.000.000.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:14px;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700;color:#f43f5e;letter-spacing:2px;">🔧 PROXIMA ACTUALICACION &nbsp;29/ 10 / 2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #68</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #70</div>
     </div>
 </div>
 
@@ -3993,7 +4002,7 @@
         <div class="balance-box" id="mainFortuneBox" style="text-align:center;margin:0 auto 16px;">
             <div class="balance-label" style="font-size:13px;letter-spacing:4px;margin-bottom:4px;">💰 TU FORTUNA</div>
             <div class="balance-amount" id="balance" style="font-size:clamp(38px,7vw,64px);line-height:1.05;">650</div>
-            <div id="prestigioBadge" style="display:none;margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a855f7;text-align:center;">⭐ PRESTIGIO <span id="prestigioLvl">0</span> · +<span id="prestigioPct">0</span>%</div>
+            <div id="prestigioBadge" style="display:none;margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a855f7;text-align:center;">⭐ FRAGMENTOS <span id="prestigioLvl">0</span></div>
         </div>
         <div id="eventLabel" style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#475569;margin-bottom:6px;">⚡ PRÓXIMO EVENTO EN</div>
         <div id="eventCountdown" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,80px);letter-spacing:8px;line-height:1;color:white;text-shadow:0 0 40px rgba(255,255,255,0.2);">05:00</div>
@@ -4700,7 +4709,7 @@
         <div class="stat-row"><span class="stat-row-label">Objeto Más Caro</span><span class="stat-row-val yellow" id="ds_best">—</span></div>
         <div class="stat-row"><span class="stat-row-label">Objetos Vendidos</span><span class="stat-row-val" id="ds_sold">0</span></div>
         <div class="stat-row"><span class="stat-row-label">Items Fabricados</span><span class="stat-row-val purple" id="ds_crafted">0</span></div>
-        <div class="stat-row"><span class="stat-row-label">Nivel Prestigio</span><span class="stat-row-val purple" id="ds_prestige">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Fragmentos de Prestigio</span><span class="stat-row-val purple" id="ds_prestige">0</span></div>
         <div class="stat-row"><span class="stat-row-label">Valor Inventario</span><span class="stat-row-val green" id="ds_invVal">0 $</span></div>
       </div>
     </div>
@@ -4943,35 +4952,30 @@
   </section>
 </div>
 
-<!-- ══════════════ PRESTIGIO MODAL ══════════════ -->
-<div id="prestigioOverlay" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.85);backdrop-filter:blur(8px);align-items:center;justify-content:center;">
-    <div id="prestigioBox" style="background:linear-gradient(145deg,#0d0a1a,#1a0d2e);border:1px solid rgba(168,85,247,0.4);border-radius:24px;padding:40px 36px;max-width:480px;width:90%;text-align:center;box-shadow:0 0 60px rgba(168,85,247,0.3),0 24px 60px rgba(0,0,0,0.6);transform:scale(0.9) translateY(20px);opacity:0;transition:all 0.35s cubic-bezier(0.34,1.56,0.64,1);">
-        <div style="font-size:64px;margin-bottom:12px;filter:drop-shadow(0 0 30px rgba(168,85,247,0.8));">⭐</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:5px;color:#a855f7;text-shadow:0 0 20px rgba(168,85,247,0.5);margin-bottom:6px;">PRESTIGIO</div>
-        <div style="font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:2px;color:#64748b;margin-bottom:28px;">Invierte para ganar más dinero permanentemente</div>
-
-        <div style="display:flex;gap:16px;justify-content:center;margin-bottom:28px;">
-            <div style="background:rgba(168,85,247,0.1);border:1px solid rgba(168,85,247,0.3);border-radius:14px;padding:14px 24px;">
-                <div style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:2px;color:#64748b;margin-bottom:4px;">NIVEL ACTUAL</div>
-                <div id="prestigioModalLvl" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#a855f7;letter-spacing:2px;">0</div>
-            </div>
-            <div style="background:rgba(74,222,128,0.08);border:1px solid rgba(74,222,128,0.3);border-radius:14px;padding:14px 24px;">
-                <div style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:2px;color:#64748b;margin-bottom:4px;">BONUS DINERO</div>
-                <div id="prestigioModalBonus" style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:#4ade80;letter-spacing:2px;">+0%</div>
-            </div>
-        </div>
-
-        <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:16px;margin-bottom:24px;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:11px;letter-spacing:2px;color:#64748b;margin-bottom:6px;">SIGUIENTE PRESTIGIO</div>
-            <div style="font-family:'Rajdhani',sans-serif;font-size:13px;color:#94a3b8;margin-bottom:8px;">+2% al dinero ganado al vender · permanente y acumulable</div>
-            <div id="prestigioModalCost" style="font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;color:#fbbf24;">10.000.000 $</div>
-        </div>
-
-        <button id="prestigioBuyBtn" style="width:100%;padding:18px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:4px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;box-shadow:0 0 30px rgba(168,85,247,0.5);transition:all 0.3s;margin-bottom:14px;">⭐ COMPRAR PRESTIGIO</button>
-        <button id="prestigioCloseBtn" style="background:none;border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 28px;color:#64748b;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;cursor:pointer;">CERRAR</button>
+<!-- ══════════════ PRESTIGIO / ASCENSIÓN MODAL ══════════════ -->
+<div id="prestigioOverlay" style="display:none;position:fixed;inset:0;z-index:9500;background:rgba(0,0,0,0.88);backdrop-filter:blur(8px);align-items:center;justify-content:center;overflow-y:auto;padding:18px;">
+  <div id="prestigioBox" style="background:linear-gradient(145deg,#0d0a1a,#1a0d2e);border:1px solid rgba(168,85,247,.45);border-radius:24px;padding:30px 24px;max-width:560px;width:100%;text-align:center;box-shadow:0 0 60px rgba(168,85,247,.25);margin:auto;">
+    <div style="font-size:54px;margin-bottom:8px;">🌌</div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:32px;letter-spacing:4px;color:#c084fc;">PRESTIGIO — ASCENSIÓN</div>
+    <p style="color:#a5b4fc;font-size:13px;line-height:1.6;margin:8px 0 18px;">La ascensión reinicia la partida casi por completo. Solo conservas la Vitrina, las mascotas y tu progreso de Prestigio (fragmentos y mejoras permanentes).</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:18px;">
+      <div style="background:#1e1232;border:1px solid #6b21a8;border-radius:12px;padding:12px 20px;min-width:140px;"><div style="font-size:11px;color:#c4b5fd;letter-spacing:1px;">FRAGMENTOS</div><div id="prestigioModalLvl" style="font-size:30px;font-weight:900;color:#e9d5ff;">0</div></div>
+      <div style="background:#1e1232;border:1px solid #6b21a8;border-radius:12px;padding:12px 20px;min-width:140px;"><div style="font-size:11px;color:#c4b5fd;letter-spacing:1px;">AL ASCENDER</div><div id="prestigioGain" style="font-size:30px;font-weight:900;color:#4ade80;">+0</div></div>
     </div>
+    <div style="background:rgba(255,255,255,.04);border-radius:12px;padding:14px;margin-bottom:16px;text-align:left;">
+      <div style="font-weight:800;color:#fbbf24;margin-bottom:5px;">Requisito</div><div id="prestigioRequirement" style="color:#e2e8f0;font-size:13px;">Necesitas el 1% del objetivo de victoria.</div>
+      <div style="color:#94a3b8;font-size:12px;margin-top:6px;">Cada 1% del objetivo equivale a 1 fragmento; máximo 10 por ascensión. La fortuna vuelve a 2.000 monedas. Se borran inventario, museo, nivel, habilidades, misiones, estadísticas y progreso de la partida.</div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr;gap:10px;text-align:left;margin-bottom:18px;">
+      <div style="background:rgba(168,85,247,.09);border:1px solid rgba(168,85,247,.25);border-radius:12px;padding:12px;"><div style="font-weight:800;color:#e9d5ff;">🛍️ Comerciante permanente <span id="prestigeMerchantLevel" style="float:right;">0/10</span></div><div style="font-size:12px;color:#a5b4fc;margin:4px 0 9px;">+10% al vender objetos conseguidos en cofres por nivel. No afecta a premios de ruletas especiales.</div><button id="prestigeMerchantBtn" type="button" style="width:100%;padding:9px;border:0;border-radius:8px;background:#6d28d9;color:white;font-weight:800;cursor:pointer;">Mejorar · 1 fragmento</button></div>
+      <div style="background:rgba(168,85,247,.09);border:1px solid rgba(168,85,247,.25);border-radius:12px;padding:12px;"><div style="font-weight:800;color:#e9d5ff;">🏛️ Mecenas del museo <span id="prestigeMuseumLevel" style="float:right;">0/10</span></div><div style="font-size:12px;color:#a5b4fc;margin:4px 0 9px;">+10% a los ingresos del museo, incluidos los offline, por nivel.</div><button id="prestigeMuseumBtn" type="button" style="width:100%;padding:9px;border:0;border-radius:8px;background:#6d28d9;color:white;font-weight:800;cursor:pointer;">Mejorar · 1 fragmento</button></div>
+      <div style="background:rgba(168,85,247,.09);border:1px solid rgba(168,85,247,.25);border-radius:12px;padding:12px;"><div style="font-weight:800;color:#e9d5ff;">🍀 Ojo de coleccionista <span id="prestigeLuckLevel" style="float:right;">0/10</span></div><div style="font-size:12px;color:#a5b4fc;margin:4px 0 9px;">+5% de suerte al abrir cofres por nivel. No afecta a ruletas.</div><button id="prestigeLuckBtn" type="button" style="width:100%;padding:9px;border:0;border-radius:8px;background:#6d28d9;color:white;font-weight:800;cursor:pointer;">Mejorar · 1 fragmento</button></div>
+      <div style="background:rgba(168,85,247,.09);border:1px solid rgba(168,85,247,.25);border-radius:12px;padding:12px;"><div style="font-weight:800;color:#e9d5ff;">📚 Aprendiz eterno <span id="prestigeXpLevel" style="float:right;">0/10</span></div><div style="font-size:12px;color:#a5b4fc;margin:4px 0 9px;">+10% de experiencia obtenida por nivel.</div><button id="prestigeXpBtn" type="button" style="width:100%;padding:9px;border:0;border-radius:8px;background:#6d28d9;color:white;font-weight:800;cursor:pointer;">Mejorar · 1 fragmento</button></div>
+    </div>
+    <button id="prestigioBuyBtn" type="button" style="width:100%;padding:15px;font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;border-radius:12px;border:0;cursor:pointer;background:linear-gradient(135deg,#4c1d95,#7c3aed,#a855f7);color:white;margin-bottom:10px;">🌌 ASCENDER Y OBTENER FRAGMENTOS</button>
+    <button id="prestigioCloseBtn" type="button" style="background:none;border:1px solid rgba(255,255,255,.15);border-radius:10px;padding:10px 28px;color:#94a3b8;cursor:pointer;">CERRAR</button>
+  </div>
 </div>
-
 
 <!-- ══════════════ CRAFT MODAL ══════════════ -->
 <div class="craft-overlay" id="craftModal">
@@ -5646,7 +5650,7 @@
     let currentKey = 'tech';
     let inventory = [];
     const LEVEL_MAX = 1000;
-    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
+    let state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige:0, prestigeUpgrades:{merchant:0,museum:0,luck:0,xp:0}, ownedPets:[], equippedPet:null, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{} };
     state.anunciosEspanaSpins = 0;
     state.dailyLogin = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
     state.blackjackRound = { phase:'bet', deck:[], player:[], dealer:[], bet:0, doubled:false, outcome:'', message:'', payout:0 };
@@ -5785,6 +5789,8 @@
                 if (darkPotionActive) weight *= 1.55;
                 if (ceravePotionActive) weight *= 3.0;
                 weight *= 1 + skillLuckLevel * 0.08;
+                const _prestigeLuck = Math.max(0, Math.min(10, Number((state.prestigeUpgrades||{}).luck)||0));
+                weight *= 1 + _prestigeLuck * 0.05;
                 if (equippedPet && equippedPet.luckBonus > 0) {
                     weight *= 1 + equippedPet.luckBonus;
                 }
@@ -6013,7 +6019,7 @@
         finalPrice = Math.round(finalPrice * mutation.mult);
         finalPrice = Math.round(finalPrice * (1 + getCollectorSkillLevel('money') * 0.05));
         const isInfected = isParasitesEnabled() && Math.random() < 0.10;
-        const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id,
+        const bonusWinner = { ...winner, price: finalPrice, favorite: false, mutation: mutation.id, source:'chest',
             _id: Date.now() + Math.floor(Math.random()*99999),
             ...(isInfected ? { infected: true, infectedSince: Date.now(), parasiteUsed: false } : {}) };
         state.invValue += finalPrice;
@@ -6349,7 +6355,9 @@
         setTimeout(() => {
             const soldId = inventory[origIdx] && inventory[origIdx]._id;
             if (soldId) cleanMuseumSlot(soldId);
-            const _saleAmt = Math.floor(salePrice * prestigeMult());
+            const _soldItem = inventory[origIdx];
+            const _fromChest = !!(_soldItem && _soldItem.source === 'chest');
+            const _saleAmt = Math.floor(salePrice * (_fromChest ? prestigeMult() : 1));
             state.balance += _saleAmt;
             state.earned = (state.earned||0) + _saleAmt;
             state.sold = (state.sold||0) + 1;
@@ -6374,7 +6382,7 @@
         createParticles(window.innerWidth/2, window.innerHeight/2, '#4ade80', 25);
         const sellValue = itemsToSell.reduce((sum, item) => sum + (Number(item.price) || 0), 0);
         itemsToSell.forEach(item => { if (item._id) cleanMuseumSlot(item._id); });
-        const _sellAmt = Math.floor(sellValue * prestigeMult());
+        const _sellAmt = Math.floor(itemsToSell.reduce((sum, item) => sum + (Number(item.price)||0) * (item.source === 'chest' ? prestigeMult() : 1), 0));
         state.balance += _sellAmt;
         state.earned = (state.earned||0) + _sellAmt;
         state.sold = (state.sold||0) + itemsToSell.length;
@@ -7186,6 +7194,7 @@
                 pityCount: state.pityCount,
                 silenceCharges: state.silenceCharges,
                 prestige: state.prestige,
+                prestigeUpgrades: state.prestigeUpgrades,
                 ownedPets: state.ownedPets,
                 equippedPet: state.equippedPet,
                 sold: state.sold,
@@ -7649,7 +7658,7 @@
             'consecutiveMiticos', 'lastWasmitico', 'timeInGame', 'gotSuerteMax', 'coinWinStreak',
             'coinLoseStreak', 'ruletaCharges', 'miticosForRuleta', 'superRuletaCharges',
             'miticosForSuperRuleta', 'hyperRuletaCharges', 'superSpinsForHyper', 'auctionWins',
-            'universalCount', 'potionsBought', 'pityCount', 'silenceCharges', 'prestige',
+            'universalCount', 'potionsBought', 'pityCount', 'silenceCharges', 'prestige', 'prestigeUpgrades',
             'ownedPets', 'equippedPet', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
             'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'loan', 'xp', 'level',
             'skillPoints', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
@@ -7666,7 +7675,7 @@
         const booleanStateKeys = new Set(['lastWasmitico', 'gotSuerteMax']);
         const objectStateKeys = new Set([
             'ownedPets', 'loan', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
-            'collectorPotionEnds', 'vitrinaBuffEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin'
+            'collectorPotionEnds', 'vitrinaBuffEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'prestigeUpgrades'
         ]);
         const safeState = {};
 
@@ -7698,6 +7707,16 @@
                 }
                 safeState[key] = sanitizeImportedJson(value);
             }
+        }
+
+        if (safeState.prestigeUpgrades !== undefined) {
+            const u = safeState.prestigeUpgrades;
+            safeState.prestigeUpgrades = {
+                merchant: Math.max(0, Math.min(10, Math.floor(Number(u.merchant) || 0))),
+                museum: Math.max(0, Math.min(10, Math.floor(Number(u.museum) || 0))),
+                luck: Math.max(0, Math.min(10, Math.floor(Number(u.luck) || 0))),
+                xp: Math.max(0, Math.min(10, Math.floor(Number(u.xp) || 0)))
+            };
         }
 
         if (Number.isFinite(safeState.level)) {
@@ -7935,7 +7954,7 @@
             points:[
                 'El Mercado Negro permite intercambiar un Mítico duplicado por otro Mítico aleatorio. Los objetos marcados como favoritos no se pueden entregar.',
                 'Los préstamos te dan monedas por adelantado, pero debes devolver el importe más un 20% de interés dentro del plazo. Comprueba el vencimiento y evita pedir más de lo que puedas pagar.',
-                'El Auto Abrir se desbloquea por 10.000.000 monedas. El Prestigio cuesta monedas y añade un 2% de bonificación por nivel de prestigio; revisa el coste actual antes de comprarlo.'
+                'El Auto Abrir se desbloquea por 10.000.000 monedas. El Prestigio permite ascender cuando tu fortuna alcanza el 1% del objetivo de victoria. Entrega hasta 10 Fragmentos de Prestigio. Al ascender solo conserva la Vitrina, las mascotas y las mejoras permanentes de Prestigio; el resto del progreso se reinicia.'
             ]
         },
         {
@@ -10406,88 +10425,99 @@
     // ────────────────────────────────────────────────────────────────────────────
 
 
-    // ─── PRESTIGIO ───────────────────────────────────────────────────────────────
+    // ─── PRESTIGIO NUEVO: ASCENSIÓN + MEJORAS PERMANENTES ───────────────────────
+    const PRESTIGE_THRESHOLD = Math.floor(WIN_GOAL * 0.01);
     function prestigeMult() {
-        return 1 + (state.prestige * 0.02);
+        const upgrades = state.prestigeUpgrades || { merchant:0, museum:0, luck:0, xp:0 };
+        return 1 + (Math.max(0, Math.min(10, upgrades.merchant || 0)) * 0.10);
     }
-
-    function prestigeCost() {
-        return Math.floor(10000000 * Math.pow(3.5, state.prestige));
+    function prestigeMuseumMult() {
+        const upgrades = state.prestigeUpgrades || { merchant:0, museum:0, luck:0, xp:0 };
+        return 1 + (Math.max(0, Math.min(10, upgrades.museum || 0)) * 0.10);
     }
-
+    function prestigeGain() {
+        if (!Number.isFinite(state.balance) || state.balance < PRESTIGE_THRESHOLD) return 0;
+        return Math.max(1, Math.min(10, Math.floor(state.balance / PRESTIGE_THRESHOLD)));
+    }
     function openPrestigio() {
         if (state.over) return;
         playSound('click');
         updatePrestigioModal();
         const ov = document.getElementById('prestigioOverlay');
-        const box = document.getElementById('prestigioBox');
         ov.style.display = 'flex';
-        setTimeout(() => { box.style.transform = 'scale(1) translateY(0)'; box.style.opacity = '1'; }, 10);
     }
-
     function closePrestigio() {
-        const box = document.getElementById('prestigioBox');
-        box.style.transform = 'scale(0.9) translateY(20px)';
-        box.style.opacity = '0';
-        setTimeout(() => { document.getElementById('prestigioOverlay').style.display = 'none'; }, 350);
+        document.getElementById('prestigioOverlay').style.display = 'none';
     }
-
+    function setPrestigeButtonState(btn, enabled, label) {
+        if (!btn) return;
+        btn.disabled = !enabled;
+        btn.style.opacity = enabled ? '1' : '0.42';
+        btn.style.cursor = enabled ? 'pointer' : 'not-allowed';
+        if (label) btn.textContent = label;
+    }
     function updatePrestigioModal() {
-        const cost = prestigeCost();
-        document.getElementById('prestigioModalLvl').textContent   = state.prestige;
-        document.getElementById('prestigioModalBonus').textContent  = '+' + (state.prestige * 2) + '%';
-        document.getElementById('prestigioModalCost').textContent   = cost.toLocaleString() + ' $';
-        const btn = document.getElementById('prestigioBuyBtn');
-        if (state.balance >= cost) {
-            btn.disabled = false;
-            btn.style.opacity = '1';
-            btn.style.cursor = 'pointer';
-        } else {
-            btn.disabled = true;
-            btn.style.opacity = '0.4';
-            btn.style.cursor = 'not-allowed';
-        }
+        const gain = prestigeGain();
+        document.getElementById('prestigioModalLvl').textContent = Math.max(0, Math.floor(state.prestige || 0));
+        document.getElementById('prestigioGain').textContent = '+' + gain;
+        document.getElementById('prestigioRequirement').textContent = `Fortuna actual: ${Math.floor(state.balance || 0).toLocaleString('es-ES')} monedas · requisito: ${PRESTIGE_THRESHOLD.toLocaleString('es-ES')} monedas.`;
+        const u = state.prestigeUpgrades || (state.prestigeUpgrades = {merchant:0,museum:0,luck:0,xp:0});
+        ['merchant','museum','luck','xp'].forEach(k => { u[k] = Math.max(0, Math.min(10, Math.floor(Number(u[k]) || 0))); });
+        document.getElementById('prestigeMerchantLevel').textContent = `${u.merchant}/10`;
+        document.getElementById('prestigeMuseumLevel').textContent = `${u.museum}/10`;
+        document.getElementById('prestigeLuckLevel').textContent = `${u.luck}/10`;
+        document.getElementById('prestigeXpLevel').textContent = `${u.xp}/10`;
+        setPrestigeButtonState(document.getElementById('prestigioBuyBtn'), gain > 0, gain > 0 ? `🌌 ASCENDER Y OBTENER ${gain} FRAGMENTO${gain===1?'':'S'}` : 'NECESITAS MÁS FORTUNA');
+        setPrestigeButtonState(document.getElementById('prestigeMerchantBtn'), (state.prestige||0) >= 1 && u.merchant < 10, `Mejorar · 1 fragmento · ${u.merchant}/10`);
+        setPrestigeButtonState(document.getElementById('prestigeMuseumBtn'), (state.prestige||0) >= 1 && u.museum < 10, `Mejorar · 1 fragmento · ${u.museum}/10`);
+        setPrestigeButtonState(document.getElementById('prestigeLuckBtn'), (state.prestige||0) >= 1 && u.luck < 10, `Mejorar · 1 fragmento · ${u.luck}/10`);
+        setPrestigeButtonState(document.getElementById('prestigeXpBtn'), (state.prestige||0) >= 1 && u.xp < 10, `Mejorar · 1 fragmento · ${u.xp}/10`);
     }
-
-    function buyPrestigio() {
-        const cost = prestigeCost();
-        if (state.balance < cost) return;
+    function buyPrestigeUpgrade(which) {
+        if (state.over) return;
+        const u = state.prestigeUpgrades || (state.prestigeUpgrades = {merchant:0,museum:0});
+        if (!['merchant','museum','luck','xp'].includes(which) || (state.prestige||0) < 1 || u[which] >= 10) return;
+        state.prestige--;
+        u[which]++;
         playSound('money');
-        state.balance = 2000;
-        state.spent   += cost;
-        state.prestige++;
-        addXP(500);
         updatePrestigioModal();
         updateStats();
         saveGame();
-        // Flash de confirmación
-        const box = document.getElementById('prestigioBox');
-        box.style.boxShadow = '0 0 80px rgba(168,85,247,0.8), 0 24px 60px rgba(0,0,0,0.6)';
-        setTimeout(() => { box.style.boxShadow = '0 0 60px rgba(168,85,247,0.3), 0 24px 60px rgba(0,0,0,0.6)'; }, 600);
     }
-
+    function buyPrestigio() {
+        if (state.over) return;
+        const gain = prestigeGain();
+        if (gain <= 0) return;
+        if (!confirm(`¿Ascender? Recibirás ${gain} fragmento(s) de Prestigio. Se reiniciará la partida: perderás fortuna, inventario, museo, nivel, habilidades, misiones, estadísticas, objetos desbloqueados y progreso de ruletas. SOLO conservarás la Vitrina, las mascotas, los fragmentos y las mejoras permanentes de Prestigio. Esta acción no se puede deshacer.`)) return;
+        const pets = Array.isArray(state.ownedPets) ? [...state.ownedPets] : [];
+        const equippedPet = state.equippedPet || null;
+        const prestige = Math.max(0, Math.floor(state.prestige || 0)) + gain;
+        const prestigeUpgrades = {merchant:0,museum:0,luck:0,xp:0,...(state.prestigeUpgrades||{})};
+        // Vitrina vive en una clave independiente de localStorage y permanece intacta.
+        state = { balance:2000, spent:0, invValue:0, opened:0, best:0, spinning:false, over:false, items:[], commonCount:0, miticoCount:0, consecutiveMiticos:0, lastWasmitico:false, timeInGame:0, gotSuerteMax:false, coinWinStreak:0, coinLoseStreak:0, ruletaCharges:0, miticosForRuleta:0, superRuletaCharges:0, miticosForSuperRuleta:0, hyperRuletaCharges:0, superSpinsForHyper:0, auctionWins:0, universalCount:0, potionsBought:0, pityCount:0, silenceCharges:0, prestige, prestigeUpgrades, ownedPets:pets, equippedPet, sold:0, earned:0, crafted:0, maxBalance:2000, pokerPlayed:0, pokerWon:0, pokerProfit:0, pokerMaxWin:0, sessionStart:Date.now(), playTime:0, loan:null, xp:0, level:1, skillPoints:0, blackMarket:null, collectorSkillLevels:{}, collectorMissionProgress:null, collectorPotionEnds:{}, qolSettings:{musicVolume:100,effectsVolume:100,parasitesEnabled:true,screenShakeEnabled:true}, chestRarityStats:{}, vitrinaBuffEnds:{}, anunciosEspanaSpins:0 };
+        inventory = [];
+        saveGame();
+        location.reload();
+    }
     function updatePrestigioBtn() {
-        // Update header badge
         const badge = document.getElementById('prestigioBadge');
         const lvlEl = document.getElementById('prestigioLvl');
-        const pctEl = document.getElementById('prestigioPct');
-        if (!badge) return;
-        if (state.prestige > 0) {
-            badge.style.display = 'block';
-            lvlEl.textContent = state.prestige;
-            pctEl.textContent = state.prestige * 2;
-        } else {
-            badge.style.display = 'none';
+        if (badge && lvlEl) {
+            const points = Math.max(0, Math.floor(state.prestige || 0));
+            badge.style.display = points > 0 ? 'block' : 'none';
+            lvlEl.textContent = points;
         }
-        // Update buy button in modal if open
-        const btn = document.getElementById('prestigioBuyBtn');
-        if (btn) {
-            const cost = prestigeCost();
-            btn.disabled     = state.balance < cost;
-            btn.style.opacity  = state.balance >= cost ? '1' : '0.4';
-            btn.style.cursor   = state.balance >= cost ? 'pointer' : 'not-allowed';
-        }
+        if (document.getElementById('prestigioOverlay')?.style.display === 'flex') updatePrestigioModal();
     }
+
+    document.getElementById('prestigioBtn').addEventListener('click', openPrestigio);
+    document.getElementById('prestigioBuyBtn').addEventListener('click', buyPrestigio);
+    document.getElementById('prestigeMerchantBtn').addEventListener('click', () => buyPrestigeUpgrade('merchant'));
+    document.getElementById('prestigeMuseumBtn').addEventListener('click', () => buyPrestigeUpgrade('museum'));
+    document.getElementById('prestigeLuckBtn').addEventListener('click', () => buyPrestigeUpgrade('luck'));
+    document.getElementById('prestigeXpBtn').addEventListener('click', () => buyPrestigeUpgrade('xp'));
+    document.getElementById('prestigioCloseBtn').addEventListener('click', closePrestigio);
+    document.getElementById('prestigioOverlay').addEventListener('click', function(e){ if(e.target===this) closePrestigio(); });
 
     // TIENDA
     document.getElementById('shopBtn').addEventListener('click', openShop);
@@ -10913,7 +10943,7 @@
         const elapsedSeconds = Math.min(MUSEUM_OFFLINE_CAP_SECONDS, (now - lastAt) / 1000);
         calcMuseoStats();
         const amount = Math.floor(
-            museoIncomePerSec * elapsedSeconds * MUSEUM_OFFLINE_PAYOUT_RATE * prestigeMult()
+            museoIncomePerSec * elapsedSeconds * MUSEUM_OFFLINE_PAYOUT_RATE * prestigeMuseumMult()
         );
         if (amount <= 0) return 0;
 
@@ -11093,7 +11123,7 @@
     setInterval(() => {
         if (state.over || document.hidden) return;
         calcMuseoStats();
-        if (museoIncomePerSec > 0) { state.balance += Math.floor(museoIncomePerSec * prestigeMult()); updateStats(); }
+        if (museoIncomePerSec > 0) { state.balance += Math.floor(museoIncomePerSec * prestigeMuseumMult()); updateStats(); }
     }, 1000);
 
     document.addEventListener('visibilitychange', () => {
@@ -11899,7 +11929,7 @@
     function addXP(amount) {
         if (state.over || !amount || amount <= 0) return;
         if ((state.level||1) >= LEVEL_MAX) return;
-        const xpMultiplier = 1 + getCollectorSkillLevel('apprentice') * 0.10;
+        const xpMultiplier = (1 + getCollectorSkillLevel('apprentice') * 0.10) * (1 + Math.max(0, Math.min(10, Number((state.prestigeUpgrades||{}).xp)||0)) * 0.10);
         state.xp = (state.xp||0) + Math.max(1, Math.round(amount * xpMultiplier));
         let levelsGained = 0;
         let skillPointsGained = 0;
@@ -12207,7 +12237,7 @@
         document.getElementById('ds_best').textContent     = state.best > 0 ? fmtM(state.best) : '—';
         document.getElementById('ds_sold').textContent     = fmt(state.sold);
         document.getElementById('ds_crafted').textContent  = fmt(state.crafted);
-        document.getElementById('ds_prestige').textContent = fmt(state.prestige) + (state.prestige > 0 ? ' (+' + (state.prestige*2) + '%)' : '');
+        document.getElementById('ds_prestige').textContent = fmt(state.prestige) + ' fragmentos';
         document.getElementById('ds_invVal').textContent   = fmtM(state.invValue);
 
         // DINERO
