@@ -1059,6 +1059,9 @@
             }
 
             .balance-box { text-align: center; flex: 1; }
+            #mainFortuneBox.balance-box { flex: none; width: 100%; }
+            #mainFortuneBox .balance-amount { font-size: clamp(34px, 9vw, 54px) !important; }
+            #mainFortuneBox .balance-label { font-size: 12px; }
             .balance-amount { font-size: 22px !important; }
             .balance-label { font-size: 8px; }
 
@@ -3987,6 +3990,11 @@
     <!-- EVENTO CONTADOR -->
     <div id="eventBanner" style="text-align:center;margin-bottom:20px;padding:20px 24px;background:var(--surface);border:1px solid var(--border);border-radius:20px;backdrop-filter:blur(20px);position:relative;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--theme),transparent);"></div>
+        <div class="balance-box" id="mainFortuneBox" style="text-align:center;margin:0 auto 16px;">
+            <div class="balance-label" style="font-size:13px;letter-spacing:4px;margin-bottom:4px;">💰 TU FORTUNA</div>
+            <div class="balance-amount" id="balance" style="font-size:clamp(38px,7vw,64px);line-height:1.05;">650</div>
+            <div id="prestigioBadge" style="display:none;margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a855f7;text-align:center;">⭐ PRESTIGIO <span id="prestigioLvl">0</span> · +<span id="prestigioPct">0</span>%</div>
+        </div>
         <div id="eventLabel" style="font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#475569;margin-bottom:6px;">⚡ PRÓXIMO EVENTO EN</div>
         <div id="eventCountdown" style="font-family:'Bebas Neue',sans-serif;font-size:clamp(48px,10vw,80px);letter-spacing:8px;line-height:1;color:white;text-shadow:0 0 40px rgba(255,255,255,0.2);">05:00</div>
         <div id="eventName" style="font-size:12px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#475569;margin-top:4px;"></div>
@@ -4013,11 +4021,6 @@
                 <div style="height:3px;background:rgba(255,255,255,0.08);border-radius:2px;margin:3px 0 2px;overflow:hidden;"><div id="playerXPBar" style="height:100%;background:linear-gradient(90deg,#f97316,#fbbf24);border-radius:2px;transition:width 0.4s ease;width:0%;"></div></div>
                 <div id="playerXPText" style="font-size:8px;color:#44403c;font-family:'JetBrains Mono',monospace;">0 / 3500 XP</div>
                 <span id="playerSkillPts" style="display:none;font-size:9px;font-weight:700;letter-spacing:1px;color:#a855f7;background:rgba(168,85,247,0.15);border-radius:4px;padding:1px 5px;"></span>
-            </div>
-            <div class="balance-box">
-                <div class="balance-label">Tu Fortuna</div>
-                <div class="balance-amount" id="balance">650</div>
-                <div id="prestigioBadge" style="display:none;margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:2px;color:#a855f7;text-align:center;">⭐ PRESTIGIO <span id="prestigioLvl">0</span> · +<span id="prestigioPct">0</span>%</div>
             </div>
             <div style="position:relative;flex-shrink:0;"><button id="coinBtn" title="Apostar monedas">🪙</button><div id="coinCooldownLabel"></div></div>
 
@@ -7320,7 +7323,9 @@
     function getDailyLoginRewardAmount(streak) {
         const streakDay = Math.max(1, Math.floor(Number(streak) || 1));
         const reward = 250 * Math.pow(1.75, streakDay - 1);
-        return Math.floor(Math.min(Number.MAX_SAFE_INTEGER, reward));
+        // La racha diaria nunca puede entregar más del 25% del objetivo de victoria.
+        const maxDailyReward = Math.floor(WIN_GOAL * 0.25);
+        return Math.floor(Math.min(maxDailyReward, reward));
     }
 
     function getDailyLoginRecoveryCost() {
@@ -7373,7 +7378,7 @@
             const intro = daily.lastClaimDate
                 ? `La racha seguirá desde el día ${normalNextStreak}.`
                 : '¡Tu primer bono diario está listo!';
-            messageEl.textContent = `${intro} Reclama hoy para mantener la racha. El premio se multiplica ×1,75 cada día consecutivo.`;
+            messageEl.textContent = `${intro} Reclama hoy para mantener la racha. El premio se multiplica ×1,75 cada día consecutivo, hasta un máximo del 25% de la fortuna necesaria para ganar.`;
             recoverBtn.style.display = 'none';
             recoverBtn.disabled = true;
         }
@@ -7829,85 +7834,120 @@
         {
             icon:'🎯',
             title:'TU META: CONSTRUIR UNA FORTUNA',
-            intro:'Empiezas con 2.000 monedas. Haz crecer el saldo hasta la meta del juego combinando cofres, ventas y actividades.',
+            intro:'Empiezas con 2.000 monedas. Haz crecer tu fortuna combinando cofres, ventas, subastas, juegos y mejoras.',
             points:[
-                'Tu saldo aparece arriba a la derecha. Cada cofre indica su precio antes de abrirlo.',
-                'Puedes perder dinero si gastas más de lo que recuperas: alterna entre abrir, vender y probar otras actividades.'
+                'Tu fortuna aparece en grande, encima del contador de eventos aleatorios. Comprueba siempre tu saldo antes de gastar o apostar.',
+                'Cada actividad puede tener costes, riesgos, requisitos o enfriamientos. No existe una única forma de progresar: combina sistemas y compara sus resultados.',
+                'El objetivo económico principal es alcanzar 200.000.000.000.000.000 monedas. Las funciones avanzadas y los requisitos especiales amplían la progresión.'
             ],
-            note:'La partida se guarda automáticamente; en la parte inferior también puedes exportar una copia.'
+            note:'La partida se guarda automáticamente. Usa Ajustes para consultar opciones y Estadísticas detalladas para revisar tu progreso. Exporta una copia de seguridad de vez en cuando.'
         },
         {
             icon:'📦',
             title:'COFRES, OBJETOS Y RAREZAS',
-            intro:'Elige una categoría en las pestañas y pulsa ABRIR COFRE. Cada apertura entrega un objeto aleatorio para tu inventario.',
+            intro:'Selecciona una categoría de cofre y pulsa ABRIR COFRE para conseguir un objeto aleatorio.',
             points:[
-                'Los objetos van de Común a Mítico. Normalmente, cuanto más rara la pieza, mayor su valor.',
-                'La barra PITI avanza al abrir cofres y garantiza un Mítico al llegar a 100.'
+                'Los objetos tienen distintas rarezas, desde Común hasta Mítico. El valor depende del objeto y puede cambiar con sus características o mejoras.',
+                'La barra PITY registra tu progreso hacia un Mítico garantizado cada 100 aperturas. La habilidad Rebajador de pity reduce el límite a 90.',
+                'Abrir cofres cuesta monedas. Mira el precio de la categoría seleccionada y decide si te compensa abrir, vender o ahorrar.'
             ],
-            note:'Comprueba el coste de la categoría seleccionada antes de gastar monedas.'
+            note:'Los objetos nuevos se añaden al inventario. Algunas actividades especiales usan sus propios requisitos y contadores.'
         },
         {
             icon:'🎒',
-            title:'INVENTARIO, VENTAS Y MUSEO',
-            intro:'Tu inventario guarda los objetos que consigues. Decide qué conservar y qué convertir en monedas.',
+            title:'INVENTARIO, VENTAS Y VITRINA',
+            intro:'El inventario reúne los objetos que consigues. Puedes conservarlos, venderlos o utilizarlos en otros sistemas.',
             points:[
-                'Filtra y ordena por rareza, mutación o precio. Puedes vender piezas sueltas, una selección o todo menos los Míticos.',
-                'En el museo expones objetos para generar ingresos. La habilidad Conservador permite desbloquear más espacios.'
+                'Filtra y ordena el inventario por rareza, mutación o precio. Puedes vender objetos sueltos, vender una selección o vender todo menos los Míticos.',
+                'La Vitrina registra los objetos que has descubierto y conserva el descubrimiento aunque luego vendas o pierdas el objeto. Incluye objetos normales y secciones para Roto, Radiactivo, Cósmico y Universal.',
+                'Las recompensas de colección cuentan solo objetos base sin mutación: 25 desbloquea ×2 suerte durante 5 minutos; 50, ×2 dinero durante 10 minutos; 100, ambos durante 20 minutos; y 160, ×2 suerte durante 60 minutos y ×2 dinero durante 30 minutos.'
             ],
-            note:'Los objetos vendidos dejan de estar disponibles para el museo, el taller o el mercado negro.'
+            note:'Las mascotas no forman parte de la colección de la Vitrina. Antes de vender un objeto, comprueba si lo necesitas para el museo, el taller, el mercado negro o algún requisito especial.'
+        },
+        {
+            icon:'🏛️',
+            title:'MUSEO Y OBJETOS EXPUESTOS',
+            intro:'El museo permite exponer objetos para generar ingresos con el paso del tiempo.',
+            points:[
+                'Elige con cuidado qué objetos expones: los espacios son limitados y un objeto expuesto deja de estar disponible para venderlo o usarlo en otras actividades mientras siga allí.',
+                'La habilidad Conservador permite ampliar la capacidad del museo. Revisa los espacios disponibles y el rendimiento de tu colección.',
+                'El juego incluye un sistema de ingresos del museo al volver después de estar ausente; comprueba el resultado al regresar y no confundas ese ingreso con una venta.'
+            ],
+            note:'Si necesitas un objeto para el taller o el mercado negro, revisa primero si está expuesto en el museo.'
+        },
+        {
+            icon:'🔨',
+            title:'SUBASTAS Y TALLER',
+            intro:'Las subastas permiten competir por objetos; el taller permite fusionar materiales para intentar conseguir otro objeto.',
+            points:[
+                'En las subastas compites contra bots. Puedes pujar, usar las tácticas disponibles —como Farol, Silencio o Espionaje cuando estén disponibles— o retirarte. No pujes más de lo que vale para ti el premio.',
+                'En el taller puedes fusionar hasta 5 objetos. Usar menos de 5 conlleva riesgo de fallo y puede destruir los materiales; con 5 no hay fallo, pero se consumen igualmente.',
+                'La habilidad Subastador reduce el presupuesto máximo de los bots y Forjador reduce el tiempo de las fusiones. Revisa el coste y el tiempo antes de confirmar.'
+            ]
         },
         {
             icon:'🎲',
-            title:'SUBASTAS Y JUEGOS DE AZAR',
-            intro:'Hay varias formas de ganar —o arriesgar— monedas fuera de los cofres.',
+            title:'CASINO: CARA O CRUZ, RULETA Y TRAGAPERRAS',
+            intro:'Los juegos de azar pueden darte ganancias, pero también hacerte perder la apuesta.',
             points:[
-                'En las subastas compites con bots: puja, usa las tácticas disponibles o retírate.',
-                'En Cara o Cruz y en la ruleta de casino eliges una apuesta; el resultado puede aumentar o reducir tu saldo.',
-                'En póker eliges cuánto apostar, cambias las cartas que quieras y compites contra las manos de los bots.'
+                'En Cara o Cruz elige cara o cruz y apuesta una cantidad. Tiene un tiempo de espera entre usos; la habilidad Reflejos reduce ese enfriamiento.',
+                'La ruleta de casino permite apostar a distintos resultados. La tragaperras tiene sus propios premios y reglas. Lee las opciones y el pago antes de jugar.',
+                'El póker permite apostar, recibir cartas, cambiar las que elijas y comparar tu mano con la de los bots. El blackjack permite pedir carta, plantarte o doblar cuando la opción esté disponible.'
             ],
-            note:'Cada actividad muestra sus controles y la apuesta antes de confirmar. No arriesgues monedas que necesites para abrir cofres.'
+            note:'Las apuestas no son ingresos garantizados. Evita jugar con monedas que necesites para cofres, mejoras o préstamos.'
         },
         {
             icon:'🎁',
-            title:'RACHA, MISIONES Y POTENCIADORES',
-            intro:'Las recompensas por entrar y las misiones ayudan a avanzar incluso cuando no abres cofres.',
+            title:'BONO DIARIO, MISIONES Y POTENCIADORES',
+            intro:'Estas funciones recompensan la actividad y te ayudan a progresar de distintas maneras.',
             points:[
-                'Reclama el bono diario para mantener tu racha: la recompensa aumenta hasta el día 7. Recuperar una racha perdida cuesta el 25% de tus monedas y no se puede hacer dos días seguidos.',
-                'Las misiones diarias y semanales rotan entre abrir, vender, jugar y otras actividades; reclama cada premio al completarlas.',
-                'Las pociones de la tienda y los eventos dan efectos temporales: revisa sus indicadores y temporizadores.'
+                'Reclama el bono diario para mantener la racha. La recompensa aumenta ×1,75 por día consecutivo, pero nunca supera el 25% de la fortuna necesaria para ganar. Recuperar una racha perdida cuesta el 25% de tus monedas y no puede hacerse dos días seguidos.',
+                'Las misiones diarias y semanales proponen tareas de distintas actividades. Completa sus requisitos y reclama cada recompensa; las misiones disponibles pueden cambiar con el tiempo.',
+                'La tienda vende pociones con efectos temporales. Los eventos también pueden aplicar efectos: mira sus indicadores y temporizadores para saber qué está activo.'
             ]
         },
         {
             icon:'🌳',
-            title:'EXPERIENCIA Y ÁRBOL DE HABILIDADES',
-            intro:'Gana XP jugando. Cada cinco niveles recibes un punto que puedes gastar en mejoras permanentes.',
+            title:'EXPERIENCIA, NIVEL Y HABILIDADES',
+            intro:'Jugar concede experiencia. Cada cinco niveles recibes un punto de habilidad, hasta el nivel máximo 1000.',
             points:[
-                'Suerte mejora las rarezas; Tasador aumenta el valor; Negociador abarata los cofres.',
-                'Rebajador de pity adelanta el mítico; Subastador reduce los presupuestos; Aprendiz aumenta la XP y Forjador acelera el taller.',
-                'Conservador añade espacios de museo y Reflejos reduce el enfriamiento de Cara o Cruz.',
-                'Abre ÁRBOL DE HABILIDADES para ver el coste y el siguiente efecto antes de comprar.'
+                'Suerte aumenta la probabilidad de rarezas superiores a Común; Tasador aumenta el valor de los objetos; Negociador abarata los cofres.',
+                'Rebajador de pity garantiza un Mítico antes; Subastador reduce los presupuestos de los bots; Aprendiz aumenta la XP y Forjador acelera las fusiones.',
+                'Conservador amplía los espacios del museo y Reflejos reduce el enfriamiento de Cara o Cruz. Las mejoras tienen costes y límites propios.',
+                'Abre el Árbol de habilidades para ver el nivel, el coste y el efecto de cada mejora antes de gastar puntos.'
             ]
         },
         {
-            icon:'🧪',
-            title:'TALLER, RULETAS Y MASCOTAS',
-            intro:'Cuando tengas más objetos, podrás probar sistemas de colección y mejoras adicionales.',
+            icon:'🎰',
+            title:'RULETAS ESPECIALES Y MASCOTAS',
+            intro:'Además de la ruleta de casino, hay ruletas especiales con objetos y requisitos propios.',
             points:[
-                'En el taller fusionas hasta 5 objetos. Usar menos de 5 tiene riesgo de fallo y puede destruir los materiales; con 5 no hay fallo, pero se consumen.',
-                'Los Míticos que consigues cargan las ruletas especiales: 5 para la Mítica, 10 para la Súper Mítica y 2 tiradas Súper para la Hyper.',
-                'Las mascotas se pueden comprar y equipar para activar sus bonificaciones.'
-            ]
-        },
-        {
-            icon:'🚀',
-            title:'SISTEMAS AVANZADOS',
-            intro:'Más adelante encontrarás herramientas para acelerar o cambiar tu progreso.',
-            points:[
-                'El Mercado Negro intercambia un Mítico duplicado por otro Mítico aleatorio. Los favoritos no se pueden entregar.',
-                'Los préstamos dan monedas ahora, pero se devuelven con un 20% de interés antes de que acabe el plazo.',
-                'El Auto Abrir se desbloquea por 10.000.000 monedas. El Prestigio cuesta monedas y añade un 2% de bonificación por nivel.'
+                'Los Míticos conseguidos alimentan los contadores de ruletas especiales: la Mítica requiere 5 Míticos; la Súper Mítica, 10; y la Hyper requiere 2 tiradas Súper.',
+                'También existen la Ruleta de Idiotas, Anuncios España y CeraVe Trascendencia. Cada una tiene sus propias reglas, costes o requisitos; consulta su panel antes de intentar girarla.',
+                'Las mascotas se compran y equipan para obtener bonificaciones. Algunas funciones avanzadas pueden exigir una mascota concreta, un nivel determinado u otros requisitos.'
             ],
-            note:'Las funciones avanzadas se desbloquean a medida que reúnes monedas y objetos.'
+            note:'Los contadores de las ruletas especiales no son intercambiables. Revisa qué requisito te falta en cada panel.'
+        },
+        {
+            icon:'🕵️',
+            title:'MERCADO NEGRO, PRÉSTAMOS Y PRESTIGIO',
+            intro:'Estos sistemas sirven para cambiar recursos, conseguir liquidez o mejorar tu progreso a largo plazo.',
+            points:[
+                'El Mercado Negro permite intercambiar un Mítico duplicado por otro Mítico aleatorio. Los objetos marcados como favoritos no se pueden entregar.',
+                'Los préstamos te dan monedas por adelantado, pero debes devolver el importe más un 20% de interés dentro del plazo. Comprueba el vencimiento y evita pedir más de lo que puedas pagar.',
+                'El Auto Abrir se desbloquea por 10.000.000 monedas. El Prestigio cuesta monedas y añade un 2% de bonificación por nivel de prestigio; revisa el coste actual antes de comprarlo.'
+            ]
+        },
+        {
+            icon:'📊',
+            title:'ESTADÍSTICAS, AJUSTES Y COPIAS DE SEGURIDAD',
+            intro:'Usa las herramientas de seguimiento para entender tu progreso y proteger la partida.',
+            points:[
+                'Estadísticas detalladas muestra registros y cifras de tu actividad, como victorias, derrotas y progresión en los sistemas que cuentan estadísticas.',
+                'En Ajustes puedes cambiar opciones disponibles, como el volumen de música y efectos, y activar o desactivar determinados efectos visuales o eventos de interfaz.',
+                'La partida se guarda automáticamente. En el panel de guardado puedes exportar un código o archivo y luego importar una copia. Importar sustituye la partida actual: haz una copia antes de hacerlo.'
+            ],
+            note:'El progreso guardado localmente depende del navegador y del dispositivo. Exporta la partida antes de borrar datos del navegador o cambiar de equipo.'
         }
     ];
     let gameTutorialIndex = 0;
