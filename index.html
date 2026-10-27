@@ -8679,9 +8679,26 @@
         }
     }, 1000);
 
+    function requirePlayerLevel(requiredLevel, activityName) {
+        const currentLevel = Math.max(1, Math.floor(Number(state && state.level) || 1));
+        if (currentLevel >= requiredLevel) return true;
+        const message = `🔒 ${activityName} se desbloquea en el nivel ${requiredLevel}. Tu nivel actual es ${currentLevel}.`;
+        if (typeof showToast === 'function') showToast(message);
+        else {
+            const toast = document.createElement('div');
+            toast.className = 'ghost-toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3600);
+        }
+        if (typeof playSound === 'function') playSound('click');
+        return false;
+    }
+
     function openCoinModal() {
+        if (!requirePlayerLevel(100, 'Cara o Cruz')) return;
         if (state.over || state.spinning || coinCooldown > 0) return;
-        const win50 = Math.floor(state.balance * 1.3);
+        const win50 = Math.floor(state.balance * 0.9);
         const lose75 = Math.floor(state.balance * 0.85);
         document.getElementById('coinWinAmt').textContent = win50.toLocaleString() + ' $';
         document.getElementById('coinLoseAmt').textContent = lose75.toLocaleString() + ' $';
@@ -8709,6 +8726,7 @@
     }
 
     function flipCoin(playerChoice) {
+        if (!requirePlayerLevel(100, 'Cara o Cruz')) return;
         if (state.balance <= 0) return;
         document.getElementById('btnHeads').disabled = true;
         document.getElementById('btnTails').disabled = true;
@@ -8729,7 +8747,7 @@
         setTimeout(() => {
             const resultEl = document.getElementById('coinResult');
             if (won) {
-                const gain = Math.floor(state.balance * 1.3);
+                const gain = Math.floor(state.balance * 0.9);
                 state.balance += gain;
                 resultEl.textContent = `+${gain.toLocaleString()} $ ✨`;
                 resultEl.className = 'win';
@@ -11210,6 +11228,7 @@
     }
 
     function openRuletaCasino() {
+        if (!requirePlayerLevel(225, 'La ruleta de 37 números')) return;
         document.getElementById('ruletaCasinoOverlay').classList.add('open');
         renderRuletaNumbers();
         const canvas = document.getElementById('ruletaCanvas');
@@ -11253,6 +11272,7 @@
     }
 
     function spinRuletaCasino() {
+        if (!requirePlayerLevel(225, 'La ruleta de 37 números')) return;
         if (ruletaCasinoSpinning) return;
         if (ruletaSelectedNum === null) { showRuletaMsg('⚠️ Elige un número primero', 'warn'); return; }
         const betInp = document.getElementById('ruletaBetInput');
@@ -12024,6 +12044,7 @@
     }
 
     function openLoans() {
+        if (!requirePlayerLevel(500, 'Los préstamos')) return;
         if (state.over) return;
         playSound('click');
         const ov = document.getElementById('loanOverlay');
@@ -12059,6 +12080,7 @@
     }
 
     function requestLoan() {
+        if (!requirePlayerLevel(500, 'Los préstamos')) return;
         if (state.loan) {
             // Already have a loan
             showLoanActiveView();
@@ -12415,6 +12437,7 @@
     }
 
     function openPoker() {
+        if (!requirePlayerLevel(175, 'El póker')) return;
         if(state.over) return;
         playSound('click');
         pks={deck:[],player:[],bots:[[],[],[]],sel:new Set(),phase:'bet',bet:0};
@@ -12449,6 +12472,7 @@
     }
 
     function pkDeal() {
+        if (!requirePlayerLevel(175, 'El póker')) return;
         const bet=parseInt(document.getElementById('pokerBetInput').value)||0;
         if(bet<=0||bet>state.balance||state.balance<=0){
             document.getElementById('balance').parentElement.classList.add('shake');
@@ -12687,6 +12711,7 @@
     }
 
     function openBlackjack() {
+        if (!requirePlayerLevel(150, 'El blackjack')) return;
         if (state.over) return;
         playSound('click');
         state.blackjackRound = sanitizeBlackjackRound(state.blackjackRound);
@@ -12710,6 +12735,7 @@
     }
 
     function startBlackjackRound() {
+        if (!requirePlayerLevel(150, 'El blackjack')) return;
         if (state.over || state.blackjackRound.phase === 'player') return;
         const bet = Math.floor(Number(document.getElementById('bjBetInput').value) || 0);
         if (!Number.isSafeInteger(bet) || bet < 1 || bet > state.balance) {
