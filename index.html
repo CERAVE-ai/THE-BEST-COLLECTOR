@@ -1592,6 +1592,12 @@
         }
 
         .splash-by span { color: #334155; }
+        .language-picker { margin: 0 0 22px; display:flex; flex-direction:column; align-items:center; gap:9px; width:min(420px,92vw); }
+        .language-picker-label { color:#94a3b8; font:700 12px 'Rajdhani',sans-serif; letter-spacing:3px; text-transform:uppercase; }
+        .language-picker-options { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+        .language-option { border:1px solid rgba(148,163,184,.28); background:rgba(15,23,42,.8); color:#cbd5e1; padding:10px 15px; border-radius:10px; cursor:pointer; font:700 14px 'Rajdhani',sans-serif; transition:all .2s; }
+        .language-option:hover { border-color:#60a5fa; transform:translateY(-1px); }
+        .language-option.active { color:#fff; border-color:#3b82f6; background:rgba(59,130,246,.2); box-shadow:0 0 18px rgba(59,130,246,.18); }
 
         /* ── TUTORIAL DE INICIO ─────────────────────────────────── */
         .game-tutorial-overlay {
@@ -3966,10 +3972,18 @@
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 200.000.000.000.000.000 monedas</div>
+        <div class="language-picker" role="group" aria-label="Seleccionar idioma">
+            <div class="language-picker-label" id="languagePickerLabel">🌐 Selecciona el idioma</div>
+            <div class="language-picker-options">
+                <button type="button" class="language-option active" data-language="es" aria-pressed="true">🇪🇸 Español</button>
+                <button type="button" class="language-option" data-language="en" aria-pressed="false">🇬🇧 English</button>
+                <button type="button" class="language-option" data-language="fr" aria-pressed="false">🇫🇷 Français</button>
+            </div>
+        </div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
         <div style="margin-top:12px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">📅 ACTUALIZACIÓN: 28/10/2026</div>
-        <div style="margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">🔧 PRÓXIMA ACTUALIZACIÓN: 04/11/2026</div>
+        <div style="margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">🔧 PRÓXIMA ACTUALIZACIÓN: 29/10/2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #71</div>
     </div>
 </div>
@@ -6369,7 +6383,7 @@
             state.earned = (state.earned||0) + _saleAmt;
             state.sold = (state.sold||0) + 1;
             recordCollectorMissionAction('sell', 1);
-            addXP(Math.max(5, Math.floor(salePrice / 20000) * 5));
+            addXP(Math.max(5, Math.floor(salePrice / 20000) * 10));
             state.invValue -= inventory[origIdx].price;
             if (state.invValue < 0) state.invValue = 0;
             inventory.splice(origIdx, 1);
@@ -6394,7 +6408,7 @@
         state.earned = (state.earned||0) + _sellAmt;
         state.sold = (state.sold||0) + itemsToSell.length;
         recordCollectorMissionAction('sell', itemsToSell.length);
-        addXP(Math.max(5, Math.floor(sellValue / 20000) * 5));
+        addXP(Math.max(5, Math.floor(sellValue / 20000) * 10));
         state.invValue -= sellValue;
         if (state.invValue < 0) state.invValue = 0;
         const soldItems = new Set(itemsToSell);
@@ -7855,6 +7869,97 @@
     function clearSave() {
         try { localStorage.removeItem(SAVE_KEY); } catch(e) {}
     }
+
+    // Idioma elegido antes de empezar. Español conserva el texto original.
+    const TBC_LANGUAGE_KEY = 'tbc_language_preference';
+    let tbcLanguage = 'es';
+    const TBC_TRANSLATIONS = {
+      en: {
+        '🌐 Selecciona el idioma':'🌐 Choose your language','▶ &nbsp;JUGAR':'▶ &nbsp;PLAY','Empieza con ':'Start with ',
+        'monedas':'coins','NOVEDADES DE LA VERSIÓN #71':'VERSION #71 NEWS','Títulos y rangos:':'Titles and ranks:','Rangos cosméticos:':'Cosmetic ranks:','Auditoría estática:':'Static audit:',
+        'JUGAR':'PLAY','CERRAR':'CLOSE','CERRAR TIENDA':'CLOSE SHOP','CANCELAR':'CANCEL','GUARDAR Y CERRAR':'SAVE & CLOSE','COLECCIONAR':'COLLECT','COLECCIONAR ⚡':'COLLECT ⚡','COLECCIONAR ✨':'COLLECT ✨','COLECCIONAR 🇪🇸':'COLLECT 🇪🇸','COLECCIONAR 🔥':'COLLECT 🔥','COLECCIONAR 🤡':'COLLECT 🤡','COLECCIONAR 🧴':'COLLECT 🧴',
+        'ABRIR COFRE':'OPEN CHEST','AUTO ABRIR':'AUTO OPEN','Comprar':'Buy','Comprar y equipar':'Buy and equip','Comprar':'Buy','Equipar':'Equip','Desequipar':'Unequip','Cofres Abiertos':'Chests Opened','Ganado Vendiendo':'Earned from Sales','Derrotas':'Losses','Apuesta':'Bet','DOBLAR':'DOUBLE','CARGA(S)':'CHARGE(S)','ACTIVO':'ACTIVE','EQUIPADA':'EQUIPPED','EQUIPADA:':'EQUIPPED:',
+        'Común':'Common','Especial':'Special','Épico':'Epic','Legendario':'Legendary','Mítico':'Mythic','Cósmico':'Cosmic','FRAGMENTOS':'FRAGMENTS','Fragmentos de Prestigio':'Prestige Fragments','AL ASCENDER':'ON ASCENSION','EN LA RUINA':'BROKE','CRUPIER':'DEALER','HYPER MÍTICO':'HYPER MYTHIC',
+        'Filtrar por mutación':'Filter by mutation','Filtrar por precio':'Filter by price','Filtrar por rareza':'Filter by rarity','Balance Actual':'Current Balance','Balance Neto Póker':'Poker Net Balance','Elige una apuesta para empezar.':'Choose a bet to start.','Apuesta tus monedas · ¡Prueba tu suerte!':'Bet your coins · Try your luck!','Adivina el número exacto · Premio x55':'Guess the exact number · x55 prize',
+        'Abre cofres para conseguir objetos.':'Open chests to get items.','Colecciona todos los objetos del juego.':'Collect every item in the game.','Completa objetivos distintos cada día y cada semana para conseguir recompensas.':'Complete different objectives every day and week to earn rewards.','Entra cada día para mantener la racha y aumentar tu recompensa.':'Log in every day to keep your streak and increase your reward.','Gasta puntos de habilidad para mejorar las ventajas permanentes de tu partida.':'Spend skill points to improve your permanent upgrades.','Controla la música de fondo.':'Control background music.','Controla los sonidos de acciones y recompensas.':'Control action and reward sounds.','Desactiva las sacudidas visuales de las recompensas.':'Disable reward screen shake.','Evita nuevas infecciones y detiene los parásitos activos.':'Prevent new infections and stop active parasites.','Cantidad rápida (vacío = todos)':'Quick amount (blank = all)','Costo: --':'Cost: --','Cargando...':'Loading...','Cargando música...':'Loading music...','Cerrar ✕':'Close ✕','GUÍA INICIAL · PASO 1 DE 8':'STARTER GUIDE · STEP 1 OF 8','By Aritz':'By Aritz','NIVEL':'LEVEL','FORTUNA':'WEALTH','Tu Fortuna':'Your Wealth','Próxima actualización':'Next update','Actualización':'Update'
+      },
+      fr: {
+        '🌐 Selecciona el idioma':'🌐 Choisissez votre langue','▶ &nbsp;JUGAR':'▶ &nbsp;JOUER','Empieza con ':'Commencez avec ',
+        'monedas':'pièces','NOVEDADES DE LA VERSIÓN #71':'NOUVEAUTÉS DE LA VERSION #71','Títulos y rangos:':'Titres et rangs :','Rangos cosméticos:':'Rangs cosmétiques :','Auditoría estática:':'Audit statique :',
+        'JUGAR':'JOUER','CERRAR':'FERMER','CERRAR TIENDA':'FERMER LA BOUTIQUE','CANCELAR':'ANNULER','GUARDAR Y CERRAR':'ENREGISTRER ET FERMER','COLECCIONAR':'COLLECTER','COLECCIONAR ⚡':'COLLECTER ⚡','COLECCIONAR ✨':'COLLECTER ✨','COLECCIONAR 🇪🇸':'COLLECTER 🇪🇸','COLECCIONAR 🔥':'COLLECTER 🔥','COLECCIONAR 🤡':'COLLECTER 🤡','COLECCIONAR 🧴':'COLLECTER 🧴',
+        'ABRIR COFRE':'OUVRIR LE COFFRE','AUTO ABRIR':'OUVERTURE AUTO','Comprar':'Acheter','Comprar y equipar':'Acheter et équiper','Equipar':'Équiper','Desequipar':'Déséquiper','Cofres Abiertos':'Coffres ouverts','Ganado Vendiendo':'Gains des ventes','Derrotas':'Défaites','Apuesta':'Mise','DOBLAR':'DOUBLER','CARGA(S)':'CHARGE(S)','ACTIVO':'ACTIF','EQUIPADA':'ÉQUIPÉE','EQUIPADA:':'ÉQUIPÉE :',
+        'Común':'Commun','Especial':'Spécial','Épico':'Épique','Legendario':'Légendaire','Mítico':'Mythique','Cósmico':'Cosmique','FRAGMENTOS':'FRAGMENTS','Fragmentos de Prestigio':'Fragments de prestige','AL ASCENDER':'À L’ASCENSION','EN LA RUINA':'RUINÉ','CRUPIER':'CROUPIER','HYPER MÍTICO':'HYPER MYTHIQUE',
+        'Filtrar por mutación':'Filtrer par mutation','Filtrar por precio':'Filtrer par prix','Filtrar por rareza':'Filtrer par rareté','Balance Actual':'Solde actuel','Balance Neto Póker':'Solde net du poker','Elige una apuesta para empezar.':'Choisissez une mise pour commencer.','Apuesta tus monedas · ¡Prueba tu suerte!':'Misez vos pièces · Tentez votre chance !','Adivina el número exacto · Premio x55':'Devinez le nombre exact · Gain x55',
+        'Abre cofres para conseguir objetos.':'Ouvrez des coffres pour obtenir des objets.','Colecciona todos los objetos del juego.':'Collectionnez tous les objets du jeu.','Completa objetivos distintos cada día y cada semana para conseguir recompensas.':'Accomplissez des objectifs quotidiens et hebdomadaires pour gagner des récompenses.','Entra cada día para mantener la racha y aumentar tu recompensa.':'Connectez-vous chaque jour pour conserver votre série et augmenter votre récompense.','Gasta puntos de habilidad para mejorar las ventajas permanentes de tu partida.':'Dépensez des points de compétence pour améliorer vos bonus permanents.','Controla la música de fondo.':'Contrôlez la musique de fond.','Controla los sonidos de acciones y recompensas.':'Contrôlez les sons des actions et des récompenses.','Desactiva las sacudidas visuales de las recompensas.':'Désactivez les secousses visuelles des récompenses.','Evita nuevas infecciones y detiene los parásitos activos.':'Empêche les nouvelles infections et arrête les parasites actifs.','Cantidad rápida (vacío = todos)':'Quantité rapide (vide = tout)','Costo: --':'Coût : --','Cargando...':'Chargement...','Cargando música...':'Chargement de la musique...','Cerrar ✕':'Fermer ✕','GUÍA INICIAL · PASO 1 DE 8':'GUIDE DE DÉMARRAGE · ÉTAPE 1 SUR 8','By Aritz':'Par Aritz','NIVEL':'NIVEAU','Tu Fortuna':'Votre fortune','Próxima actualización':'Prochaine mise à jour','Actualización':'Mise à jour'
+      }
+    };
+    const tbcOriginalText = new WeakMap();
+    const tbcOriginalAttrs = new WeakMap();
+    function tbcTranslateText(value) {
+      if (tbcLanguage === 'es' || !value) return value;
+      const dict = TBC_TRANSLATIONS[tbcLanguage];
+      const leading = (value.match(/^\s*/) || [''])[0], trailing = (value.match(/\s*$/) || [''])[0];
+      let out = value.trim();
+      // Exact replacements first, then phrases within generated text nodes.
+      for (const [from, to] of Object.entries(dict).sort((a,b) => b[0].length-a[0].length)) {
+        if (out === from) return to;
+        if (from.length >= 8 && out.includes(from)) out = out.split(from).join(to);
+      }
+      return leading + out + trailing;
+    }
+    function restoreTbcLanguage() {
+      const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) { const node = walker.currentNode; if (tbcOriginalText.has(node)) node.nodeValue = tbcOriginalText.get(node); }
+      document.body.querySelectorAll?.('[placeholder],[title],[aria-label]').forEach(el => {
+        ['placeholder','title','aria-label'].forEach(attr => { const saved = tbcOriginalAttrs.get(el)?.[attr]; if (saved !== undefined) el.setAttribute(attr, saved); });
+      });
+    }
+    function applyTbcLanguage(root = document.body) {
+      if (!root || tbcLanguage === 'es') return;
+      const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      while (walker.nextNode()) nodes.push(walker.currentNode);
+      nodes.forEach(node => {
+        if (!node.parentElement || node.parentElement.closest('script,style,textarea,input,option,[data-no-translate]')) return;
+        if (!tbcOriginalText.has(node)) tbcOriginalText.set(node, node.nodeValue);
+        const translated = tbcTranslateText(tbcOriginalText.get(node));
+        if (translated !== node.nodeValue) node.nodeValue = translated;
+      });
+      root.querySelectorAll?.('[placeholder],[title],[aria-label]').forEach(el => {
+        ['placeholder','title','aria-label'].forEach(attr => {
+          const val = el.getAttribute(attr); if (val) { let saved = tbcOriginalAttrs.get(el); if (!saved) { saved = {}; tbcOriginalAttrs.set(el, saved); } if (saved[attr] === undefined) saved[attr] = val; el.setAttribute(attr, tbcTranslateText(saved[attr])); }
+        });
+      });
+    }
+    function setTbcLanguage(language) {
+      restoreTbcLanguage();
+      tbcLanguage = ['es','en','fr'].includes(language) ? language : 'es';
+      try { localStorage.setItem(TBC_LANGUAGE_KEY, tbcLanguage); } catch (e) {}
+      document.documentElement.lang = tbcLanguage;
+      document.querySelectorAll('.language-option').forEach(btn => {
+        const active = btn.dataset.language === tbcLanguage;
+        btn.classList.toggle('active', active); btn.setAttribute('aria-pressed', String(active));
+      });
+      const label = document.getElementById('languagePickerLabel');
+      if (label) label.textContent = tbcLanguage === 'en' ? '🌐 Choose your language' : tbcLanguage === 'fr' ? '🌐 Choisissez votre langue' : '🌐 Selecciona el idioma';
+      const play = document.getElementById('playBtn');
+      if (play) play.innerHTML = tbcLanguage === 'en' ? '▶ &nbsp;PLAY' : tbcLanguage === 'fr' ? '▶ &nbsp;JOUER' : '▶ &nbsp;JUGAR';
+      applyTbcLanguage(document.body);
+    }
+    try { tbcLanguage = localStorage.getItem(TBC_LANGUAGE_KEY) || 'es'; } catch (e) { tbcLanguage = 'es'; }
+    setTbcLanguage(tbcLanguage);
+    document.addEventListener('DOMContentLoaded', () => setTbcLanguage(tbcLanguage));
+    document.querySelectorAll('.language-option').forEach(btn => btn.addEventListener('click', () => setTbcLanguage(btn.dataset.language)));
+    const tbcTranslationObserver = new MutationObserver(mutations => {
+      if (tbcLanguage === 'es') return;
+      mutations.forEach(m => m.addedNodes.forEach(node => {
+        if (node.nodeType === Node.TEXT_NODE) {
+          if (!tbcOriginalText.has(node)) tbcOriginalText.set(node, node.nodeValue);
+          const translated = tbcTranslateText(tbcOriginalText.get(node)); if (translated !== node.nodeValue) node.nodeValue = translated;
+        } else if (node.nodeType === Node.ELEMENT_NODE) applyTbcLanguage(node);
+      }));
+    });
+    tbcTranslationObserver.observe(document.body, {childList:true,subtree:true});
 
     function startGame() {
         const splash = document.getElementById('splashScreen');
