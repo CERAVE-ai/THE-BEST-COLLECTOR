@@ -3957,20 +3957,19 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:12px;padding:9px 16px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:560px;width:calc(100% - 28px);box-sizing:border-box;text-align:left;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#f43f5e;letter-spacing:2px;text-align:center;margin-bottom:7px;">🆕 NOVEDADES DE LA VERSIÓN #70</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#f43f5e;letter-spacing:2px;text-align:center;margin-bottom:7px;">🆕 NOVEDADES DE LA VERSIÓN #71</div>
             <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:#e2e8f0;line-height:1.32;">
-                • <b>Vitrina:</b> registra los objetos que descubres y conserva tu colección.<br>
-                • <b>Prestigio renovado:</b> asciende para conseguir fragmentos y desbloquear mejoras permanentes.<br>
-                • <b>Ascensión:</b> reinicia la partida y conserva la Vitrina, las mascotas y el progreso de Prestigio.<br>
-                • <b>Progresión:</b> racha diaria limitada al 25% de la meta final, nueva mascota Eñaut El Gigante Colosal y objetivo final multiplicado por 100.
+                • <b>Títulos y rangos:</b> desbloquea títulos por progresar en cofres, míticos, ventas, fusiones, subastas, póker y mascotas.<br>
+                • <b>Rangos cosméticos:</b> muestran tu progreso sin multiplicar monedas ni alterar las probabilidades.<br>
+                • <b>Auditoría estática:</b> revisión de requisitos de nivel, guardado/importación y mecánicas económicas principales.
             </div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
         <div class="splash-subtitle">By Aritz &nbsp;·&nbsp; Llega a 200.000.000.000.000.000 monedas</div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:12px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">📅 ACTUALIZACIÓN: 27/10/2026</div>
-        <div style="margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">🔧 PRÓXIMA ACTUALIZACIÓN: 4/11/2026(RETRASADO)</div>
+        <div style="margin-top:12px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">📅 ACTUALIZACIÓN: 28/10/2026</div>
+        <div style="margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">🔧 PRÓXIMA ACTUALIZACIÓN: 29/10/2026</div>
         <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #71</div>
     </div>
 </div>
@@ -4316,6 +4315,16 @@
         </div>
         <div id="achievements-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;"></div>
     </div>
+
+    <!-- TÍTULOS Y RANGOS #71 -->
+    <section id="collectorRanksPanel" style="margin-top:30px;padding:18px;border:1px solid rgba(168,85,247,.28);border-radius:16px;background:linear-gradient(145deg,rgba(88,28,135,.12),rgba(15,23,42,.55));">
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:6px;">
+            <div class="inventory-title">🏆 Títulos y rangos</div>
+            <div id="collectorCurrentRank" style="font-weight:800;color:#c4b5fd;background:rgba(139,92,246,.14);border:1px solid rgba(167,139,250,.3);padding:6px 10px;border-radius:999px;">🌱 Novato</div>
+        </div>
+        <p style="font-size:12px;color:#94a3b8;margin:0 0 14px;line-height:1.5;">Desbloquea títulos jugando a distintas mecánicas. Los rangos son cosméticos: no multiplican dinero, suerte ni premios, para mantener equilibrada la economía.</p>
+        <div id="collectorRanksGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px;"></div>
+    </section>
 
     <!-- RULETA MÍTICA -->
     <div style="margin-top:40px;">
@@ -6417,6 +6426,56 @@
         sellInventoryItems(inventory);
     }
 
+    // Rangos calculados a partir de estadísticas ya existentes: no requieren migración de partidas.
+    // Se mantienen cosméticos para que no alteren la economía ni las probabilidades.
+    const COLLECTOR_RANKS = [
+        { id:'novato', title:'Novato', icon:'🌱', requirements:[], desc:'Tu aventura acaba de empezar.' },
+        { id:'aprendiz', title:'Aprendiz', icon:'📘', requirements:[['level',10,'Alcanza nivel 10'],['opened',25,'Abre 25 cofres']], desc:'Empieza a construir tu colección.' },
+        { id:'coleccionista', title:'Coleccionista', icon:'🎒', requirements:[['level',25,'Alcanza nivel 25'],['opened',100,'Abre 100 cofres'],['miticoCount',5,'Consigue 5 míticos']], desc:'La colección empieza a tener valor.' },
+        { id:'tasador', title:'Tasador', icon:'💎', requirements:[['sold',50,'Vende 50 objetos'],['crafted',5,'Completa 5 fusiones'],['miticoCount',10,'Consigue 10 míticos']], desc:'Sabes cuándo conservar y cuándo vender.' },
+        { id:'subastador', title:'Subastador', icon:'🔨', requirements:[['auctionWins',10,'Gana 10 subastas'],['maxBalance',1000000,'Alcanza 1.000.000 de fortuna'],['level',50,'Alcanza nivel 50']], desc:'Dominas las pujas y la gestión del dinero.' },
+        { id:'crupier', title:'Crupier', icon:'🃏', requirements:[['pokerWon',10,'Gana 10 partidas de póker'],['pokerPlayed',20,'Juega 20 partidas de póker'],['level',75,'Alcanza nivel 75']], desc:'También sabes arriesgar con cabeza.' },
+        { id:'maestro', title:'Maestro coleccionista', icon:'✨', requirements:[['universalCount',3,'Consigue 3 objetos universales'],['ownedPetsCount',3,'Consigue 3 mascotas'],['miticoCount',25,'Consigue 25 míticos'],['level',100,'Alcanza nivel 100']], desc:'Has dominado varias ramas del juego.' },
+        { id:'leyenda', title:'Leyenda', icon:'👑', requirements:[['level',250,'Alcanza nivel 250'],['opened',1000,'Abre 1.000 cofres'],['auctionWins',50,'Gana 50 subastas'],['pokerWon',25,'Gana 25 partidas de póker'],['universalCount',10,'Consigue 10 objetos universales']], desc:'Un título para quienes destacan en casi todo.' }
+    ];
+
+    function collectorRankMetric(key) {
+        if (key === 'ownedPetsCount') return Array.isArray(state.ownedPets) ? state.ownedPets.length : 0;
+        return Math.max(0, Number(state[key]) || 0);
+    }
+
+    function getCollectorRankProgress(rank) {
+        const done = rank.requirements.filter(([key, target]) => collectorRankMetric(key) >= target).length;
+        return { done, total: rank.requirements.length, unlocked: done === rank.requirements.length };
+    }
+
+    function renderCollectorRanks() {
+        const grid = document.getElementById('collectorRanksGrid');
+        const current = document.getElementById('collectorCurrentRank');
+        if (!grid || !current) return;
+        let best = COLLECTOR_RANKS[0];
+        for (const rank of COLLECTOR_RANKS) {
+            if (getCollectorRankProgress(rank).unlocked) best = rank;
+        }
+        current.textContent = `${best.icon} ${best.title}`;
+        grid.innerHTML = COLLECTOR_RANKS.map(rank => {
+            const progress = getCollectorRankProgress(rank);
+            const isCurrent = rank.id === best.id;
+            const requirements = rank.requirements.length
+                ? rank.requirements.map(([key, target, label]) => {
+                    const value = collectorRankMetric(key);
+                    const met = value >= target;
+                    const shown = key === 'maxBalance' ? Math.floor(value).toLocaleString('es-ES') : Math.floor(value).toLocaleString('es-ES');
+                    return `<div style="font-size:11px;color:${met ? '#86efac' : '#94a3b8'};margin-top:5px;">${met ? '✓' : '○'} ${label} <span style="opacity:.8">(${shown}/${target.toLocaleString('es-ES')})</span></div>`;
+                }).join('')
+                : '<div style="font-size:11px;color:#86efac;margin-top:7px;">✓ Disponible desde el principio</div>';
+            return `<article style="padding:12px;border:1px solid ${isCurrent ? 'rgba(167,139,250,.65)' : progress.unlocked ? 'rgba(74,222,128,.3)' : 'rgba(255,255,255,.08)'};border-radius:12px;background:${isCurrent ? 'rgba(139,92,246,.12)' : 'rgba(255,255,255,.025)'};">
+                <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:24px;">${progress.unlocked ? rank.icon : '🔒'}</span><div style="font-weight:800;color:${progress.unlocked ? '#e2e8f0' : '#94a3b8'};flex:1;">${rank.title}</div><span style="font-size:9px;font-weight:800;color:${progress.unlocked ? '#86efac' : '#64748b'};">${progress.unlocked ? 'DESBLOQUEADO' : `${progress.done}/${progress.total}`}</span></div>
+                <div style="font-size:11px;color:#94a3b8;margin-top:5px;line-height:1.4;">${rank.desc}</div>${requirements}
+            </article>`;
+        }).join('');
+    }
+
     function updateStats() {
         const bal = document.getElementById('balance');
         bal.textContent = Math.floor(state.balance).toLocaleString();
@@ -6433,6 +6492,7 @@
         if (typeof updateAnunciosEspanaRuletaBtn === 'function') updateAnunciosEspanaRuletaBtn();
         if (typeof updateCeraveRuletaBtn === 'function') updateCeraveRuletaBtn();
         if (typeof updatePrestigioBtn === 'function') updatePrestigioBtn();
+        renderCollectorRanks();
     }
 
 
@@ -7123,6 +7183,7 @@
                 showAchievementToast(a);
             }
         });
+        renderCollectorRanks();
     }
 
     let toastTimeout = null;
