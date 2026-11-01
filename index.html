@@ -5345,62 +5345,116 @@
     let tbcCrazySdkReady = false;
     let tbcCrazyGameplayActive = false;
     let tbcCrazySdkInitPromise = null;
+    let tbcCrazySettingsListener = null;
+    let tbcCrazyPlatformMuted = false;
+
+    function tbcCrazyApplyAudioSetting(settings) {
+        const muted = !!(settings && settings.muteAudio);
+        const wasMutedByPlatform = tbcCrazyPlatformMuted;
+        tbcCrazyPlatformMuted = muted;
+
+        // El silencio de CrazyGames tiene prioridad sobre los controles del juego.
+        // Solo reanudar si estamos deshaciendo un silencio impuesto por la plataforma;
+        // no despertar un AudioContext que el navegador mantenga suspendido por autoplay.
+        try {
+            if (typeof audioCtx !== 'undefined' && audioCtx) {
+                if (muted && audioCtx.state === 'running') {
+                    audioCtx.suspend().catch(() => {});
+                } else if (!muted && wasMutedByPlatform && audioCtx.state === 'suspended') {
+                    audioCtx.resume().catch(() => {});
+                }
+            }
+        } catch (e) {}
+
+        // La música externa también debe respetar el silencio de la plataforma.
+        try {
+            if (typeof scWidget !== 'undefined' && scWidget && typeof scWidget.setVolume === 'function') {
+                const userVolume = (typeof getQolSettings === 'function')
+                    ? getQolSettings().musicVolume
+                    : 100;
+                scWidget.setVolume(muted ? 0 : Math.round(userVolume));
+            }
+        } catch (e) {}
+    }
 
     async function initializeCrazyGamesSdk() {
+        if (tbcCrazySdkReady) return true;
         if (tbcCrazySdkInitPromise) return tbcCrazySdkInitPromise;
+
         tbcCrazySdkInitPromise = (async () => {
             try {
                 if (!window.CrazyGames || !window.CrazyGames.SDK) return false;
                 const sdk = window.CrazyGames.SDK;
                 const environment = sdk.environment;
-                // SDK v3 está desactivado en dominios que no son CrazyGames.
+
+                // SDK v3 solo está activo en CrazyGames y en localhost.
                 if (environment !== 'crazygames' && environment !== 'local') return false;
-                if (sdk.game && typeof sdk.game.sdkGameLoadingStart === 'function') {
-                    try { sdk.game.sdkGameLoadingStart(); } catch (e) {}
+
+                // En v3 los métodos correctos son loadingStart/loadingStop.
+                if (sdk.game && typeof sdk.game.loadingStart === 'function') {
+                    try { sdk.game.loadingStart(); } catch (e) {}
                 }
+
                 await sdk.init();
                 tbcCrazySdkReady = true;
-                if (sdk.game && typeof sdk.game.sdkGameLoadingStop === 'function') {
-                    try { sdk.game.sdkGameLoadingStop(); } catch (e) {}
+
+                if (sdk.game && typeof sdk.game.loadingStop === 'function') {
+                    try { sdk.game.loadingStop(); } catch (e) {}
                 }
-                // Respetar la opción de silenciar audio que pueda enviar la plataforma.
+
+                // Aplicar el estado inicial y escuchar cambios posteriores.
                 try {
-                    const settings = sdk.game && sdk.game.settings;
-                    if (settings && settings.muteAudio) {
-                        if (audioCtx && audioCtx.state === 'running') await audioCtx.suspend();
+                    tbcCrazyApplyAudioSetting(sdk.game && sdk.game.settings);
+                    if (sdk.game && typeof sdk.game.addSettingsChangeListener === 'function') {
+                        if (tbcCrazySettingsListener && typeof sdk.game.removeSettingsChangeListener === 'function') {
+                            try { sdk.game.removeSettingsChangeListener(tbcCrazySettingsListener); } catch (e) {}
+                        }
+                        tbcCrazySettingsListener = (newSettings) => tbcCrazyApplyAudioSetting(newSettings);
+                        sdk.game.addSettingsChangeListener(tbcCrazySettingsListener);
                     }
-                } catch (e) {}
+                } catch (e) {
+                    console.warn('[CrazyGames SDK] Settings listener failed:', e);
+                }
+
                 return true;
             } catch (e) {
                 console.warn('[CrazyGames SDK] Initialization failed:', e);
+                // Permite reintentar si el script/SDK no estaba listo o init falló.
+                tbcCrazySdkReady = false;
+                tbcCrazySdkInitPromise = null;
                 return false;
             }
         })();
-        return tbcCrazySdkInitPromise;
+
+        const result = await tbcCrazySdkInitPromise;
+        // Si el SDK aún no estaba disponible, no conservar una promesa fallida.
+        if (!result && !tbcCrazySdkReady) tbcCrazySdkInitPromise = null;
+        return result;
     }
 
     async function tbcCrazyGameplayStart() {
-        await initializeCrazyGamesSdk();
-        if (!tbcCrazySdkReady || document.hidden || tbcCrazyGameplayActive) return;
+        const ready = await initializeCrazyGamesSdk();
+        if (!ready || !tbcCrazySdkReady || tbcCrazyGameplayActive) return;
         try {
             window.CrazyGames.SDK.game.gameplayStart();
             tbcCrazyGameplayActive = true;
-        } catch (e) { console.warn('[CrazyGames SDK] gameplayStart failed:', e); }
+        } catch (e) {
+            console.warn('[CrazyGames SDK] gameplayStart failed:', e);
+        }
     }
 
     function tbcCrazyGameplayStop() {
         if (!tbcCrazySdkReady || !tbcCrazyGameplayActive) return;
-        try { window.CrazyGames.SDK.game.gameplayStop(); } catch (e) {}
+        try {
+            window.CrazyGames.SDK.game.gameplayStop();
+        } catch (e) {
+            console.warn('[CrazyGames SDK] gameplayStop failed:', e);
+        }
         tbcCrazyGameplayActive = false;
     }
 
-    document.addEventListener('visibilitychange', () => {
-        if (document.hidden) {
-            tbcCrazyGameplayStop();
-        } else if (document.getElementById('gameWrapper')?.style.display === 'block') {
-            tbcCrazyGameplayStart();
-        }
-    });
+    // No se escucha visibilitychange para gameplay: CrazyGames gestiona el foco
+    // y cambiar de pestaña no debe contarse como una pausa del juego.
 
     // Inicialización anticipada; no bloquea la carga ni el botón JUGAR.
     initializeCrazyGamesSdk();
@@ -6697,6 +6751,7 @@
             // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
             clearSave();
             state.over = true;
+            tbcCrazyGameplayStop();
             const rec = getRecord();
             const newWins = rec.wins + 1;
             saveRecord(newWins, rec.losses);
@@ -6710,6 +6765,7 @@
             // ✅ FIX: clearSave PRIMERO para que el autosave de 15s no pueda re-guardar el estado
             clearSave();
             state.over = true;
+            tbcCrazyGameplayStop();
             const rec = getRecord();
             const newLosses = rec.losses + 1;
             saveRecord(rec.wins, newLosses);
@@ -8223,26 +8279,212 @@
       'gana':'win','gana':'wins','pierde':'lose','compra':'buy','alcanza':'reach','alcanza':'reach',
       'mutación':'mutation','veces':'times','hora':'hour','ruina':'broke','fortuna':'wealth'
     });
-    function tbcFallbackEnglish(value) {
-      let out = value;
-      for (const [from, to] of Object.entries(TBC_EN_WORDS).sort((a,b) => b[0].length-a[0].length)) {
-        const escaped = from.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const re = new RegExp('(^|[^\\p{L}])' + escaped + '(?=$|[^\\p{L}])', 'giu');
-        out = out.replace(re, (whole, prefix) => prefix + to);
-      }
-      return out;
+    // Correcciones de auditoría: textos visibles que faltaban en la traducción inglesa.
+    // Se incluyen frases completas para evitar resultados híbridos en logros y paneles dinámicos.
+    Object.assign(TBC_TRANSLATIONS.en, {
+      'desbloquea títulos por progresar en cofres, míticos, ventas, fusiones, subastas, póker y mascotas.':'Unlock titles by progressing through chests, Mythic items, sales, fusions, auctions, poker, and pets.',
+      'muestran tu progreso sin multiplicar monedas ni alterar las probabilidades.':'They show your progress without multiplying coins or changing the odds.',
+      'Meta: ':'Goal: ', '💰 TU FORTUNA':'💰 YOUR WEALTH', '⭐ NIVEL':'⭐ LEVEL', '⚡ PRÓXIMO EVENTO EN':'⚡ NEXT EVENT IN',
+      'Valor Colección':'Collection Value','Objeto Más Caro':'Most Valuable Item','Inversión Total':'Total Investment',
+      '🌳 ÁRBOL DE HABILIDADES':'🌳 SKILL TREE','📊 ESTADÍSTICAS DETALLADAS':'📊 DETAILED STATISTICS',
+      '🔥 Racha':'🔥 Streak','días':'days','💰 Premio de hoy':'💰 Today’s Reward','🛟 RECUPERAR RACHA':'🛟 RESTORE STREAK',
+      'Copia el código y guárdalo en un lugar seguro, o descarga el archivo. Úsalo para restaurar tu partida en cualquier dispositivo.':'Copy the code and keep it somewhere safe, or download the file. Use it to restore your game on any device.',
+      '📋 COPIAR CÓDIGO':'📋 COPY CODE','Pega el código de tu partida exportada, o sube el archivo .json.':'Paste your exported save code or upload the .json file.',
+      '¡Esto reemplazará tu partida actual!':'This will replace your current game!', 'Vender Todo 💰':'Sell All 💰',
+      'Más recientes':'Most Recent','Mutación':'Mutation','Vender selección':'Sell Selected','Vender todo menos míticos':'Sell All Except Mythic Items',
+      'Nombre canción':'Song Name','LOGROS':'ACHIEVEMENTS','🏅 Logros':'🏅 Achievements','🏆 Títulos y rangos':'🏆 Titles & Ranks',
+      'Desbloquea títulos jugando a distintas mecánicas. Los rangos son cosméticos: no multiplican dinero, suerte ni premios, para mantener equilibrada la economía.':'Unlock titles by playing different game modes. Ranks are cosmetic: they do not multiply money, luck, or prizes, keeping the economy balanced.',
+      'Ruleta Mítica':'Mythic Roulette','Solo Objetos Míticos':'Mythic Items Only','míticos':'Mythic items','en cofres = 1 tirada · Progreso:':'in chests = 1 spin · Progress:',
+      '· Tiradas:':'· Spins:','Tiradas:':'Spins:','Ruleta Súper Mítica':'Super Mythic Roulette','Objetos Legendarios Únicos':'Unique Legendary Items',
+      'Ruleta Hyper Mítica':'Hyper Mythic Roulette','Objetos de Valor Extremo':'Extremely Valuable Items','Ruleta de Idiotas':'Idiot Roulette',
+      'Objetos de Dudosa Existencia':'Items of Questionable Existence','Precio por tirada:':'Price per spin:',
+      'Ruleta Especial: Anuncios España':'Special Roulette: Spain Ads','Ruleta CeraVe Trascendencia Absoluta':'CeraVe Absolute Transcendence Roulette',
+      'Ocho premios de colección · Más valor, menor probabilidad':'Eight collectible prizes · Higher value, lower odds',
+      'Los premios más caros tienen menos probabilidad':'The most expensive prizes have lower odds',
+      'Objeto 100% secreto · Calidad mejorada +35% · Épico / Legendario / Mítico':'100% secret item · Quality increased by +35% · Epic / Legendary / Mythic',
+      '⚔️ BATALLAS DE SUBASTAS EN VIVO':'⚔️ LIVE AUCTION BATTLES','BATALLAS DE SUBASTAS EN VIVO':'LIVE AUCTION BATTLES',
+      'Apuesta tus monedas · ¡Prueba tu suerte!':'Bet your coins · Try your luck!', '⏳ PRÓXIMA BATALLA EN':'⏳ NEXT BATTLE IN',
+      '??? OBJETO MISTERIOSO':'??? MYSTERY ITEM','🏳️ RÍNDETE':'🏳️ SURRENDER','🎰 MÁQUINA DE JACKPOT':'🎰 JACKPOT MACHINE',
+      '🎰 RULETA':'🎰 ROULETTE','💳 PRÉSTAMOS':'💳 LOANS','· Pulsa para entrar':'· Click to enter',
+      '⚠️ PRÉSTAMO ACTIVO — Queda:':'⚠️ ACTIVE LOAN — Time left:', 'Banco del Coleccionista · Máximo 50.000.000.000 $ · Interés 20%':'Collector’s Bank · Maximum $50,000,000,000 · 20% interest',
+      '⚠️ Al solicitar un préstamo tienes entre':'⚠️ When taking out a loan, you have between',
+      'Siempre debes pagar el':'You must always repay', 'más':'more',
+      'Si el tiempo expira, el banco te cobrará de tu balance automáticamente.':'If time runs out, the bank will automatically charge your balance.',
+      '¿CUÁNTO QUIERES PEDIR PRESTADO?':'HOW MUCH DO YOU WANT TO BORROW?', 'Recibirás':'You will receive','Deberás Pagar':'You Must Repay',
+      'Interés':'Interest','Tiempo Límite':'Time Limit','💳 SOLICITAR PRÉSTAMO':'💳 REQUEST LOAN',
+      '🚨 ¡TIEMPO CASI AGOTADO! El banco cobrará tu deuda automáticamente.':'🚨 TIME IS ALMOST UP! The bank will automatically collect your debt.',
+      'Préstamo Original':'Original Loan','📊 ESTADÍSTICAS':'📊 STATISTICS','Resumen completo de tu partida':'Complete overview of your game',
+      '📦 COLECCIÓN':'📦 COLLECTION','Objetos Vendidos':'Items Sold','🎁 RAREZAS POR COFRE':'🎁 RARITIES PER CHEST',
+      'El desglose empieza a contar desde esta versión; las partidas antiguas no guardaban estadísticas por cofre.':'This breakdown starts tracking in this version; older saves did not store per-chest statistics.',
+      'Máximo Alcanzado':'Highest Reached','🃏 PÓKER':'🃏 POKER','Volumen de música':'Music Volume','Parásitos del juego':'Game Parasites',
+      'Controla los sonidos de acciones y recompensas.':'Control the sounds for actions and rewards.',
+      'Evita nuevas infecciones y detiene los parásitos activos.':'Prevent new infections and stop active parasites.',
+      'Premio si ganas':'Prize if You Win','¿CUÁNTO APUESTAS?':'HOW MUCH DO YOU BET?',
+      'Llega a 21 · el crupier se planta en 17 · premio total x5 la apuesta en las victorias':'Reach 21 · the dealer stands on 17 · total prize is 5× your bet when you win',
+      'PRESTIGIO — ASCENSIÓN':'PRESTIGE — ASCENSION',
+      'La ascensión reinicia la partida casi por completo. Solo conservas la Vitrina, las mascotas y tu progreso de Prestigio (fragmentos y mejoras permanentes).':'Ascension resets almost the entire game. You only keep your Showcase, pets, and Prestige progress (fragments and permanent upgrades).',
+      'Requisito':'Requirement','Necesitas el 1% del objetivo de victoria.':'You need 1% of the victory goal.',
+      'Cada 1% del objetivo equivale a 1 fragmento; máximo 10 por ascensión. La fortuna vuelve a 2.000 monedas. Se borran inventario, museo, nivel, habilidades, misiones, estadísticas y préstamos.':'Each 1% of the goal equals 1 fragment, up to 10 per ascension. Your wealth returns to 2,000 coins. Your inventory, museum, level, skills, missions, statistics, and loans are reset.',
+      '+10% al vender objetos conseguidos en cofres por nivel. No afecta a premios de ruletas especiales.':'+10% when selling items obtained from chests per level. Does not affect special roulette prizes.',
+      '+10% a los ingresos del museo, incluidos los offline, por nivel.':'+10% to museum income, including offline income, per level.',
+      '+5% de suerte al abrir cofres por nivel. No afecta a ruletas.':'+5% chest-opening luck per level. Does not affect roulettes.',
+      '+10% de experiencia obtenida por nivel.':'+10% experience gained per level.',
+      '⚗️ CRAFTEO DE OBJETOS':'⚗️ ITEM CRAFTING','Fusiona hasta 5 objetos para crear algo nuevo · Los objetos Hyper Míticos no se pueden fusionar':'Fuse up to 5 items to create something new · Hyper Mythic items cannot be fused',
+      'OBJETOS SELECCIONADOS':'SELECTED ITEMS','TU INVENTARIO — Click para añadir · Click de nuevo para quitar':'YOUR INVENTORY — Click to add · Click again to remove',
+      'Tu objeto se está forjando. Puedes cerrar este panel y volver luego.':'Your item is being crafted. You can close this panel and come back later.',
+      'Pociones y mejoras para tu partida':'Potions and upgrades for your game','Ruletas giran 35% más rápido durante 3 minutos':'Roulette wheels spin 35% faster for 3 minutes',
+      'Los objetos valen 30% más durante 3 minutos':'Items are worth 30% more for 3 minutes',
+      '+55% suerte, objetos valen 50% más y ruleta 40% más rápida durante 4 min':'+55% luck, items are worth 50% more, and roulette spins 40% faster for 4 minutes',
+      'La ruleta gira un 100% más rápido durante 3 minutos':'Roulette spins 100% faster for 3 minutes',
+      '+200% suerte, +150% dinero y ruleta 200% más rápida durante 3 minutos':'+200% luck, +150% money, and roulette spins 200% faster for 3 minutes',
+      'Congela todos los bots 5 seg en subasta · +1 carga (apilable)':'Freezes all auction bots for 5 sec · +1 charge (stackable)',
+      '¡TIRADA DESBLOQUEADA!':'SPIN UNLOCKED!','Ruleta Mítica disponible':'Mythic Roulette available',
+      '¡TIRADA SÚPER DESBLOQUEADA!':'SUPER SPIN UNLOCKED!','Ruleta Súper Mítica disponible':'Super Mythic Roulette available',
+      '¡TIRADA HYPER DESBLOQUEADA!':'HYPER SPIN UNLOCKED!','Ruleta Hyper Mítica disponible':'Hyper Mythic Roulette available',
+      'PREMIO PUBLICITARIO EXCLUSIVO':'EXCLUSIVE ADVERTISING PRIZE','Valor del premio':'Prize Value',
+      'PREMIO CERAVE TRASCENDENTE':'TRANSCENDENT CERAVE PRIZE','🏅 LOGRO DESBLOQUEADO':'🏅 ACHIEVEMENT UNLOCKED',
+      'Nombre del logro':'Achievement Name','Te has quedado sin un céntimo. La banca siempre gana...':'You are completely broke. The house always wins...',
+      'VENDER MIS ZAPATOS':'SELL MY SHOES','Ganar: +':'Win: +','ACTUALIZACIÓN:':'UPDATE:','PRÓXIMA ACTUALIZACIÓN:':'NEXT UPDATE:',
+      'Versión Del Juego Actual':'Current Game Version','GUÍA INICIAL':'STARTER GUIDE','COMPRAR':'BUY','ÉXITO':'SUCCESS',
+      'Estate una hora en el juego':'Spend one hour in the game',
+      'Quédate en la ruina 15 veces':'Go broke 15 times','Alcanza la gloria 20 veces':'Reach glory 20 times',
+      'Gana a cara o cruz tres veces seguidas':'Win three coin flips in a row','Pierde a cara o cruz tres veces seguidas':'Lose three coin flips in a row',
+      'Sal ganando en una subasta 15 veces':'Win an auction 15 times','Consigue 10 objetos con la mutación Universal':'Get 10 items with the Universal mutation',
+      'Compra 50 pociones':'Buy 50 potions','Consigue la gloria máxima 45 veces':'Reach maximum glory 45 times',
+      'Consigue 5 objetos míticos (no tienen que ser seguidos)':'Get 5 Mythic items (they do not have to be consecutive)',
+      'Llega a 2.000.000$ de fortuna':'Reach $2,000,000 in wealth','Consigue dos míticos seguidos':'Get two Mythic items in a row',
+      'Que te toque Suerte Máxima en el evento aleatorio':'Get Maximum Luck in the random event','Llega a 3.750.000$ de fortuna':'Reach $3,750,000 in wealth',
+      'Completa todos los demás logros':'Complete all other achievements',
+      'Rebajador de pity':'Pity Reducer','Subastador':'Auctioneer','Aprendiz':'Apprentice','Forjador':'Forge Master',
+      'Mecenas del museo':'Museum Patron','Aprendiz eterno':'Eternal Apprentice',
+      'Poción de Suerte':'Luck Potion','Poción de Velocidad':'Speed Potion','Poción de Dinero':'Money Potion','Poción Oscura':'Dark Potion',
+      'Poción Flash':'Flash Potion','Poción Cerave':'CeraVe Potion','Poción de Silencio':'Silence Potion'
+    });
+
+    // Fallback francés: solo se aplica a etiquetas de una única palabra,
+    // igual que el fallback inglés. Las frases completas del diccionario tienen prioridad.
+    const TBC_FR_WORDS = {
+      'abiertos':'ouverts','abierto':'ouvert','abrir':'ouvrir','abre':'ouvre','abriendo':'ouverture',
+      'actualización':'mise à jour','actualizaciones':'mises à jour','actual':'actuel','actuales':'actuels','próxima':'prochaine','próximo':'prochain',
+      'añadir':'ajouter','añade':'ajoute','añadido':'ajouté','añadida':'ajoutée','ahora':'maintenant','antes':'avant','después':'après','durante':'pendant','hasta':'jusqu’à','desde':'depuis','cada':'chaque','todos':'tous','todas':'toutes','todo':'tout','toda':'toute',
+      'objeto':'objet','objetos':'objets','cofre':'coffre','cofres':'coffres','moneda':'pièce','monedas':'pièces','inventario':'inventaire','colección':'collection','coleccion':'collection','coleccionar':'collectionner','rareza':'rareté','mutación':'mutation','mutaciones':'mutations',
+      'común':'commun','comunes':'communs','especial':'spécial','especiales':'spéciaux','épico':'épique','épica':'épique','legendario':'légendaire','legendaria':'légendaire','mítico':'mythique','mítica':'mythique','universal':'universel','radiactivo':'radioactif','radiactiva':'radioactive','cósmico':'cosmique','cósmica':'cosmique',
+      'valor':'valeur','precio':'prix','precios':'prix','coste':'coût','costo':'coût','ganancia':'gain','ganancias':'gains','pérdida':'perte','pérdidas':'pertes','vender':'vendre','vende':'vend','vendido':'vendu','vendida':'vendue','venta':'vente','comprar':'acheter','compra':'achat','comprado':'acheté','saldo':'solde','dinero':'argent','riqueza':'richesse','fortuna':'fortune','ganar':'gagner','gana':'gagne','ganas':'vous gagnez','ganaste':'vous avez gagné',
+      'perder':'perdre','pierdes':'vous perdez','perdiste':'vous avez perdu','derrota':'défaite','victoria':'victoire','empate':'égalité','nivel':'niveau','niveles':'niveaux','experiencia':'expérience','puntos':'points','punto':'point','habilidad':'compétence','habilidades':'compétences','mejora':'amélioration','mejorar':'améliorer','misión':'mission','misiones':'missions','diaria':'quotidienne','diario':'quotidien','semanal':'hebdomadaire','recompensa':'récompense','recompensas':'récompenses',
+      'racha':'série','días':'jours','día':'jour','semanas':'semaines','semana':'semaine','hoy':'aujourd’hui','mañana':'demain','ayer':'hier','mascota':'animal','mascotas':'animaux','poción':'potion','pociones':'potions','préstamo':'prêt','préstamos':'prêts','deuda':'dette','deudas':'dettes','pagar':'payer','pago':'paiement','pagado':'payé',
+      'subasta':'enchère','subastas':'enchères','subastador':'commissaire-priseur','puja':'enchère','pujas':'enchères','apostar':'parier','apuesta':'pari','apuestas':'paris','ruleta':'roulette','ruletas':'roulettes','casino':'casino','póker':'poker','crupier':'croupier','premio':'prix','premios':'prix','probabilidad':'probabilité','probabilidades':'probabilités',
+      'fabricación':'fabrication','crafteo':'fabrication','fusionar':'fusionner','fusión':'fusion','fallida':'échouée','fallido':'échoué','éxito':'succès','fracaso':'échec','tiempo':'temps','restante':'restant','restantes':'restants','museo':'musée','vitrina':'vitrine','vitrinas':'vitrines','prestigio':'prestige','ascender':'monter','ascensión':'ascension','fragmento':'fragment','fragmentos':'fragments',
+      'ajustes':'paramètres','ajuste':'paramètre','guardar':'sauvegarder','guardado':'sauvegardé','partida':'partie','partidas':'parties','cargar':'charger','cargando':'chargement','importar':'importer','exportar':'exporter','archivo':'fichier','archivos':'fichiers','cerrar':'fermer','cancelar':'annuler','confirmar':'confirmer','continuar':'continuer','volver':'retour','atrás':'retour','siguiente':'suivant','anterior':'précédent','seleccionar':'sélectionner','selecciona':'sélectionnez','elegir':'choisir','elige':'choisissez',
+      'activar':'activer','desactivar':'désactiver','activo':'actif','activa':'active','inactivo':'inactif','equipar':'équiper','equipado':'équipé','desbloquear':'débloquer','desbloqueado':'débloqué','desbloqueada':'débloquée','disponible':'disponible','bloqueado':'verrouillé','bloqueada':'verrouillée','infección':'infection','parásito':'parasite','parásitos':'parasites','silencio':'silence','suerte':'chance','velocidad':'vitesse','efecto':'effet','efectos':'effets',
+      'más':'plus','menos':'moins','mayor':'supérieur','menor':'inférieur','máximo':'maximum','máxima':'maximale','mínimo':'minimum','mínima':'minimale','total':'total','actualmente':'actuellement','vacío':'vide','vacía':'vide','lleno':'plein','llena':'pleine','ninguno':'aucun','ninguna':'aucune','otro':'autre','otra':'autre','otros':'autres','otras':'autres','gratis':'gratuit','gratuito':'gratuit','gratuita':'gratuite','caro':'cher','cara':'chère','barato':'bon marché','barata':'bon marché','rápido':'rapide','rápida':'rapide','lento':'lent','lenta':'lente','fácil':'facile','difícil':'difficile','seguro':'sûr','segura':'sûre','inválido':'invalide','inválida':'invalide','correcto':'correct','correcta':'correcte','error':'erreur','advertencia':'avertissement',
+      'objetivo':'objectif','objetivos':'objectifs','meta':'objectif','completa':'complète','completar':'terminer','completado':'terminé','completada':'terminée','conseguir':'obtenir','consigue':'obtenez','obtén':'obtiens','obtener':'obtenir','jugar':'jouer','juega':'joue','juego':'jeu','jugador':'joueur','jugadores':'joueurs','ganador':'gagnant','perdedor':'perdant','reintentar':'réessayer','reiniciar':'redémarrer','reinicia':'redémarre','espera':'attendez','esperar':'attendre','segundo':'seconde','segundos':'secondes','minuto':'minute','minutos':'minutes','hora':'heure','horas':'heures',
+      'izquierda':'gauche','derecha':'droite','arriba':'haut','abajo':'bas','nuevo':'nouveau','nueva':'nouvelle','nuevos':'nouveaux','nuevas':'nouvelles','último':'dernier','última':'dernière','nombre':'nom','descripción':'description','información':'informations','estadística':'statistique','estadísticas':'statistiques','historial':'historique','registro':'registre','porcentaje':'pourcentage','cantidad':'quantité','veces':'fois','selección':'sélection','idioma':'langue','idiomas':'langues','inglés':'anglais','español':'espagnol','francés':'français'
+    };
+
+    // Noms propres et libellés volontairement conservés : ils ne doivent pas
+    // encombrer le rapport des textes à traduire.
+    const TBC_TRANSLATION_KEEP = new Set([
+      'cerave','ceraVe','poseidón','poseidon','tiburón','the best collector','crazygames',
+      'hyper','jackpot','blackjack','poker','póker','bitcoin','tech'
+    ].map(v => v.toLocaleLowerCase()));
+    function tbcShouldIgnoreDiagnostic(value) {
+      const clean = String(value || '').replace(/\s+/g, ' ').trim();
+      const lower = clean.toLocaleLowerCase();
+      if (!clean || TBC_TRANSLATION_KEEP.has(lower)) return true;
+      // No informar códigos, rutas, identificadores técnicos ni valores numéricos.
+      if (/^(?:https?:\/\/|www\.|[a-z0-9_-]+\.(?:html?|js|css|json)|#[\w-]+$)/i.test(clean)) return true;
+      if (/^[A-Z0-9_-]{3,}$/.test(clean) && /[_-]|\d/.test(clean)) return true;
+      return false;
     }
-    function tbcTranslateText(value) {
-      if (tbcLanguage === 'es' || !value) return value;
-      const dict = TBC_TRANSLATIONS[tbcLanguage];
-      const leading = (value.match(/^\s*/) || [''])[0], trailing = (value.match(/\s*$/) || [''])[0];
-      let out = value.trim();
-      // Exact replacements first, then phrases within generated text nodes.
-      for (const [from, to] of Object.entries(dict).sort((a,b) => b[0].length-a[0].length)) {
-        if (out === from) return to;
-        if (from.length >= 8 && out.includes(from)) out = out.split(from).join(to);
+
+    // Registro de textos pendientes: no depende de detectar palabras españolas.
+    // Guarda cualquier texto visible que no haya encontrado traducción para EN/FR.
+    // Son candidatos de revisión: pueden incluir nombres propios o textos neutros.
+    const tbcMissingTranslations = { en: new Set(), fr: new Set() };
+    // Frases que han recibido alguna sustitución, pero no una traducción exacta.
+    // Se separan de los errores reales para que el informe no mezcle ambos casos.
+    const tbcPartialTranslations = { en: new Set(), fr: new Set() };
+    function tbcRecordMissing(value, lang = tbcLanguage) {
+      if ((lang !== 'en' && lang !== 'fr') || typeof value !== 'string') return;
+      const clean = value.replace(/\s+/g, ' ').trim();
+      // Evitar ruido: cadenas vacías, números, símbolos aislados y valores muy largos.
+      if (clean.length < 2 || clean.length > 240 || !/[\p{L}]/u.test(clean)) return;
+      if (/^[\p{N}\p{P}\p{S}\s]+$/u.test(clean) || tbcShouldIgnoreDiagnostic(clean)) return;
+      tbcMissingTranslations[lang].add(clean);
+    }
+    window.TBC_getMissingTranslations = function(language = tbcLanguage) {
+      return [...(tbcMissingTranslations[language] || [])].sort((a,b) => a.localeCompare(b));
+    };
+    window.TBC_getPartialTranslations = function(language = tbcLanguage) {
+      return [...(tbcPartialTranslations[language] || [])].sort((a,b) => a.localeCompare(b));
+    };
+    window.TBC_clearMissingTranslations = function(language) {
+      if (language === 'en' || language === 'fr') {
+        tbcMissingTranslations[language].clear();
+        tbcPartialTranslations[language].clear();
+      } else {
+        for (const lang of ['en','fr']) { tbcMissingTranslations[lang].clear(); tbcPartialTranslations[lang].clear(); }
       }
-      if (tbcLanguage === 'en') out = tbcFallbackEnglish(out);
+    };
+    window.TBC_exportMissingTranslations = function(language = tbcLanguage) {
+      const texts = window.TBC_getMissingTranslations(language);
+      const partial = window.TBC_getPartialTranslations(language);
+      return JSON.stringify({ language, count: texts.length, texts, partialCount: partial.length, partiallyTranslated: partial, note: 'Los textos pendientes son candidatos de revisión; los nombres propios y términos intencionalmente conservados se filtran cuando están reconocidos.' }, null, 2);
+    };
+    // API central de traducción por clave. También queda expuesta para integrarla
+    // desde funciones del juego sin depender de buscar/reemplazar el DOM.
+    function tbcT(key, params) {
+      const source = String(key ?? '');
+      const dict = TBC_TRANSLATIONS[tbcLanguage];
+      let result = tbcLanguage === 'es' ? source : (dict && Object.prototype.hasOwnProperty.call(dict, source) ? dict[source] : undefined);
+      if (result == null) {
+        tbcRecordMissing(source);
+        result = source;
+      }
+      if (params && typeof result === 'string') {
+        for (const [name, val] of Object.entries(params)) result = result.replaceAll('{' + name + '}', String(val));
+      }
+      return result;
+    }
+    window.tbcT = tbcT;
+    function tbcTranslateText(value) {
+      if (tbcLanguage === 'es' || value == null || value === '') return value;
+      const source = String(value);
+      const leading = (source.match(/^\s*/) || [''])[0], trailing = (source.match(/\s*$/) || [''])[0];
+      const clean = source.trim();
+      const dict = TBC_TRANSLATIONS[tbcLanguage];
+      // Toda traducción del DOM pasa por la API central, primero con coincidencia exacta.
+      const exact = dict && Object.prototype.hasOwnProperty.call(dict, clean) ? tbcT(clean) : null;
+      if (exact !== null) return leading + exact + trailing;
+      let out = clean;
+      let replacements = 0;
+      const entries = Object.entries(dict || {}).sort((a,b) => b[0].length-a[0].length);
+      for (const [from, to] of entries) {
+        if (from.length >= 8 && out.includes(from)) {
+          out = out.split(from).join(to);
+          replacements++;
+        }
+      }
+      // Fallback EN cuidadosamente limitado: solo traduce una etiqueta de una
+      // única palabra completa. Nunca reemplaza palabras dentro de frases,
+      // evitando alterar nombres, conjugaciones o el significado de mensajes.
+      // Debe ejecutarse ANTES del registro para no marcar como pendiente una
+      // palabra que este fallback sí consigue traducir.
+      let usedWordFallback = false;
+      if (out === clean && (tbcLanguage === 'en' || tbcLanguage === 'fr')) {
+        const word = clean.toLocaleLowerCase();
+        const fallback = tbcLanguage === 'en' ? TBC_EN_WORDS : TBC_FR_WORDS;
+        if (/^[\p{L}]+$/u.test(word) && Object.prototype.hasOwnProperty.call(fallback, word)) {
+          out = fallback[word];
+          usedWordFallback = out !== clean;
+        }
+      }
+      // Registrar solo después de agotar todos los intentos de traducción.
+      // Las frases con sustituciones parciales van a su registro independiente.
+      if (out === clean) tbcRecordMissing(clean);
+      else if (!usedWordFallback && replacements > 0 && clean.length >= 2 && clean.length <= 240) {
+        tbcPartialTranslations[tbcLanguage].add(clean);
+      }
       return leading + out + trailing;
     }
     function restoreTbcLanguage() {
@@ -8263,7 +8505,13 @@
         const translated = tbcTranslateText(tbcOriginalText.get(node));
         if (translated !== node.nodeValue) node.nodeValue = translated;
       });
-      root.querySelectorAll?.('[placeholder],[title],[aria-label],button[value],input[type=button][value],input[type=submit][value]').forEach(el => {
+      const attrSelector = '[placeholder],[title],[aria-label],button[value],input[type=button][value],input[type=submit][value]';
+      // querySelectorAll no incluye root: procesarlo expresamente evita que los
+      // atributos del propio elemento recién insertado queden en español.
+      const attrElements = [];
+      if (root.nodeType === Node.ELEMENT_NODE && root.matches(attrSelector)) attrElements.push(root);
+      root.querySelectorAll?.(attrSelector).forEach(el => attrElements.push(el));
+      attrElements.forEach(el => {
         ['placeholder','title','aria-label', ...(el.matches('button[value],input[type=button][value],input[type=submit][value]') ? ['value'] : [])].forEach(attr => {
           const val = el.getAttribute(attr); if (val) { let saved = tbcOriginalAttrs.get(el); if (!saved) { saved = {}; tbcOriginalAttrs.set(el, saved); } if (saved[attr] === undefined) saved[attr] = val; el.setAttribute(attr, tbcTranslateText(saved[attr])); }
         });
@@ -8288,16 +8536,56 @@
     setTbcLanguage(tbcLanguage);
     document.addEventListener('DOMContentLoaded', () => setTbcLanguage(tbcLanguage));
     document.querySelectorAll('.language-option').forEach(btn => btn.addEventListener('click', () => setTbcLanguage(btn.dataset.language)));
+    const TBC_TRANSLATABLE_ATTRIBUTES = ['placeholder','title','aria-label','value'];
     const tbcTranslationObserver = new MutationObserver(mutations => {
       if (tbcLanguage === 'es') return;
-      mutations.forEach(m => m.addedNodes.forEach(node => {
-        if (node.nodeType === Node.TEXT_NODE) {
-          if (!tbcOriginalText.has(node)) tbcOriginalText.set(node, node.nodeValue);
-          const translated = tbcTranslateText(tbcOriginalText.get(node)); if (translated !== node.nodeValue) node.nodeValue = translated;
-        } else if (node.nodeType === Node.ELEMENT_NODE) applyTbcLanguage(node);
-      }));
+      for (const m of mutations) {
+        // Text nodes can be edited in place by the game without adding a new DOM node.
+        if (m.type === 'characterData') {
+          const node = m.target;
+          if (!node.parentElement || node.parentElement.closest('script,style,textarea,input,option,[data-no-translate]')) continue;
+          const original = tbcOriginalText.get(node);
+          // Ignore our own translation mutation; otherwise treat the new value as fresh source text.
+          if (original !== undefined && node.nodeValue === tbcTranslateText(original)) continue;
+          tbcOriginalText.set(node, node.nodeValue);
+          const translated = tbcTranslateText(node.nodeValue);
+          if (translated !== node.nodeValue) node.nodeValue = translated;
+          continue;
+        }
+        // Dynamic placeholders, titles, aria labels and button/input values also need retranslation.
+        if (m.type === 'attributes') {
+          const el = m.target, attr = m.attributeName;
+          if (!el || !attr || !el.matches('[placeholder],[title],[aria-label],[value]')) continue;
+          let saved = tbcOriginalAttrs.get(el);
+          if (!saved) { saved = {}; tbcOriginalAttrs.set(el, saved); }
+          const current = el.getAttribute(attr);
+          if (current == null) { delete saved[attr]; continue; }
+          if (saved[attr] !== undefined && current === tbcTranslateText(saved[attr])) continue;
+          saved[attr] = current;
+          const translated = tbcTranslateText(current);
+          if (translated !== current) el.setAttribute(attr, translated);
+          continue;
+        }
+        if (m.type === 'childList') {
+          m.addedNodes.forEach(node => {
+            if (node.nodeType === Node.TEXT_NODE) {
+              if (!node.parentElement || node.parentElement.closest('script,style,textarea,input,option,[data-no-translate]')) return;
+              if (!tbcOriginalText.has(node)) tbcOriginalText.set(node, node.nodeValue);
+              const translated = tbcTranslateText(tbcOriginalText.get(node));
+              if (translated !== node.nodeValue) node.nodeValue = translated;
+            } else if (node.nodeType === Node.ELEMENT_NODE) applyTbcLanguage(node);
+          });
+        }
+      }
     });
-    tbcTranslationObserver.observe(document.body, {childList:true,subtree:true});
+    tbcTranslationObserver.observe(document.body, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+      attributes: true,
+      attributeOldValue: true,
+      attributeFilter: TBC_TRANSLATABLE_ATTRIBUTES
+    });
 
     function startGame() {
         const splash = document.getElementById('splashScreen');
@@ -12711,6 +12999,7 @@
             if (!state.over) {
                 clearSave();
                 state.over = true;
+                tbcCrazyGameplayStop();
                 const rec = getRecord();
                 saveRecord(rec.wins, rec.losses + 1);
                 updateRecordDisplay();
@@ -12734,6 +13023,7 @@
             if (!state.over) {
                 clearSave();
                 state.over = true;
+                tbcCrazyGameplayStop();
                 const rec = getRecord();
                 saveRecord(rec.wins, rec.losses + 1);
                 updateRecordDisplay();
@@ -14034,7 +14324,11 @@
             effectsMasterGain.gain.setTargetAtTime(settings.effectsVolume / 100, audioCtx.currentTime, 0.025);
         }
         if (typeof scWidget !== 'undefined' && scWidget && typeof scWidget.setVolume === 'function') {
-            try { scWidget.setVolume(Math.round(settings.musicVolume)); } catch (e) {}
+            try { scWidget.setVolume(tbcCrazyPlatformMuted ? 0 : Math.round(settings.musicVolume)); } catch (e) {}
+        }
+        // Si CrazyGames tiene el audio silenciado, el control interno no puede reactivarlo.
+        if (tbcCrazyPlatformMuted && audioCtx && audioCtx.state === 'running') {
+            audioCtx.suspend().catch(() => {});
         }
         document.body.classList.toggle('no-screen-shake', !settings.screenShakeEnabled);
         if (!settings.screenShakeEnabled) document.body.style.transform = '';
