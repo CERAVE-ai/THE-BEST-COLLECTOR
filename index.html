@@ -3967,7 +3967,7 @@
             <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#f43f5e;letter-spacing:2px;text-align:center;margin-bottom:7px;">🆕 NOVEDADES DE LA VERSIÓN #72</div>
             <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:#e2e8f0;line-height:1.32;">
                 • <b>Títulos y rangos:</b> desbloquea títulos por progresar en cofres, míticos, ventas, fusiones, subastas, póker y mascotas.<br>
-                • <b>Selector de idomas:</b> ya puedes jugar este juegos en otros idiomas.<br>
+                • <b>Traductor metido:</b> ya puede jugar este juego en mas idiomas.<br>
             </div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
@@ -6685,7 +6685,10 @@
         for (const rank of COLLECTOR_RANKS) {
             if (getCollectorRankProgress(rank).unlocked) best = rank;
         }
-        current.textContent = `${best.icon} ${best.title}`;
+        // Los textos se traducen aquí, al generar las tarjetas dinámicas.
+        // Así también se actualizan al cambiar de idioma sin alterar los datos del rango.
+        current.textContent = `${best.icon} ${tbcT(best.title)}`;
+        const numberLocale = tbcLanguage === 'fr' ? 'fr-FR' : tbcLanguage === 'en' ? 'en-US' : 'es-ES';
         grid.innerHTML = COLLECTOR_RANKS.map(rank => {
             const progress = getCollectorRankProgress(rank);
             const isCurrent = rank.id === best.id;
@@ -6693,13 +6696,13 @@
                 ? rank.requirements.map(([key, target, label]) => {
                     const value = collectorRankMetric(key);
                     const met = value >= target;
-                    const shown = key === 'maxBalance' ? Math.floor(value).toLocaleString('es-ES') : Math.floor(value).toLocaleString('es-ES');
-                    return `<div style="font-size:11px;color:${met ? '#86efac' : '#94a3b8'};margin-top:5px;">${met ? '✓' : '○'} ${label} <span style="opacity:.8">(${shown}/${target.toLocaleString('es-ES')})</span></div>`;
+                    const shown = Math.floor(value).toLocaleString(numberLocale);
+                    return `<div style="font-size:11px;color:${met ? '#86efac' : '#94a3b8'};margin-top:5px;">${met ? '✓' : '○'} ${tbcT(label)} <span style="opacity:.8">(${shown}/${target.toLocaleString(numberLocale)})</span></div>`;
                 }).join('')
-                : '<div style="font-size:11px;color:#86efac;margin-top:7px;">✓ Disponible desde el principio</div>';
+                : `<div style="font-size:11px;color:#86efac;margin-top:7px;">✓ ${tbcT('Disponible desde el principio')}</div>`;
             return `<article style="padding:12px;border:1px solid ${isCurrent ? 'rgba(167,139,250,.65)' : progress.unlocked ? 'rgba(74,222,128,.3)' : 'rgba(255,255,255,.08)'};border-radius:12px;background:${isCurrent ? 'rgba(139,92,246,.12)' : 'rgba(255,255,255,.025)'};">
-                <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:24px;">${progress.unlocked ? rank.icon : '🔒'}</span><div style="font-weight:800;color:${progress.unlocked ? '#e2e8f0' : '#94a3b8'};flex:1;">${rank.title}</div><span style="font-size:9px;font-weight:800;color:${progress.unlocked ? '#86efac' : '#64748b'};">${progress.unlocked ? 'DESBLOQUEADO' : `${progress.done}/${progress.total}`}</span></div>
-                <div style="font-size:11px;color:#94a3b8;margin-top:5px;line-height:1.4;">${rank.desc}</div>${requirements}
+                <div style="display:flex;align-items:center;gap:8px;"><span style="font-size:24px;">${progress.unlocked ? rank.icon : '🔒'}</span><div style="font-weight:800;color:${progress.unlocked ? '#e2e8f0' : '#94a3b8'};flex:1;">${tbcT(rank.title)}</div><span style="font-size:9px;font-weight:800;color:${progress.unlocked ? '#86efac' : '#64748b'};">${progress.unlocked ? tbcT('DESBLOQUEADO') : `${progress.done}/${progress.total}`}</span></div>
+                <div style="font-size:11px;color:#94a3b8;margin-top:5px;line-height:1.4;">${tbcT(rank.desc)}</div>${requirements}
             </article>`;
         }).join('');
     }
@@ -8182,6 +8185,51 @@
     });
     Object.assign(TBC_TRANSLATIONS.fr, {
       'RÁPIDA':'RAPIDE','Los objetos valen un 25% más':'Les objets valent 25 % de plus','🌟 SUERTE MÍTICA':'🌟 CHANCE MYTHIQUE','Los míticos tienen un 2% de probabilidad':'Les objets mythiques ont 2 % de chances','🔥 SUERTE MÁXIMA':'🔥 CHANCE MAXIMALE','Tridente de Poseidón':'Trident de Poséidon','⚠️ Apuesta inválida':'⚠️ Mise invalide','🏆 ¡Todos los bots se retiraron! ¡GANASTE la subasta!':'🏆 Tous les bots se sont retirés ! VOUS AVEZ GAGNÉ l’enchère !','🔇 ¡SILENCIO! Los bots están congelados 5 segundos':'🔇 SILENCE ! Les bots sont immobilisés pendant 5 secondes','❌ Nadie ganó la subasta · objeto devuelto al mercado':'❌ Personne n’a remporté l’enchère · objet remis sur le marché','⚔️ ¡BATALLA COMENZADA!':'⚔️ COMBAT COMMENCÉ !','COMÚN':'COMMUN','ÉPICO':'ÉPIQUE','💀 FUSIÓN FALLIDA':'💀 FUSION ÉCHOUÉE','Mutación:':'Mutation :','La ruleta de 37 números':'Roulette à 37 numéros','🎯 Número elegido:':'🎯 Numéro choisi :','⚠️ Elige un número primero':'⚠️ Choisissez d’abord un numéro','⚠️ Introduce una apuesta válida':'⚠️ Saisissez une mise valide','🎉 ¡GANASTE! El':'🎉 VOUS AVEZ GAGNÉ ! Le','🖱️ ¡EL GLITCH DEL RATÓN te ha infectado! Tu cursor está bajo el agua...':'🖱️ LE GLITCH DE LA SOURIS vous a infecté ! Votre curseur est sous l’eau...','✅ El Glitch del Ratón ha desaparecido... por ahora.':'✅ Le Glitch de la souris a disparu... pour le moment.','👾 ¡EL LADRÓN DE BOTONES ha robado tu botón! Haz clic en él':'👾 LE VOLEUR DE BOUTONS a volé votre bouton ! Cliquez dessus','✨ NIVEL MÁXIMO':'✨ NIVEAU MAXIMAL','PÓQUER':'POKER','TRÍO':'BRELAN','¡VICTORIA! 🏆':'VICTOIRE ! 🏆','Introduce una apuesta válida dentro de tu saldo.':'Saisissez une mise valide ne dépassant pas votre solde.','¡Ganas! Premio total x5. El crupier se pasó.':'Vous gagnez ! Gain total x5. Le croupier a dépassé 21.','¡Blackjack natural! Premio total x5.':'Blackjack naturel ! Gain total x5.','Día de mercado':'Jour du marché','Abre cofres de la categoría Tech antes de que termine el día.':'Ouvrez des coffres de la catégorie Tech avant la fin de la journée.','Abre el árbol para mejorar tus habilidades.':'Ouvrez l’arbre pour améliorer vos compétences.'
+    });
+
+
+    // Traducciones explícitas de los títulos, descripciones y requisitos de rangos.
+    Object.assign(TBC_TRANSLATIONS.en, {
+      'Novato':'Beginner','Aprendiz':'Apprentice','Coleccionista':'Collector','Tasador':'Appraiser',
+      'Subastador':'Auctioneer','Crupier':'Dealer','Maestro coleccionista':'Master Collector','Leyenda':'Legend',
+      'Tu aventura acaba de empezar.':'Your adventure has just begun.',
+      'Empieza a construir tu colección.':'You are starting to build your collection.',
+      'La colección empieza a tener valor.':'Your collection is starting to gain value.',
+      'Sabes cuándo conservar y cuándo vender.':'You know when to keep items and when to sell.',
+      'Dominas las pujas y la gestión del dinero.':'You have mastered bidding and money management.',
+      'También sabes arriesgar con cabeza.':'You also know how to take calculated risks.',
+      'Has dominado varias ramas del juego.':'You have mastered several areas of the game.',
+      'Un título para quienes destacan en casi todo.':'A title for those who excel in almost everything.',
+      'Alcanza nivel 10':'Reach level 10','Abre 25 cofres':'Open 25 chests',
+      'Alcanza nivel 25':'Reach level 25','Abre 100 cofres':'Open 100 chests','Consigue 5 míticos':'Get 5 Mythics',
+      'Vende 50 objetos':'Sell 50 items','Completa 5 fusiones':'Complete 5 fusions','Consigue 10 míticos':'Get 10 Mythics',
+      'Gana 10 subastas':'Win 10 auctions','Alcanza 1.000.000 de fortuna':'Reach 1,000,000 wealth','Alcanza nivel 50':'Reach level 50',
+      'Gana 10 partidas de póker':'Win 10 poker games','Juega 20 partidas de póker':'Play 20 poker games','Alcanza nivel 75':'Reach level 75',
+      'Consigue 3 objetos universales':'Get 3 Universal items','Consigue 3 mascotas':'Get 3 pets','Consigue 25 míticos':'Get 25 Mythics','Alcanza nivel 100':'Reach level 100',
+      'Alcanza nivel 250':'Reach level 250','Abre 1.000 cofres':'Open 1,000 chests','Gana 50 subastas':'Win 50 auctions',
+      'Gana 25 partidas de póker':'Win 25 poker games','Consigue 10 objetos universales':'Get 10 Universal items',
+      'Disponible desde el principio':'Available from the start','DESBLOQUEADO':'UNLOCKED'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+      'Novato':'Débutant','Aprendiz':'Apprenti','Coleccionista':'Collectionneur','Tasador':'Évaluateur',
+      'Subastador':'Commissaire-priseur','Crupier':'Croupier','Maestro coleccionista':'Maître collectionneur','Leyenda':'Légende',
+      'Tu aventura acaba de empezar.':'Votre aventure ne fait que commencer.',
+      'Empieza a construir tu colección.':'Vous commencez à construire votre collection.',
+      'La colección empieza a tener valor.':'Votre collection commence à prendre de la valeur.',
+      'Sabes cuándo conservar y cuándo vender.':'Vous savez quand garder et quand vendre.',
+      'Dominas las pujas y la gestión del dinero.':'Vous maîtrisez les enchères et la gestion de l’argent.',
+      'También sabes arriesgar con cabeza.':'Vous savez aussi prendre des risques calculés.',
+      'Has dominado varias ramas del juego.':'Vous avez maîtrisé plusieurs aspects du jeu.',
+      'Un título para quienes destacan en casi todo.':'Un titre pour ceux qui excellent dans presque tous les domaines.',
+      'Alcanza nivel 10':'Atteignez le niveau 10','Abre 25 cofres':'Ouvrez 25 coffres',
+      'Alcanza nivel 25':'Atteignez le niveau 25','Abre 100 cofres':'Ouvrez 100 coffres','Consigue 5 míticos':'Obtenez 5 mythiques',
+      'Vende 50 objetos':'Vendez 50 objets','Completa 5 fusiones':'Terminez 5 fusions','Consigue 10 míticos':'Obtenez 10 mythiques',
+      'Gana 10 subastas':'Remportez 10 enchères','Alcanza 1.000.000 de fortuna':'Atteignez 1 000 000 de fortune','Alcanza nivel 50':'Atteignez le niveau 50',
+      'Gana 10 partidas de póker':'Gagnez 10 parties de poker','Juega 20 partidas de póker':'Jouez 20 parties de poker','Alcanza nivel 75':'Atteignez le niveau 75',
+      'Consigue 3 objetos universales':'Obtenez 3 objets universels','Consigue 3 mascotas':'Obtenez 3 animaux','Consigue 25 míticos':'Obtenez 25 mythiques','Alcanza nivel 100':'Atteignez le niveau 100',
+      'Alcanza nivel 250':'Atteignez le niveau 250','Abre 1.000 cofres':'Ouvrez 1 000 coffres','Gana 50 subastas':'Remportez 50 enchères',
+      'Gana 25 partidas de póker':'Gagnez 25 parties de poker','Consigue 10 objetos universales':'Obtenez 10 objets universels',
+      'Disponible desde el principio':'Disponible dès le début','DESBLOQUEADO':'DÉBLOQUÉ'
     });
 
     for (const lang of ['en','fr']) Object.assign(TBC_TRANSLATIONS[lang], TBC_MORE_TRANSLATIONS[lang]);
