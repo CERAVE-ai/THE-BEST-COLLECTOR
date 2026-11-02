@@ -4024,7 +4024,7 @@
     <header>
         <div>
             <div class="header-title">THE BEST <span id="titleTheme">COLLECTOR</span></div>
-            <div class="header-sub">Meta: 2.000.000.000.000.000 monedas · By Aritz</div>
+            <div class="header-sub">Meta: 200.000.000.000.000.000 monedas · By Aritz</div>
         </div>
         <div style="display:flex;align-items:center;gap:20px;" id="header-right">
             <div id="bonusBox" style="text-align:center;">
@@ -4421,7 +4421,7 @@
             <div class="ruleta-marker" style="background:#fff1b8;box-shadow:0 0 18px #fbbf24,0 0 42px rgba(239,68,68,0.62);"></div>
             <div class="ruleta-reel" id="anunciosEspanaRuletaReel"></div>
         </div>
-        <div class="ruleta-cost-info">Precio por tirada: <span style="color:#ffe08a;">70.000.000.000 €</span> · 5 premios publicitarios exclusivos</div>
+        <div class="ruleta-cost-info">Precio por tirada: <span style="color:#ffe08a;">70.000.000.000 $</span> · 5 premios publicitarios exclusivos</div>
         <button class="ruleta-spin-btn" id="anunciosEspanaRuletaSpinBtn" style="background:linear-gradient(115deg,#991b1b,#dc2626 42%,#b45309 72%,#eab308);box-shadow:0 0 34px rgba(220,38,38,0.48),0 0 20px rgba(251,191,36,0.32),0 8px 24px rgba(0,0,0,0.5);">🇪🇸 GIRAR ANUNCIOS ESPAÑA</button>
     </div>
 
@@ -5347,9 +5347,12 @@
     let tbcCrazySdkInitPromise = null;
     let tbcCrazySettingsListener = null;
     let tbcCrazyPlatformMuted = false;
+    let tbcCrazyAdMuted = false;
+    let tbcCrazyAdRequestActive = false;
+    let tbcCrazyGameplayWasActiveBeforeAd = false;
 
     function tbcCrazyApplyAudioSetting(settings) {
-        const muted = !!(settings && settings.muteAudio);
+        const muted = !!(settings && settings.muteAudio) || tbcCrazyAdMuted;
         const wasMutedByPlatform = tbcCrazyPlatformMuted;
         tbcCrazyPlatformMuted = muted;
 
@@ -5452,6 +5455,98 @@
         }
         tbcCrazyGameplayActive = false;
     }
+
+    // Solicitud de anuncios de vídeo del SDK v3.
+    // Los anuncios midgame se piden en una transición real (pantalla de derrota).
+    // Los rewarded solo deben añadirse cuando exista una recompensa opcional clara.
+    function tbcCrazySetAdAudioMuted(muted) {
+        tbcCrazyAdMuted = !!muted;
+        try {
+            const sdkSettings = (window.CrazyGames && window.CrazyGames.SDK &&
+                window.CrazyGames.SDK.game && window.CrazyGames.SDK.game.settings) || {};
+            tbcCrazyApplyAudioSetting(sdkSettings);
+        } catch (e) {}
+    }
+
+    function tbcCrazyRequestAd(type = 'midgame', onReward = null) {
+        if (tbcCrazyAdRequestActive) return false;
+        if (type !== 'midgame' && type !== 'rewarded') {
+            console.warn('[CrazyGames SDK] Invalid ad type:', type);
+            return false;
+        }
+
+        initializeCrazyGamesSdk().then(ready => {
+            if (!ready || !window.CrazyGames || !window.CrazyGames.SDK ||
+                !window.CrazyGames.SDK.ad ||
+                typeof window.CrazyGames.SDK.ad.requestAd !== 'function') {
+                console.info('[CrazyGames SDK] Ads are unavailable in this environment.');
+                return;
+            }
+
+            tbcCrazyAdRequestActive = true;
+            let adStarted = false;
+            let callbackHandled = false;
+
+            const finishAd = (successful, error) => {
+                if (callbackHandled) return;
+                callbackHandled = true;
+                tbcCrazyAdRequestActive = false;
+                tbcCrazySetAdAudioMuted(false);
+
+                // Reanudar gameplay únicamente si estaba activo antes del anuncio
+                // y la partida sigue en curso.
+                if (tbcCrazyGameplayWasActiveBeforeAd && !state.over) {
+                    tbcCrazyGameplayStart();
+                }
+                tbcCrazyGameplayWasActiveBeforeAd = false;
+
+                if (successful) {
+                    if (type === 'rewarded' && typeof onReward === 'function') {
+                        try { onReward(); } catch (e) {
+                            console.error('[CrazyGames SDK] Reward callback failed:', e);
+                        }
+                    }
+                } else {
+                    // Nunca entregar recompensas cuando el anuncio falla o no está disponible.
+                    console.info('[CrazyGames SDK] Ad not shown:', error || 'unknown error');
+                }
+            };
+
+            const callbacks = {
+                adStarted: () => {
+                    adStarted = true;
+                    tbcCrazyGameplayWasActiveBeforeAd = tbcCrazyGameplayActive;
+                    tbcCrazyGameplayStop();
+                    tbcCrazySetAdAudioMuted(true);
+                    console.info('[CrazyGames SDK] Ad started:', type);
+                },
+                adFinished: () => {
+                    console.info('[CrazyGames SDK] Ad finished:', type);
+                    finishAd(true);
+                },
+                adError: (error, errorData) => {
+                    console.warn('[CrazyGames SDK] Ad error:', error, errorData);
+                    finishAd(false, errorData || error);
+                }
+            };
+
+            try {
+                // SDK v3 usa callbacks; requestAd no devuelve una Promise.
+                window.CrazyGames.SDK.ad.requestAd(type, callbacks);
+            } catch (error) {
+                finishAd(false, error);
+            }
+        }).catch(error => {
+            tbcCrazyAdRequestActive = false;
+            console.warn('[CrazyGames SDK] Could not request ad:', error);
+        });
+
+        return true;
+    }
+
+    // API opcional para futuras recompensas voluntarias desde la interfaz.
+    // Ejemplo: window.TBC_requestCrazyAd('rewarded', () => grantYourReward());
+    window.TBC_requestCrazyAd = tbcCrazyRequestAd;
 
     // No se escucha visibilitychange para gameplay: CrazyGames gestiona el foco
     // y cambiar de pestaña no debe contarse como una pausa del juego.
@@ -6897,6 +6992,9 @@
                     flash.remove();
                     cracks.remove();
                     document.getElementById('loseScreen').classList.add('show');
+                    // La derrota es una transición natural entre partidas: no interrumpe
+                    // una acción ni aparece al abrir menús o tiendas.
+                    setTimeout(() => tbcCrazyRequestAd('midgame'), 900);
                 }, 1000);
             }, 1800);
 
@@ -8087,6 +8185,31 @@
     });
 
     for (const lang of ['en','fr']) Object.assign(TBC_TRANSLATIONS[lang], TBC_MORE_TRANSLATIONS[lang]);
+
+    // Traducciones de datos del juego (cofres, objetos, mascotas y premios).
+    // Los nombres originales se conservan en los datos para no alterar partidas,
+    // identificadores, intercambios ni comprobaciones internas.
+    Object.assign(TBC_TRANSLATIONS.en, {
+      'Dulce':'Sweet','Cofre Dulce':'Sweet Chest','Natura':'Nature','Cofre Natura':'Nature Chest','Cofre Tech':'Tech Chest','Gaming':'Gaming','Cofre Gaming':'Gaming Chest','Espacial':'Space','Cofre Espacial':'Space Chest','Joyería':'Jewelry','Bóveda Joyería':'Jewelry Vault','Coches':'Cars','Garaje Premium':'Premium Garage','Casas':'Houses','Inmobiliaria':'Real Estate','Memes':'Memes','Cofre Memes':'Meme Chest','Santuario Air-Fryer':'Air Fryer Shrine','Cósmico':'Cosmic','Cofre Cósmico':'Cosmic Chest','Países':'Countries','Cofre de Países':'Countries Chest','Celebridades':'Celebrities','Cofre Celebridades':'Celebrity Chest','Villanos':'Villains','Reunión de Villanos':'Villains Gathering','Cofre Pacific Rim':'Pacific Rim Chest','Cofre Transformers':'Transformers Chest','Cofre Anime':'Anime Chest','Cofre Roblox':'Roblox Chest','Cofre Solo Leveling':'Solo Leveling Chest','Cofre Supercell':'Supercell Chest','Cofre Pokémon':'Pokémon Chest',"Cofre JoJo's Bizarre Adventure":"JoJo's Bizarre Adventure Chest",'Santuario Cerave':'CeraVe Shrine','Garaje Premium':'Premium Garage',
+      'Gominola':'Gummy Candy','Piruleta Galáctica':'Galactic Lollipop','Pastel Gourmet':'Gourmet Cake','Cacao Mítico':'Mythic Cocoa','Ambrosía':'Ambrosia','Piedra de Río':'River Stone','Bonsai Milenario':'Millennial Bonsai','Orquídea de Cristal':'Crystal Orchid','Lobo Plateado':'Silver Wolf','Madre Tierra':'Mother Earth','Holograma':'Hologram','Supercomputador':'Supercomputer','Conciencia Digital':'Digital Consciousness','Alfombrilla':'Mouse Pad','Silla Ergonómica':'Ergonomic Chair','Consola Next-Gen':'Next-Gen Console','Setup RGB Extremo':'Extreme RGB Setup','Server de Minecraft':'Minecraft Server','Polvo de Estrellas':'Stardust','Fragmento Voyager':'Voyager Fragment','Anillo Planetario':'Planetary Ring','Meteorito de Oro':'Golden Meteorite','Agujero de Gusano':'Wormhole','Anillo de Plata':'Silver Ring','Collar de Perlas':'Pearl Necklace','Reloj Suizo':'Swiss Watch','Diamante Azul':'Blue Diamond','El Arca de Oro':'The Golden Ark','Utilitario':'Compact Car','Todoterreno':'Off-Road Vehicle','Deportivo de Lujo':'Luxury Sports Car','Hipercoche':'Hypercar','Nave Terrestre':'Landship','Estudio Urbano':'Urban Studio','Chalet Adosado':'Townhouse','Villa con Piscina':'Villa with Pool','Mansión en Hollywood':'Hollywood Mansion','Castillo Medieval':'Medieval Castle','Video Viral':'Viral Video','Meme Histórico':'Historic Meme','El Internet':'The Internet','Cesta de Recambio':'Replacement Basket','Modelo Básico':'Basic Model','Air-Fryer Digital':'Digital Air Fryer','Edición Oro Cocina':'Kitchen Gold Edition','La Freidora de Dios':'The God Fryer','Japón':'Japan','Rusia':'Russia','China':'China','Estados Unidos':'United States','España':'Spain','Copia Barata':'Cheap Copy','Cerave Barato':'Cheap CeraVe','Cerave Original':'Original CeraVe','Cerave de Oro':'Golden CeraVe','Cerave Cósmico':'Cosmic CeraVe',
+      'Gato':'Cat','Perro':'Dog','Lobo':'Wolf','Serpiente':'Snake','Dragón':'Dragon','Dragón Rojo':'Red Dragon','Dragón Fantasma':'Ghost Dragon','Dragón Segador De La Muerte':'Death Reaper Dragon','Erlantz Calvo Definitivo':'Ultimate Bald Erlantz','Eñaut El Gigante Colosal':'Eñaut the Colossal Giant','Sin beneficios':'No benefits','Ninguna mascota equipada':'No pet equipped','COMPRA Y EQUIPA UNA MASCOTA · SOLO UNA PUEDE ESTAR ACTIVA A LA VEZ':'BUY AND EQUIP A PET · ONLY ONE CAN BE ACTIVE AT A TIME','EQUIPADA:':'EQUIPPED:','EQUIPADA':'EQUIPPED','Comprar':'Buy','Equipar':'Equip','Desequipar':'Unequip','+2% más dinero':'+2% more money','+5% dinero · +5% suerte':'+5% money · +5% luck','+17% más suerte':'+17% more luck','+15% dinero · +20% suerte':'+15% money · +20% luck','+50% dinero · +20% suerte':'+50% money · +20% luck','+40% dinero · +40% suerte':'+40% money · +40% luck','+250% dinero · +200% suerte · +250% ruleta':'+250% money · +200% luck · +250% roulette speed','+500% dinero · +450% suerte · +300% ruleta':'+500% money · +450% luck · +300% roulette speed','+1250% dinero · +100% suerte':'+1250% money · +100% luck',
+      '2 iguales':'2 matching','5 PREMIOS PUBLICITARIOS EXCLUSIVOS':'5 EXCLUSIVE ADVERTISING PRIZES','NECESITAS':'YOU NEED','APUESTA':'BET','GIRAR':'SPIN','MÁQUINA DE JACKPOT':'JACKPOT MACHINE','Apuesta tus monedas · ¡Prueba tu suerte!':'Bet your coins · Try your luck!','Recuperas':'You get back','Ninguna mascota equipada':'No pet equipped'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+      'Dulce':'Sucré','Cofre Dulce':'Coffre sucré','Natura':'Nature','Cofre Natura':'Coffre nature','Cofre Tech':'Coffre technologie','Cofre Gaming':'Coffre gaming','Espacial':'Spatial','Cofre Espacial':'Coffre spatial','Joyería':'Bijoux','Bóveda Joyería':'Coffre-fort à bijoux','Coches':'Voitures','Garaje Premium':'Garage premium','Casas':'Maisons','Inmobiliaria':'Agence immobilière','Cofre Memes':'Coffre à mèmes','Santuario Air-Fryer':'Sanctuaire friteuse à air','Cósmico':'Cosmique','Cofre Cósmico':'Coffre cosmique','Países':'Pays','Cofre de Países':'Coffre des pays','Celebridades':'Célébrités','Cofre Celebridades':'Coffre des célébrités','Villanos':'Vilains','Reunión de Villanos':'Réunion de vilains','Cofre Pacific Rim':'Coffre Pacific Rim','Cofre Transformers':'Coffre Transformers','Cofre Anime':'Coffre anime','Cofre Roblox':'Coffre Roblox','Cofre Solo Leveling':'Coffre Solo Leveling','Cofre Supercell':'Coffre Supercell','Cofre Pokémon':'Coffre Pokémon',"Cofre JoJo's Bizarre Adventure":"Coffre JoJo's Bizarre Adventure",'Santuario Cerave':'Sanctuaire CeraVe',
+      'Gominola':'Bonbon gélifié','Piruleta Galáctica':'Sucette galactique','Pastel Gourmet':'Gâteau gourmet','Cacao Mítico':'Cacao mythique','Ambrosía':'Ambroisie','Piedra de Río':'Pierre de rivière','Bonsai Milenario':'Bonsaï millénaire','Orquídea de Cristal':'Orchidée de cristal','Lobo Plateado':'Loup argenté','Madre Tierra':'Terre-Mère','Holograma':'Hologramme','Supercomputador':'Superordinateur','Conciencia Digital':'Conscience numérique','Alfombrilla':'Tapis de souris','Silla Ergonómica':'Chaise ergonomique','Consola Next-Gen':'Console nouvelle génération','Setup RGB Extremo':'Configuration RGB extrême','Server de Minecraft':'Serveur Minecraft','Polvo de Estrellas':'Poussière d’étoiles','Fragmento Voyager':'Fragment Voyager','Anillo Planetario':'Anneau planétaire','Meteorito de Oro':'Météorite dorée','Agujero de Gusano':'Trou de ver','Anillo de Plata':'Bague en argent','Collar de Perlas':'Collier de perles','Reloj Suizo':'Montre suisse','Diamante Azul':'Diamant bleu','El Arca de Oro':'L’Arche d’or','Utilitario':'Petite voiture','Todoterreno':'Tout-terrain','Deportivo de Lujo':'Voiture de sport de luxe','Hipercoche':'Hypercar','Nave Terrestre':'Vaisseau terrestre','Estudio Urbano':'Studio urbain','Chalet Adosado':'Maison mitoyenne','Villa con Piscina':'Villa avec piscine','Mansión en Hollywood':'Manoir à Hollywood','Castillo Medieval':'Château médiéval','Video Viral':'Vidéo virale','Meme Histórico':'Mème historique','El Internet':'Internet','Cesta de Recambio':'Panier de rechange','Modelo Básico':'Modèle de base','Air-Fryer Digital':'Friteuse à air numérique','Edición Oro Cocina':'Édition or cuisine','La Freidora de Dios':'La friteuse divine','Japón':'Japon','Rusia':'Russie','China':'Chine','Estados Unidos':'États-Unis','España':'Espagne','Copia Barata':'Copie bon marché','Cerave Barato':'CeraVe bon marché','Cerave Original':'CeraVe original','Cerave de Oro':'CeraVe doré','Cerave Cósmico':'CeraVe cosmique',
+      'Gato':'Chat','Perro':'Chien','Lobo':'Loup','Serpiente':'Serpent','Dragón':'Dragon','Dragón Rojo':'Dragon rouge','Dragón Fantasma':'Dragon fantôme','Dragón Segador De La Muerte':'Dragon faucheur de la mort','Erlantz Calvo Definitivo':'Erlantz chauve ultime','Eñaut El Gigante Colosal':'Eñaut le géant colossal','Sin beneficios':'Aucun avantage','Ninguna mascota equipada':'Aucun animal équipé','COMPRA Y EQUIPA UNA MASCOTA · SOLO UNA PUEDE ESTAR ACTIVA A LA VEZ':'ACHETEZ ET ÉQUIPEZ UN ANIMAL · UN SEUL PEUT ÊTRE ACTIF À LA FOIS','EQUIPADA:':'ÉQUIPÉ :','EQUIPADA':'ÉQUIPÉ','Comprar':'Acheter','Equipar':'Équiper','Desequipar':'Déséquiper','+2% más dinero':'+2 % d’argent','+5% dinero · +5% suerte':'+5 % d’argent · +5 % de chance','+17% más suerte':'+17 % de chance','+15% dinero · +20% suerte':'+15 % d’argent · +20 % de chance','+50% dinero · +20% suerte':'+50 % d’argent · +20 % de chance','+40% dinero · +40% suerte':'+40 % d’argent · +40 % de chance','+250% dinero · +200% suerte · +250% ruleta':'+250 % d’argent · +200 % de chance · +250 % de vitesse de roulette','+500% dinero · +450% suerte · +300% ruleta':'+500 % d’argent · +450 % de chance · +300 % de vitesse de roulette','+1250% dinero · +100% suerte':'+1250 % d’argent · +100 % de chance',
+      '2 iguales':'2 identiques','5 PREMIOS PUBLICITARIOS EXCLUSIVOS':'5 PRIX PUBLICITAIRES EXCLUSIFS','APUESTA':'MISE','GIRAR':'TOURNER','MÁQUINA DE JACKPOT':'MACHINE À JACKPOT','Apuesta tus monedas · ¡Prueba tu suerte!':'Misez vos pièces · Tentez votre chance !','Recuperas':'Vous récupérez'
+    });
+
+    // Nombres propios y títulos de franquicias que se conservan, más etiquetas
+    // de cofres/objetos que requieren una traducción literal en cada idioma.
+    Object.assign(TBC_TRANSLATIONS.en, {
+      'USB 1TB':'1TB USB Drive','Smartphone Pro':'Pro Smartphone','Air-Fryer Digital':'Digital Air Fryer','Marte':'Mars','Tierra':'Earth','Sol':'Sun','Pepe Frog':'Pepe Frog','Doge Coin':'Doge Coin','Ariana Grande':'Ariana Grande','Anne Hathaway':'Anne Hathaway','Robert Downey Jr.':'Robert Downey Jr.','Joaquin Phoenix':'Joaquin Phoenix','Hayden Christensen':'Hayden Christensen','Thanos':'Thanos','Joker':'Joker','Sauron':'Sauron','Bowser':'Bowser','Darth Vader':'Darth Vader','Gipsy Avenger':'Gipsy Avenger','Crimson Typhoon':'Crimson Typhoon','Cherno Alpha':'Cherno Alpha','Striker Eureka':'Striker Eureka','Gipsy Danger':'Gipsy Danger','Starscream':'Starscream','Bumblebee':'Bumblebee','Shockwave':'Shockwave','Optimus Prime':'Optimus Prime','Megatron':'Megatron','Midoriya':'Midoriya','Naruto':'Naruto','Monkey D. Luffy':'Monkey D. Luffy','Goku':'Goku','Garou':'Garou','The Forge':'The Forge','99 Noches en el Bosque':'99 Nights in the Forest','Blox Fruits':'Blox Fruits','Rivals':'Rivals','Shenanigans de Jujutsu':'Jujutsu Shenanigans','Ant Queen':'Ant Queen','Zhigang':'Zhigang','Beru/Ant King':'Beru/Ant King','Sung Jin-Woo':'Sung Jin-Woo','Ashborn':'Ashborn','Boom Beach':'Boom Beach','Hay Day':'Hay Day','Clash of Clans':'Clash of Clans','Clash Royale':'Clash Royale','Brawl Stars':'Brawl Stars','Dialga':'Dialga','Palkia':'Palkia','Giratina':'Giratina','Mega-Mewtwo Y':'Mega Mewtwo Y','Arceus':'Arceus','Tooru':'Tooru','Enrico Pucci':'Enrico Pucci','DIO':'DIO','Jotaro Kujo':'Jotaro Kujo','Giorno Giovanna':'Giorno Giovanna','UY Scuti':'UY Scuti','TON 618':'TON 618'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+      'USB 1TB':'Clé USB 1 To','Smartphone Pro':'Smartphone Pro','Air-Fryer Digital':'Friteuse à air numérique','Marte':'Mars','Tierra':'Terre','Sol':'Soleil','Pepe Frog':'Pepe Frog','Doge Coin':'Doge Coin','Ariana Grande':'Ariana Grande','Anne Hathaway':'Anne Hathaway','Robert Downey Jr.':'Robert Downey Jr.','Joaquin Phoenix':'Joaquin Phoenix','Hayden Christensen':'Hayden Christensen','Thanos':'Thanos','Joker':'Joker','Sauron':'Sauron','Bowser':'Bowser','Darth Vader':'Dark Vador','Gipsy Avenger':'Gipsy Avenger','Crimson Typhoon':'Crimson Typhoon','Cherno Alpha':'Cherno Alpha','Striker Eureka':'Striker Eureka','Gipsy Danger':'Gipsy Danger','Starscream':'Starscream','Bumblebee':'Bumblebee','Shockwave':'Shockwave','Optimus Prime':'Optimus Prime','Megatron':'Mégatron','Midoriya':'Midoriya','Naruto':'Naruto','Monkey D. Luffy':'Monkey D. Luffy','Goku':'Goku','Garou':'Garou','The Forge':'The Forge','99 Noches en el Bosque':'99 nuits dans la forêt','Blox Fruits':'Blox Fruits','Rivals':'Rivals','Shenanigans de Jujutsu':'Jujutsu Shenanigans','Ant Queen':'Reine des fourmis','Zhigang':'Zhigang','Beru/Ant King':'Beru/Roi des fourmis','Sung Jin-Woo':'Sung Jin-Woo','Ashborn':'Ashborn','Boom Beach':'Boom Beach','Hay Day':'Hay Day','Clash of Clans':'Clash of Clans','Clash Royale':'Clash Royale','Brawl Stars':'Brawl Stars','Dialga':'Dialga','Palkia':'Palkia','Giratina':'Giratina','Mega-Mewtwo Y':'Méga-Mewtwo Y','Arceus':'Arceus','Tooru':'Tooru','Enrico Pucci':'Enrico Pucci','DIO':'DIO','Jotaro Kujo':'Jotaro Kujo','Giorno Giovanna':'Giorno Giovanna','UY Scuti':'UY Scuti','TON 618':'TON 618'
+    });
 
     const tbcOriginalText = new WeakMap();
     const tbcOriginalAttrs = new WeakMap();
@@ -10414,8 +10537,8 @@
         const affordable = state.balance >= ANUNCIOS_ESPANA_SPIN_COST;
         btn.disabled = !affordable || state.over || anunciosEspanaRuletaSpinning;
         btn.textContent = affordable
-            ? '🇪🇸 GIRAR ANUNCIOS ESPAÑA (70.000.000.000 €)'
-            : 'NECESITAS 70.000.000.000 €';
+            ? '🇪🇸 GIRAR ANUNCIOS ESPAÑA (70.000.000.000 $)'
+            : 'NECESITAS 70.000.000.000 $';
         btn.style.opacity = btn.disabled ? '0.45' : '1';
         btn.style.cursor = btn.disabled ? 'not-allowed' : 'pointer';
     }
