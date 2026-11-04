@@ -4618,6 +4618,29 @@
 @keyframes levelUpFade { 0%{opacity:0;} 12%{opacity:1;} 70%{opacity:1;} 100%{opacity:0;} }
 #levelUpOverlay.show #levelUpInner { animation:levelUpPop 0.5s cubic-bezier(0.34,1.56,0.64,1) forwards; }
 @keyframes levelUpPop { from{transform:scale(0.2);opacity:0;} to{transform:scale(1);opacity:1;} }
+
+/* Consistency pass across reward and system menus */
+.modal-overlay{padding:clamp(12px,3vw,24px);backdrop-filter:blur(16px) saturate(1.15)}
+.modal-box{border-radius:22px;border-color:rgba(148,163,184,.22);box-shadow:0 24px 80px rgba(0,0,0,.42)}
+.modal-close-btn{border-radius:12px;letter-spacing:2px;font-weight:800;transition:transform .18s,filter .18s,background .18s}
+.modal-close-btn:hover{transform:translateY(-1px);filter:brightness(1.08)}
+button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
+/* TBC polish pass: vitrina layout and reward hierarchy */
+#vitrinaModal .vitrina-tab{padding:10px 14px;border-radius:11px;border:1px solid #475569;background:linear-gradient(180deg,#1e293b,#0f172a);color:#e2e8f0;font-weight:800;letter-spacing:.01em;cursor:pointer;transition:transform .18s,border-color .18s,background .18s;box-shadow:0 5px 14px rgba(0,0,0,.18)}
+#vitrinaModal .vitrina-tab:hover{transform:translateY(-2px);border-color:#94a3b8}
+#vitrinaModal .vitrina-tab.is-active{border-color:#fbbf24;background:linear-gradient(135deg,#43320b,#312e81);box-shadow:0 0 0 1px rgba(251,191,36,.18),0 7px 20px rgba(99,102,241,.18)}
+#vitrinaModal #vitrinaTabs{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0 18px}
+#vitrinaModal #vitrinaGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(125px,1fr));gap:10px}
+#vitrinaModal .vitrina-card{padding:13px 10px;border-radius:13px;border:1px solid #334155;background:linear-gradient(160deg,rgba(30,41,59,.92),rgba(15,23,42,.96));text-align:center;min-height:124px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:transform .18s,border-color .18s,box-shadow .18s}
+#vitrinaModal .vitrina-card.is-found{border-color:rgba(34,197,94,.55);box-shadow:inset 0 0 18px rgba(34,197,94,.045)}
+#vitrinaModal .vitrina-card.is-found:hover{transform:translateY(-3px);box-shadow:0 9px 20px rgba(0,0,0,.22)}
+#vitrinaModal .vitrina-card-icon{font-size:29px;filter:drop-shadow(0 3px 5px rgba(0,0,0,.25))}
+#vitrinaModal .vitrina-card-name{font-weight:800;font-size:12px;line-height:1.35;color:#f8fafc;overflow-wrap:anywhere}
+#vitrinaModal .vitrina-card-source{font-size:10px;line-height:1.3;color:#94a3b8;overflow-wrap:anywhere}
+#vitrinaModal .vitrina-reward-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:7px 0;padding:9px 11px;border-radius:9px;background:rgba(30,41,59,.62);font-size:12px}
+#vitrinaModal .vitrina-reward-row strong{white-space:nowrap;color:#fbbf24;font-size:10px;text-transform:uppercase;letter-spacing:.04em}
+@media(max-width:600px){#vitrinaModal #vitrinaGrid{grid-template-columns:repeat(2,minmax(0,1fr))}#vitrinaModal .vitrina-reward-row{align-items:flex-start;flex-direction:column;gap:4px}}
+@media(prefers-reduced-motion:reduce){#vitrinaModal .vitrina-tab,#vitrinaModal .vitrina-card{transition:none}}
 </style>
 
 <!-- ══════════════ PRÉSTAMOS MODAL ══════════════ -->
@@ -6196,7 +6219,7 @@
                 state.vitrinaBuffEnds = state.vitrinaBuffEnds || {};
                 if (r.luck) state.vitrinaBuffEnds.luck = Math.max(Number(state.vitrinaBuffEnds.luck)||0, endLuck);
                 if (r.money) state.vitrinaBuffEnds.money = Math.max(Number(state.vitrinaBuffEnds.money)||0, endMoney);
-                if (typeof showToast === 'function') showToast('🏆 Vitrina: recompensa desbloqueada — ' + r.label);
+                if (typeof showToast === 'function') { const msg = tbcLanguage==='en' ? ({25:'×2 luck · 5 minutes',50:'×2 money · 10 minutes',100:'×2 luck and ×2 money · 20 minutes',160:'×2 luck · 60 minutes and ×2 money · 30 minutes'}[r.n]) : tbcLanguage==='fr' ? ({25:'×2 chance · 5 minutes',50:'×2 argent · 10 minutes',100:'×2 chance et ×2 argent · 20 minutes',160:'×2 chance · 60 minutes et ×2 argent · 30 minutes'}[r.n]) : r.label; showToast((tbcLanguage==='en'?'🏆 Showcase: reward unlocked — ':tbcLanguage==='fr'?'🏆 Vitrine : récompense débloquée — ':'🏆 Vitrina: recompensa desbloqueada — ') + msg); }
             }
         });
         saveVitrinaData(); saveGame();
@@ -6205,19 +6228,58 @@
         const catalog = vitrinaCatalog();
         const tabs = document.getElementById('vitrinaTabs');
         const grid = document.getElementById('vitrinaGrid'); if (!tabs || !grid) return;
-        const labels = {normal:'⬜ Objetos normales',roto:'💔 Roto',radiactivo:'☢️ Radiactivo',cosmico:'🌌 Cósmico',universal:'✨ Universal'};
+        const tr = (es, en, fr) => tbcLanguage === 'en' ? en : tbcLanguage === 'fr' ? fr : es;
+        const sourceLabels = {
+            'Súper Ruleta Mítica': tr('Súper Ruleta Mítica','Super Mythic Roulette','Super roulette mythique'),
+            'Ruleta Hyper Mítica': tr('Ruleta Hyper Mítica','Hyper Mythic Roulette','Roulette hyper mythique'),
+            'Ruleta de Idiotas': tr('Ruleta de Idiotas','Idiots Roulette','Roulette des idiots'),
+            'Anuncios España': tr('Anuncios España','Spain Ads','Publicités Espagne'),
+            'CeraVe Trascendencia': tr('CeraVe Trascendencia','CeraVe Transcendence','Transcendance CeraVe')
+        };
+        const mutationNames = {
+            normal: tr('Objetos normales','Normal items','Objets normaux'),
+            roto: tr('Roto','Broken','Cassé'),
+            radiactivo: tr('Radiactivo','Radioactive','Radioactif'),
+            cosmico: tr('Cósmico','Cosmic','Cosmique'),
+            universal: tr('Universal','Universal','Universel')
+        };
+        const labels = {normal:'⬜ '+mutationNames.normal,roto:'💔 '+mutationNames.roto,radiactivo:'☢️ '+mutationNames.radiactivo,cosmico:'🌌 '+mutationNames.cosmico,universal:'✨ '+mutationNames.universal};
         tabs.innerHTML = '';
-        VITRINA_MUTATIONS.forEach(m => { const b=document.createElement('button'); b.type='button'; b.textContent=labels[m]; b.style.cssText='padding:9px 12px;border-radius:8px;border:1px solid '+(vitrinaSection===m?'#fbbf24':'#475569')+';background:'+(vitrinaSection===m?'#312e81':'#1e293b')+';color:white;cursor:pointer'; b.onclick=()=>{vitrinaSection=m;renderVitrina();}; tabs.appendChild(b); });
+        VITRINA_MUTATIONS.forEach(m => {
+            const b=document.createElement('button'); b.type='button'; b.textContent=labels[m];
+            b.className='vitrina-tab'+(vitrinaSection===m?' is-active':'');
+            b.setAttribute('aria-pressed',String(vitrinaSection===m));
+            b.onclick=()=>{vitrinaSection=m;renderVitrina();}; tabs.appendChild(b);
+        });
         const ids = new Set(vitrinaData[vitrinaSection]);
-        const sectionCatalog = catalog;
-        const count = sectionCatalog.filter(x=>ids.has(x.id)).length;
+        const count = catalog.filter(x=>ids.has(x.id)).length;
         grid.innerHTML = '';
-        sectionCatalog.forEach(item => { const got=ids.has(item.id); const card=document.createElement('div'); card.style.cssText='padding:12px;border-radius:10px;border:1px solid '+(got?'#22c55e':'#334155')+';background:'+(got?'rgba(34,197,94,.08)':'#111827')+';text-align:center;min-height:105px'; card.innerHTML='<div style="font-size:28px">'+(got?item.icon:'❔')+'</div><div style="font-weight:700;font-size:12px;margin-top:6px">'+(got?item.name:'Objeto desconocido')+'</div><div style="font-size:10px;color:#94a3b8;margin-top:5px">'+(got?item.source:'???')+'</div>'; grid.appendChild(card); });
+        catalog.forEach(item => {
+            const got=ids.has(item.id), card=document.createElement('div');
+            card.className='vitrina-card'+(got?' is-found':' is-unknown');
+            const icon=document.createElement('div'); icon.className='vitrina-card-icon'; icon.textContent=got?(item.icon||'🎁'):'❔';
+            const name=document.createElement('div'); name.className='vitrina-card-name';
+            name.textContent=got?tbcTranslateText(item.name):tr('Objeto desconocido','Unknown item','Objet inconnu');
+            const source=document.createElement('div'); source.className='vitrina-card-source';
+            source.textContent=got?(sourceLabels[item.source]||tbcTranslateText(item.source)): '???';
+            card.append(icon,name,source); grid.appendChild(card);
+        });
         const normalCount=vitrinaNormalCount();
-        document.getElementById('vitrinaSummary').textContent = count+' / '+sectionCatalog.length+' descubiertos en esta sección. Colección normal: '+normalCount+' / 160.';
+        document.getElementById('vitrinaSummary').textContent = `${count} / ${catalog.length} ${tr('descubiertos en esta sección. Colección normal:','discovered in this section. Normal collection:','découverts dans cette section. Collection normale :')} ${normalCount} / 160.`;
         document.getElementById('vitrinaProgressTop').textContent = normalCount+'/160';
-        const rewardText = [{n:25,t:'×2 suerte · 5 min'},{n:50,t:'×2 dinero · 10 min'},{n:100,t:'×2 suerte y dinero · 20 min'},{n:160,t:'×2 suerte · 60 min + ×2 dinero · 30 min'}].map(r=>'<div style="margin:5px 0">'+(normalCount>=r.n?'✅':'🔒')+' <b>'+r.n+' objetos base:</b> '+r.t+(vitrinaData.claimed.includes(r.n)?' · Reclamada':'')+'</div>').join('');
-        document.getElementById('vitrinaRewardStatus').innerHTML='<b>Progreso de recompensas (solo objetos base, sin mutaciones)</b>'+rewardText;
+        const rewards = [
+            {n:25,es:'×2 suerte · 5 min',en:'×2 luck · 5 min',fr:'×2 chance · 5 min'},
+            {n:50,es:'×2 dinero · 10 min',en:'×2 money · 10 min',fr:'×2 argent · 10 min'},
+            {n:100,es:'×2 suerte y ×2 dinero · 20 min',en:'×2 luck and ×2 money · 20 min',fr:'×2 chance et ×2 argent · 20 min'},
+            {n:160,es:'×2 suerte · 60 min + ×2 dinero · 30 min',en:'×2 luck · 60 min + ×2 money · 30 min',fr:'×2 chance · 60 min + ×2 argent · 30 min'}
+        ];
+        const rewardText = rewards.map(r=>{
+            const unlocked=normalCount>=r.n, claimed=vitrinaData.claimed.includes(r.n);
+            const status=claimed?tr('Reclamada','Claimed','Réclamée'):unlocked?tr('Disponible','Available','Disponible'):tr('Bloqueada','Locked','Verrouillée');
+            const reward=tbcLanguage==='en'?r.en:tbcLanguage==='fr'?r.fr:r.es;
+            return `<div class="vitrina-reward-row"><span>${unlocked?'✅':'🔒'} <b>${r.n} ${tr('objetos base','base items','objets de base')}:</b> ${reward}</span><strong>${status}</strong></div>`;
+        }).join('');
+        document.getElementById('vitrinaRewardStatus').innerHTML = `<b>${tr('Progreso de recompensas (solo objetos base, sin mutaciones)','Reward progress (base items only, no mutations)','Progression des récompenses (objets de base uniquement, sans mutations)')}</b>${rewardText}`;
     }
     function updateVitrinaUI() { const top=document.getElementById('vitrinaProgressTop'); if(top) top.textContent=vitrinaNormalCount()+'/160'; claimVitrinaRewards(); if(document.getElementById('vitrinaModal')?.style.display==='block') renderVitrina(); }
     loadVitrinaData();
@@ -6403,6 +6465,28 @@
         document.getElementById('autoAbrirPauseBtn').classList.remove('paused');
     }
 
+
+    function playRaritySound(rarity) {
+        try {
+            if (effectsMasterGain.gain.value <= 0) return;
+            if (audioCtx.state === 'suspended') audioCtx.resume();
+            const profiles = {
+                comun: [440, 0.07, 0.10], especial: [560, 0.09, 0.14],
+                epico: [660, 0.12, 0.20], legendario: [790, 0.15, 0.28], mitico: [980, 0.19, 0.42]
+            };
+            const [base, volume, duration] = profiles[rarity] || profiles.comun;
+            const now = audioCtx.currentTime;
+            const notes = rarity === 'mitico' ? [1,1.25,1.5,2] : rarity === 'legendario' ? [1,1.33,1.66] : rarity === 'epico' ? [1,1.5] : [1];
+            notes.forEach((ratio,i) => {
+                const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+                osc.type = rarity==='mitico' ? 'sine' : 'triangle'; osc.frequency.setValueAtTime(base*ratio,now+i*0.075);
+                gain.gain.setValueAtTime(0.0001,now+i*0.075); gain.gain.linearRampToValueAtTime(volume/notes.length,now+i*0.075+0.025);
+                gain.gain.exponentialRampToValueAtTime(0.0001,now+i*0.075+duration); osc.connect(gain); gain.connect(effectsMasterGain);
+                osc.start(now+i*0.075); osc.stop(now+i*0.075+duration);
+            });
+        } catch(e) {}
+    }
+
     function playReelLandEffect(rarity) {
         const rarColor = rarities[rarity].color;
         const caseEl = document.getElementById('mainCase');
@@ -6410,6 +6494,8 @@
         const cx = caseRect.left + caseRect.width / 2;
         const cy = caseRect.top + caseRect.height / 2;
 
+        // Firma sonora por rareza, respetando el control de sonido existente.
+        playRaritySound(rarity);
         // Flash de color en el reel según rareza
         const flash = document.createElement('div');
         flash.style.cssText = `
