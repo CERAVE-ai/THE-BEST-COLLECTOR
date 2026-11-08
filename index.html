@@ -1603,15 +1603,22 @@
         /* ── TUTORIAL DE INICIO ─────────────────────────────────── */
         .game-tutorial-overlay {
             display:none; position:fixed; inset:0; z-index:12000;
-            align-items:center; justify-content:center; overflow-y:auto;
-            padding:18px; background:rgba(2,6,23,0.94); backdrop-filter:blur(18px);
+            align-items:flex-start; justify-content:flex-end; overflow:visible;
+            padding:12px; background:transparent; pointer-events:none;
         }
         .game-tutorial-overlay.open { display:flex; }
         .game-tutorial-box {
-            width:min(740px,100%); max-height:90vh; overflow-y:auto;
+            width:min(410px,calc(100vw - 24px)); max-height:38vh; overflow-y:auto; pointer-events:auto;
             padding:clamp(20px,4vw,34px); border:1px solid rgba(59,130,246,0.35);
             border-radius:22px; background:linear-gradient(145deg,#0a1020,#111a2d);
             box-shadow:0 28px 90px rgba(0,0,0,0.75),0 0 50px rgba(59,130,246,0.12);
+        }
+        @media (max-width: 700px) {
+            .game-tutorial-overlay { justify-content:center; padding:8px; }
+            .game-tutorial-box { width:min(390px,calc(100vw - 16px)); max-height:32vh; padding:14px; }
+            .game-tutorial-icon { width:48px; height:48px; font-size:25px; margin-bottom:7px; }
+            .game-tutorial-intro { margin:6px auto 10px; font-size:12px; }
+            .game-tutorial-point { padding:8px 10px; }
         }
         .game-tutorial-kicker {
             color:#60a5fa; font:11px 'JetBrains Mono',monospace;
@@ -3990,10 +3997,10 @@
 
 <div class="game-tutorial-overlay" id="gameTutorialOverlay" role="presentation">
     <section class="game-tutorial-box" role="dialog" aria-modal="true" aria-labelledby="gameTutorialTitle">
-        <div class="game-tutorial-kicker" id="gameTutorialKicker">GUÍA INICIAL · PASO 1 DE 8</div>
+        <div class="game-tutorial-kicker" id="gameTutorialKicker">TUTORIAL INTERACTIVO · PASO 1 DE 4</div>
         <div class="game-tutorial-progress" aria-hidden="true"><div class="game-tutorial-progress-fill" id="gameTutorialProgress"></div></div>
         <div class="game-tutorial-icon" id="gameTutorialIcon" aria-hidden="true">🎯</div>
-        <h2 class="game-tutorial-title" id="gameTutorialTitle">PREPARA TU COLECCIÓN</h2>
+        <h2 class="game-tutorial-title" id="gameTutorialTitle">ABRE TU PRIMER COFRE</h2>
         <p class="game-tutorial-intro" id="gameTutorialIntro"></p>
         <ul class="game-tutorial-points" id="gameTutorialPoints"></ul>
         <div class="game-tutorial-note" id="gameTutorialNote" style="display:none"></div>
@@ -6283,7 +6290,7 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
     }
     function updateVitrinaUI() { const top=document.getElementById('vitrinaProgressTop'); if(top) top.textContent=vitrinaNormalCount()+'/160'; claimVitrinaRewards(); if(document.getElementById('vitrinaModal')?.style.display==='block') renderVitrina(); }
     loadVitrinaData();
-    document.getElementById('vitrinaOpenBtn').addEventListener('click',()=>{restoreVitrinaBuffs();syncVitrinaFromInventory();renderVitrina();document.getElementById('vitrinaModal').style.display='block';});
+    document.getElementById('vitrinaOpenBtn').addEventListener('click',()=>{restoreVitrinaBuffs();syncVitrinaFromInventory();renderVitrina();document.getElementById('vitrinaModal').style.display='block';completeGameTutorialAction(2);});
     document.getElementById('vitrinaCloseBtn').addEventListener('click',()=>document.getElementById('vitrinaModal').style.display='none');
     document.getElementById('vitrinaModal').addEventListener('click',e=>{if(e.target.id==='vitrinaModal')e.currentTarget.style.display='none';});
 
@@ -6337,6 +6344,7 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         if (finalPrice > state.best) state.best = finalPrice;
         inventory.push(bonusWinner);
         registerVitrinaItem(bonusWinner);
+        completeGameTutorialAction(0);
         if (mutation.id === 'universal') state.universalCount++;
 
         // Efecto visual en la carta ganadora
@@ -6751,7 +6759,9 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
     }
 
     function sellAll() {
+        const hadItems = inventory.length > 0;
         sellInventoryItems(inventory);
+        if (hadItems) completeGameTutorialAction(1);
     }
 
     // Rangos calculados a partir de estadísticas ya existentes: no requieren migración de partidas.
@@ -7825,7 +7835,10 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         }
         updateDailyLoginUI();
 
-        if (showPrompt && daily.lastClaimDate !== today && today >= (daily.lastClaimDate || today) && dailyLoginPromptedDate !== today) {
+        // No abrir el bono diario encima del tutorial: se mostrará al terminarlo.
+        const tutorialOverlay = document.getElementById('gameTutorialOverlay');
+        const tutorialIsOpen = !!tutorialOverlay?.classList.contains('open');
+        if (showPrompt && !tutorialIsOpen && daily.lastClaimDate !== today && today >= (daily.lastClaimDate || today) && dailyLoginPromptedDate !== today) {
             dailyLoginPromptedDate = today;
             openDailyLoginModal();
         }
@@ -8781,6 +8794,57 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
       'Bob Esponja Pantalones Cuadrados':'Bob l’éponge','Don Cangrejo':'M. Krabs'
     });
 
+    Object.assign(TBC_TRANSLATIONS.en, {
+      'TUTORIAL INTERACTIVO':'INTERACTIVE TUTORIAL','PASO':'STEP','DE':'OF',
+      'ABRE TU PRIMER COFRE':'OPEN YOUR FIRST CHEST',
+      '¡Vamos a conseguir tu primer objeto! Elige un cofre y pulsa ABRIR COFRE.':'Let’s get your first item! Choose a chest and click OPEN CHEST.',
+      'El objeto aparecerá en tu inventario cuando termine la apertura.':'Your item will appear in your inventory when the chest opening finishes.',
+      'Puedes elegir cualquier cofre disponible; el primero ya está seleccionado.':'You can choose any available chest; the first one is already selected.',
+      'Acción necesaria: abre un cofre para continuar.':'Action required: open a chest to continue.',
+      'CONSIGUE Y VENDE OBJETOS':'COLLECT AND SELL ITEMS',
+      '¡Ya tienes un objeto! Los objetos que consigues aparecen en el Inventario, debajo de los cofres.':'You have an item! Items you collect appear in the Inventory, below the chests.',
+      'Puedes conservar tus objetos o venderlos para conseguir monedas.':'You can keep your items or sell them to earn coins.',
+      'Pulsa VENDER TODO en el encabezado del Inventario para completar este paso.':'Click SELL ALL in the Inventory header to complete this step.',
+      'Acción necesaria: vende el objeto que acabas de conseguir.':'Action required: sell the item you just collected.',
+      'CONSULTA TU COLECCIÓN':'CHECK YOUR COLLECTION',
+      'La Vitrina registra los objetos que has descubierto, incluso si después los vendes.':'The Showcase records the items you have discovered, even if you sell them later.',
+      'Abre la Vitrina con el botón 🏆 VITRINA, situado encima de los cofres.':'Open the Showcase using the 🏆 SHOWCASE button above the chests.',
+      'Explora las pestañas para consultar los objetos descubiertos y las recompensas de colección.':'Browse the tabs to see discovered items and collection rewards.',
+      'Acción necesaria: abre la Vitrina. Puedes cerrarla después para continuar.':'Action required: open the Showcase. You can close it afterwards to continue.',
+      '¡TODO LISTO! JUEGA A TU MANERA':'ALL SET! PLAY YOUR WAY',
+      'Ya conoces el ciclo principal: abrir cofres, conseguir objetos, venderlos y completar tu colección.':'You know the main loop: open chests, collect items, sell them and complete your collection.',
+      'Ahora puedes explorar libremente mascotas, misiones, habilidades, museo, ruletas, subastas y el resto de mecánicas.':'You can now freely explore pets, missions, skills, the museum, roulettes, auctions and all the other features.',
+      'No hay más pasos obligatorios. ¡Buena suerte construyendo tu fortuna!':'There are no more required steps. Good luck building your fortune!',
+      'Tu progreso se guarda automáticamente.':'Your progress is saved automatically.',
+      '¡A JUGAR! ✓':'LET’S PLAY! ✓','SIGUIENTE →':'NEXT →','SALTAR TUTORIAL':'SKIP TUTORIAL',
+      'VENDER TODO':'SELL ALL','ABRIR COFRE':'OPEN CHEST'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+      'TUTORIAL INTERACTIVO':'TUTORIEL INTERACTIF','PASO':'ÉTAPE','DE':'SUR',
+      'ABRE TU PRIMER COFRE':'OUVRE TON PREMIER COFFRE',
+      '¡Vamos a conseguir tu primer objeto! Elige un cofre y pulsa ABRIR COFRE.':'Obtenons ton premier objet ! Choisis un coffre et clique sur OUVRIR LE COFFRE.',
+      'El objeto aparecerá en tu inventario cuando termine la apertura.':'Ton objet apparaîtra dans ton inventaire à la fin de l’ouverture du coffre.',
+      'Puedes elegir cualquier cofre disponible; el primero ya está seleccionado.':'Tu peux choisir n’importe quel coffre disponible ; le premier est déjà sélectionné.',
+      'Acción necesaria: abre un cofre para continuar.':'Action requise : ouvre un coffre pour continuer.',
+      'CONSIGUE Y VENDE OBJETOS':'COLLECTE ET VENDS DES OBJETS',
+      '¡Ya tienes un objeto! Los objetos que consigues aparecen en el Inventario, debajo de los cofres.':'Tu as un objet ! Les objets obtenus apparaissent dans l’inventaire, sous les coffres.',
+      'Puedes conservar tus objetos o venderlos para conseguir monedas.':'Tu peux garder tes objets ou les vendre pour gagner des pièces.',
+      'Pulsa VENDER TODO en el encabezado del Inventario para completar este paso.':'Clique sur TOUT VENDRE dans l’en-tête de l’inventaire pour terminer cette étape.',
+      'Acción necesaria: vende el objeto que acabas de conseguir.':'Action requise : vends l’objet que tu viens d’obtenir.',
+      'CONSULTA TU COLECCIÓN':'CONSULTE TA COLLECTION',
+      'La Vitrina registra los objetos que has descubierto, incluso si después los vendes.':'La Vitrine enregistre les objets que tu as découverts, même si tu les vends ensuite.',
+      'Abre la Vitrina con el botón 🏆 VITRINA, situado encima de los cofres.':'Ouvre la Vitrine avec le bouton 🏆 VITRINE situé au-dessus des coffres.',
+      'Explora las pestañas para consultar los objetos descubiertos y las recompensas de colección.':'Parcours les onglets pour voir les objets découverts et les récompenses de collection.',
+      'Acción necesaria: abre la Vitrina. Puedes cerrarla después para continuar.':'Action requise : ouvre la Vitrine. Tu peux la fermer ensuite pour continuer.',
+      '¡TODO LISTO! JUEGA A TU MANERA':'C’EST PARTI ! JOUE À TA FAÇON',
+      'Ya conoces el ciclo principal: abrir cofres, conseguir objetos, venderlos y completar tu colección.':'Tu connais maintenant le principe : ouvrir des coffres, obtenir des objets, les vendre et compléter ta collection.',
+      'Ahora puedes explorar libremente mascotas, misiones, habilidades, museo, ruletas, subastas y el resto de mecánicas.':'Tu peux maintenant découvrir librement les familiers, missions, compétences, musée, roulettes, enchères et toutes les autres fonctionnalités.',
+      'No hay más pasos obligatorios. ¡Buena suerte construyendo tu fortuna!':'Il n’y a plus d’étapes obligatoires. Bonne chance pour bâtir ta fortune !',
+      'Tu progreso se guarda automáticamente.':'Ta progression est sauvegardée automatiquement.',
+      '¡A JUGAR! ✓':'C’EST PARTI ! ✓','SIGUIENTE →':'SUIVANT →','SALTAR TUTORIAL':'PASSER LE TUTORIEL',
+      'VENDER TODO':'TOUT VENDRE','ABRIR COFRE':'OUVRIR LE COFFRE'
+    });
+
     function applyTbcLanguage(root = document.body) {
       if (!root || tbcLanguage === 'es') return;
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
@@ -8874,7 +8938,7 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
       attributeFilter: TBC_TRANSLATABLE_ATTRIBUTES
     });
 
-    function startGame() {
+    function startGame(suppressDailyLoginPrompt = false) {
         const splash = document.getElementById('splashScreen');
         const game = document.getElementById('gameWrapper');
         splash.classList.add('hidden');
@@ -8905,7 +8969,7 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         claimMuseumOfflineIncome();
         updateRecordDisplay();
         updateMascotaIndicator();
-        checkDailyLoginStatus(true);
+        checkDailyLoginStatus(!suppressDailyLoginPrompt);
 
         startBonusTimer();
         startEventTimer();
@@ -8926,222 +8990,121 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         startCollectorBridge();
     }
 
-    const GAME_TUTORIAL_SEEN_KEY = 'theBestCollectorTutorialSeen_v1';
+    const GAME_TUTORIAL_SEEN_KEY = 'theBestCollectorTutorialSeen_v2';
     const GAME_TUTORIAL_STEPS = [
         {
-            icon:'🎯',
-            title:'TU META: CONSTRUIR UNA FORTUNA',
-            intro:'Empiezas con 2.000 monedas. Haz crecer tu fortuna combinando cofres, ventas, subastas, juegos y mejoras.',
-            points:[
-                'Tu fortuna aparece en grande, encima del contador de eventos aleatorios. Comprueba siempre tu saldo antes de gastar o apostar.',
-                'Cada actividad puede tener costes, riesgos, requisitos o enfriamientos. No existe una única forma de progresar: combina sistemas y compara sus resultados.',
-                'El objetivo económico principal es alcanzar 200.000.000.000.000.000 monedas. Las funciones avanzadas y los requisitos especiales amplían la progresión.'
-            ],
-            note:'La partida se guarda automáticamente. Usa Ajustes para consultar opciones y Estadísticas detalladas para revisar tu progreso. Exporta una copia de seguridad de vez en cuando.'
+            icon:'📦', title:'ABRE TU PRIMER COFRE',
+            intro:'¡Vamos a conseguir tu primer objeto! Elige un cofre y pulsa ABRIR COFRE.',
+            points:['El objeto aparecerá en tu inventario cuando termine la apertura.','Puedes elegir cualquier cofre disponible; el primero ya está seleccionado.'],
+            note:'Acción necesaria: abre un cofre para continuar.'
         },
         {
-            icon:'📦',
-            title:'COFRES, OBJETOS Y RAREZAS',
-            intro:'Selecciona una categoría de cofre y pulsa ABRIR COFRE para conseguir un objeto aleatorio.',
-            points:[
-                'Los objetos tienen distintas rarezas, desde Común hasta Mítico. El valor depende del objeto y puede cambiar con sus características o mejoras.',
-                'La barra PITY registra tu progreso hacia un Mítico garantizado cada 100 aperturas. La habilidad Rebajador de pity reduce el límite a 90.',
-                'Abrir cofres cuesta monedas. Mira el precio de la categoría seleccionada y decide si te compensa abrir, vender o ahorrar.'
-            ],
-            note:'Los objetos nuevos se añaden al inventario. Algunas actividades especiales usan sus propios requisitos y contadores.'
+            icon:'💰', title:'CONSIGUE Y VENDE OBJETOS',
+            intro:'¡Ya tienes un objeto! Los objetos que consigues aparecen en el Inventario, debajo de los cofres.',
+            points:['Puedes conservar tus objetos o venderlos para conseguir monedas.','Pulsa VENDER TODO en el encabezado del Inventario para completar este paso.'],
+            note:'Acción necesaria: vende el objeto que acabas de conseguir.'
         },
         {
-            icon:'🎒',
-            title:'INVENTARIO, VENTAS Y VITRINA',
-            intro:'El inventario reúne los objetos que consigues. Puedes conservarlos, venderlos o utilizarlos en otros sistemas.',
-            points:[
-                'Filtra y ordena el inventario por rareza, mutación o precio. Puedes vender objetos sueltos, vender una selección o vender todo menos los Míticos.',
-                'La Vitrina registra los objetos que has descubierto y conserva el descubrimiento aunque luego vendas o pierdas el objeto. Incluye objetos normales y secciones para Roto, Radiactivo, Cósmico y Universal.',
-                'Las recompensas de colección cuentan solo objetos base sin mutación: 25 desbloquea ×2 suerte durante 5 minutos; 50, ×2 dinero durante 10 minutos; 100, ambos durante 20 minutos; y 160, ×2 suerte durante 60 minutos y ×2 dinero durante 30 minutos.'
-            ],
-            note:'Las mascotas no forman parte de la colección de la Vitrina. Antes de vender un objeto, comprueba si lo necesitas para el museo, el taller, el mercado negro o algún requisito especial.'
+            icon:'🏆', title:'CONSULTA TU COLECCIÓN',
+            intro:'La Vitrina registra los objetos que has descubierto, incluso si después los vendes.',
+            points:['Abre la Vitrina con el botón 🏆 VITRINA, situado encima de los cofres.','Explora las pestañas para consultar los objetos descubiertos y las recompensas de colección.'],
+            note:'Acción necesaria: abre la Vitrina. Puedes cerrarla después para continuar.'
         },
         {
-            icon:'🏛️',
-            title:'MUSEO Y OBJETOS EXPUESTOS',
-            intro:'El museo permite exponer objetos para generar ingresos con el paso del tiempo.',
-            points:[
-                'Elige con cuidado qué objetos expones: los espacios son limitados y un objeto expuesto deja de estar disponible para venderlo o usarlo en otras actividades mientras siga allí.',
-                'La habilidad Conservador permite ampliar la capacidad del museo. Revisa los espacios disponibles y el rendimiento de tu colección.',
-                'El juego incluye un sistema de ingresos del museo al volver después de estar ausente; comprueba el resultado al regresar y no confundas ese ingreso con una venta.'
-            ],
-            note:'Si necesitas un objeto para el taller o el mercado negro, revisa primero si está expuesto en el museo.'
-        },
-        {
-            icon:'🔨',
-            title:'SUBASTAS Y TALLER',
-            intro:'Las subastas permiten competir por objetos; el taller permite fusionar materiales para intentar conseguir otro objeto.',
-            points:[
-                'En las subastas compites contra bots. Puedes pujar, usar las tácticas disponibles —como Farol, Silencio o Espionaje cuando estén disponibles— o retirarte. No pujes más de lo que vale para ti el premio.',
-                'En el taller puedes fusionar hasta 5 objetos. Usar menos de 5 conlleva riesgo de fallo y puede destruir los materiales; con 5 no hay fallo, pero se consumen igualmente.',
-                'La habilidad Subastador reduce el presupuesto máximo de los bots y Forjador reduce el tiempo de las fusiones. Revisa el coste y el tiempo antes de confirmar.'
-            ]
-        },
-        {
-            icon:'🎲',
-            title:'CASINO: CARA O CRUZ, RULETA Y TRAGAPERRAS',
-            intro:'Los juegos de azar pueden darte ganancias, pero también hacerte perder la apuesta.',
-            points:[
-                'En Cara o Cruz elige cara o cruz y apuesta una cantidad. Tiene un tiempo de espera entre usos; la habilidad Reflejos reduce ese enfriamiento.',
-                'La ruleta de casino permite apostar a distintos resultados. La tragaperras tiene sus propios premios y reglas. Lee las opciones y el pago antes de jugar.',
-                'El póker permite apostar, recibir cartas, cambiar las que elijas y comparar tu mano con la de los bots. El blackjack permite pedir carta, plantarte o doblar cuando la opción esté disponible.'
-            ],
-            note:'Las apuestas no son ingresos garantizados. Evita jugar con monedas que necesites para cofres, mejoras o préstamos.'
-        },
-        {
-            icon:'🎁',
-            title:'BONO DIARIO, MISIONES Y POTENCIADORES',
-            intro:'Estas funciones recompensan la actividad y te ayudan a progresar de distintas maneras.',
-            points:[
-                'Reclama el bono diario para mantener la racha. La recompensa aumenta ×1,75 por día consecutivo, pero nunca supera el 25% de la fortuna necesaria para ganar. Recuperar una racha perdida cuesta el 25% de tus monedas y no puede hacerse dos días seguidos.',
-                'Las misiones diarias y semanales proponen tareas de distintas actividades. Completa sus requisitos y reclama cada recompensa; las misiones disponibles pueden cambiar con el tiempo.',
-                'La tienda vende pociones con efectos temporales. Los eventos también pueden aplicar efectos: mira sus indicadores y temporizadores para saber qué está activo.'
-            ]
-        },
-        {
-            icon:'🌳',
-            title:'EXPERIENCIA, NIVEL Y HABILIDADES',
-            intro:'Jugar concede experiencia. Cada cinco niveles recibes un punto de habilidad, hasta el nivel máximo 1000.',
-            points:[
-                'Suerte aumenta la probabilidad de rarezas superiores a Común; Tasador aumenta el valor de los objetos; Negociador abarata los cofres.',
-                'Rebajador de pity garantiza un Mítico antes; Subastador reduce los presupuestos de los bots; Aprendiz aumenta la XP y Forjador acelera las fusiones.',
-                'Conservador amplía los espacios del museo y Reflejos reduce el enfriamiento de Cara o Cruz. Las mejoras tienen costes y límites propios.',
-                'Abre el Árbol de habilidades para ver el nivel, el coste y el efecto de cada mejora antes de gastar puntos.'
-            ]
-        },
-        {
-            icon:'🎰',
-            title:'RULETAS ESPECIALES Y MASCOTAS',
-            intro:'Además de la ruleta de casino, hay ruletas especiales con objetos y requisitos propios.',
-            points:[
-                'Los Míticos conseguidos alimentan los contadores de ruletas especiales: la Mítica requiere 5 Míticos; la Súper Mítica, 10; y la Hyper requiere 2 tiradas Súper.',
-                'También existen la Ruleta de Idiotas, Anuncios España y CeraVe Trascendencia. Cada una tiene sus propias reglas, costes o requisitos; consulta su panel antes de intentar girarla.',
-                'Las mascotas se compran y equipan para obtener bonificaciones. Algunas funciones avanzadas pueden exigir una mascota concreta, un nivel determinado u otros requisitos.'
-            ],
-            note:'Los contadores de las ruletas especiales no son intercambiables. Revisa qué requisito te falta en cada panel.'
-        },
-        {
-            icon:'🕵️',
-            title:'MERCADO NEGRO, PRÉSTAMOS Y PRESTIGIO',
-            intro:'Estos sistemas sirven para cambiar recursos, conseguir liquidez o mejorar tu progreso a largo plazo.',
-            points:[
-                'El Mercado Negro permite intercambiar un Mítico duplicado por otro Mítico aleatorio. Los objetos marcados como favoritos no se pueden entregar.',
-                'Los préstamos te dan monedas por adelantado, pero debes devolver el importe más un 20% de interés dentro del plazo. Comprueba el vencimiento y evita pedir más de lo que puedas pagar.',
-                'El Auto Abrir se desbloquea por 10.000.000 monedas. El Prestigio permite ascender cuando tu fortuna alcanza el 1% del objetivo de victoria. Entrega hasta 10 Fragmentos de Prestigio. Al ascender solo conserva la Vitrina, las mascotas y las mejoras permanentes de Prestigio; el resto del progreso se reinicia.'
-            ]
-        },
-        {
-            icon:'📊',
-            title:'ESTADÍSTICAS, AJUSTES Y COPIAS DE SEGURIDAD',
-            intro:'Usa las herramientas de seguimiento para entender tu progreso y proteger la partida.',
-            points:[
-                'Estadísticas detalladas muestra registros y cifras de tu actividad, como victorias, derrotas y progresión en los sistemas que cuentan estadísticas.',
-                'En Ajustes puedes cambiar opciones disponibles, como el volumen de música y efectos, y activar o desactivar determinados efectos visuales o eventos de interfaz.',
-                'La partida se guarda automáticamente. En el panel de guardado puedes exportar un código o archivo y luego importar una copia. Importar sustituye la partida actual: haz una copia antes de hacerlo.'
-            ],
-            note:'El progreso guardado localmente depende del navegador y del dispositivo. Exporta la partida antes de borrar datos del navegador o cambiar de equipo.'
+            icon:'🚀', title:'¡TODO LISTO! JUEGA A TU MANERA',
+            intro:'Ya conoces el ciclo principal: abrir cofres, conseguir objetos, venderlos y completar tu colección.',
+            points:['Ahora puedes explorar libremente mascotas, misiones, habilidades, museo, ruletas, subastas y el resto de mecánicas.','No hay más pasos obligatorios. ¡Buena suerte construyendo tu fortuna!'],
+            note:'Tu progreso se guarda automáticamente.'
         }
     ];
     let gameTutorialIndex = 0;
     let gameTutorialStartsGame = false;
+    let gameTutorialInteractive = false;
 
     function hasSeenGameTutorial() {
         try { return localStorage.getItem(GAME_TUTORIAL_SEEN_KEY) === '1'; }
         catch (error) { return false; }
     }
-
     function markGameTutorialSeen() {
-        try { localStorage.setItem(GAME_TUTORIAL_SEEN_KEY, '1'); }
-        catch (error) {}
+        try { localStorage.setItem(GAME_TUTORIAL_SEEN_KEY, '1'); } catch (error) {}
     }
-
-    function openGameTutorial(startAfterTutorial = false) {
+    function openGameTutorial(startAfterTutorial = false, interactive = false) {
         gameTutorialStartsGame = !!startAfterTutorial;
+        gameTutorialInteractive = !!interactive;
         gameTutorialIndex = 0;
         const overlay = document.getElementById('gameTutorialOverlay');
-        if (!overlay) {
-            if (gameTutorialStartsGame) startGame();
-            return;
-        }
+        if (!overlay) { if (gameTutorialStartsGame) startGame(); return; }
         overlay.classList.add('open');
         renderGameTutorial();
     }
-
     function renderGameTutorial() {
         const step = GAME_TUTORIAL_STEPS[gameTutorialIndex];
         if (!step) return;
-        const finalStep = gameTutorialIndex === GAME_TUTORIAL_STEPS.length - 1;
-        document.getElementById('gameTutorialKicker').textContent = `GUÍA ${gameTutorialStartsGame ? 'INICIAL' : 'RÁPIDA'} · PASO ${gameTutorialIndex + 1} DE ${GAME_TUTORIAL_STEPS.length}`;
-        document.getElementById('gameTutorialProgress').style.width = `${((gameTutorialIndex + 1) / GAME_TUTORIAL_STEPS.length) * 100}%`;
+        const total = GAME_TUTORIAL_STEPS.length;
+        document.getElementById('gameTutorialKicker').textContent =
+            `${tbcTranslateText('TUTORIAL INTERACTIVO')} · ${tbcTranslateText('PASO')} ${gameTutorialIndex + 1} ${tbcTranslateText('DE')} ${total}`;
+        document.getElementById('gameTutorialProgress').style.width = `${((gameTutorialIndex + 1) / total) * 100}%`;
         document.getElementById('gameTutorialIcon').textContent = step.icon;
-        document.getElementById('gameTutorialTitle').textContent = step.title;
-        document.getElementById('gameTutorialIntro').textContent = step.intro;
-
+        document.getElementById('gameTutorialTitle').textContent = tbcTranslateText(step.title);
+        document.getElementById('gameTutorialIntro').textContent = tbcTranslateText(step.intro);
         const points = document.getElementById('gameTutorialPoints');
         points.innerHTML = '';
-        step.points.forEach(text => {
+        step.points.forEach(line => {
             const item = document.createElement('li');
             item.className = 'game-tutorial-point';
             const icon = document.createElement('span');
             icon.className = 'game-tutorial-point-icon';
             icon.textContent = '◆';
             const detail = document.createElement('span');
-            detail.textContent = text;
+            detail.textContent = tbcTranslateText(line);
             item.append(icon, detail);
             points.appendChild(item);
         });
-
         const note = document.getElementById('gameTutorialNote');
-        note.textContent = step.note || '';
+        note.textContent = tbcTranslateText(step.note || '');
         note.style.display = step.note ? 'block' : 'none';
-        const previous = document.getElementById('gameTutorialPrev');
-        previous.disabled = gameTutorialIndex === 0;
-        document.getElementById('gameTutorialNext').textContent = finalStep
-            ? (gameTutorialStartsGame ? 'EMPEZAR A JUGAR ▶' : 'TERMINAR ✓')
-            : 'SIGUIENTE →';
-        document.getElementById('gameTutorialSkip').textContent = gameTutorialStartsGame
-            ? 'SALTAR TUTORIAL Y JUGAR'
-            : 'CERRAR TUTORIAL';
+        document.getElementById('gameTutorialPrev').disabled = gameTutorialIndex === 0;
+        const actionRequired = gameTutorialInteractive && gameTutorialIndex < 3;
+        const next = document.getElementById('gameTutorialNext');
+        next.disabled = actionRequired;
+        next.textContent = gameTutorialIndex === 3 ? tbcTranslateText('¡A JUGAR! ✓') : tbcTranslateText('SIGUIENTE →');
+        document.getElementById('gameTutorialSkip').textContent = tbcTranslateText('SALTAR TUTORIAL');
     }
-
+    function completeGameTutorialAction(expectedStep) {
+        if (!gameTutorialInteractive || !document.getElementById('gameTutorialOverlay')?.classList.contains('open')) return;
+        if (gameTutorialIndex !== expectedStep) return;
+        gameTutorialIndex = Math.min(GAME_TUTORIAL_STEPS.length - 1, gameTutorialIndex + 1);
+        renderGameTutorial();
+    }
     function nextGameTutorial() {
+        if (gameTutorialInteractive && gameTutorialIndex < 3) return;
         if (gameTutorialIndex < GAME_TUTORIAL_STEPS.length - 1) {
             gameTutorialIndex++;
             renderGameTutorial();
-        } else {
-            finishGameTutorial();
-        }
+        } else finishGameTutorial();
     }
-
     function previousGameTutorial() {
-        if (gameTutorialIndex > 0) {
-            gameTutorialIndex--;
-            renderGameTutorial();
-        }
+        if (gameTutorialIndex > 0) { gameTutorialIndex--; renderGameTutorial(); }
     }
-
     function finishGameTutorial() {
         const startAfterTutorial = gameTutorialStartsGame;
         markGameTutorialSeen();
         document.getElementById('gameTutorialOverlay').classList.remove('open');
         gameTutorialStartsGame = false;
+        gameTutorialInteractive = false;
         if (startAfterTutorial) startGame();
+        // El bono diario se presenta después de cerrar el tutorial, nunca a la vez.
+        checkDailyLoginStatus(true);
     }
-
-    function skipGameTutorial() {
-        finishGameTutorial();
-    }
-
+    function skipGameTutorial() { finishGameTutorial(); }
     function startFromSplash() {
-        startGame();
+        const firstVisit = !hasSeenGameTutorial();
+        // En la primera visita se aplaza el aviso diario hasta terminar/saltar el tutorial.
+        startGame(firstVisit);
+        if (firstVisit) openGameTutorial(false, true);
     }
 
-    function showSaveNotice() {
+        function showSaveNotice() {
         const notice = document.createElement('div');
         notice.style.cssText = `
             position:fixed;top:20px;left:50%;transform:translateX(-50%);
