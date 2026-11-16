@@ -3961,7 +3961,49 @@
             .collector-skills-heading { font-size:26px; }
             .collector-skill-description { min-height:0; }
         }
-    </style>
+    
+/* UPDATE 74 · QUALITY OVERHAUL */
+button,input,select{font:inherit}button{-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid rgba(125,211,252,.9)!important;outline-offset:3px!important}
+.v74-showcase-tools{display:grid;grid-template-columns:minmax(180px,1.6fr) repeat(2,minmax(135px,1fr));gap:9px;margin:14px 0 12px}
+.v74-showcase-tools input,.v74-showcase-tools select{width:100%;min-width:0;padding:11px 12px;border:1px solid #475569;border-radius:10px;background:#111c30;color:#f8fafc;font-size:12px}
+.v74-search-wrap{display:flex;align-items:center;gap:8px;padding-left:12px;border:1px solid #475569;border-radius:10px;background:#111c30;color:#94a3b8}
+.v74-search-wrap span{font-size:20px;line-height:1}.v74-search-wrap input{border:0;background:transparent;outline:0!important;box-shadow:none!important;padding-left:0}
+.v74-showcase-progress{padding:12px 14px;margin:8px 0 14px;border:1px solid rgba(148,163,184,.2);border-radius:12px;background:linear-gradient(120deg,rgba(30,41,59,.85),rgba(15,23,42,.9))}
+.v74-showcase-progress-top{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:11px;color:#cbd5e1;margin-bottom:8px}.v74-showcase-progress-top b{color:#fbbf24;font-variant-numeric:tabular-nums}
+.v74-showcase-track{height:8px;border-radius:99px;background:#020617;overflow:hidden}.v74-showcase-track span{display:block;width:0;height:100%;border-radius:inherit;background:linear-gradient(90deg,#22c55e,#a3e635,#fbbf24);transition:width .35s ease}
+.v74-empty-state{padding:28px 12px;text-align:center;color:#94a3b8;border:1px dashed #475569;border-radius:12px;font-size:12px}
+#vitrinaModal .vitrina-card{position:relative;isolation:isolate}#vitrinaModal .vitrina-card::after{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .2s;background:linear-gradient(135deg,rgba(255,255,255,.09),transparent 55%);z-index:-1}#vitrinaModal .vitrina-card:hover::after{opacity:1}
+#vitrinaModal .v74-card-rarity{font-size:9px;font-weight:900;letter-spacing:.08em;text-transform:uppercase}#vitrinaModal .v74-card-price{font-size:10px;color:#4ade80;font-weight:800;font-variant-numeric:tabular-nums}#vitrinaModal .vitrina-card.is-unknown .v74-card-rarity,#vitrinaModal .vitrina-card.is-unknown .v74-card-price{opacity:.35}
+.v74-reveal-context{display:inline-flex;align-items:center;justify-content:center;margin:-5px auto 12px;padding:5px 10px;border:1px solid rgba(148,163,184,.28);border-radius:99px;background:rgba(15,23,42,.7);color:#cbd5e1;font-size:9px;font-weight:900;letter-spacing:.15em}
+#modalBox.v74-reveal-especial .modal-icon,#modalBox.v74-reveal-epico .modal-icon,#modalBox.v74-reveal-legendario .modal-icon,#modalBox.v74-reveal-mitico .modal-icon{animation:v74ItemReveal .72s cubic-bezier(.16,1,.3,1) both}
+#modalBox.v74-reveal-epico{border-color:#a78bfa;box-shadow:0 0 35px rgba(167,139,250,.2),0 24px 80px rgba(0,0,0,.65)}#modalBox.v74-reveal-legendario{border-color:#fbbf24;box-shadow:0 0 42px rgba(251,191,36,.24),0 24px 80px rgba(0,0,0,.65)}#modalBox.v74-reveal-mitico{border-color:#f472b6;box-shadow:0 0 52px rgba(244,114,182,.34),0 24px 80px rgba(0,0,0,.65);animation:v74MythicPulse 1.8s ease-in-out infinite alternate}
+@keyframes v74ItemReveal{0%{transform:translateY(22px) scale(.55) rotate(-8deg);filter:blur(8px);opacity:0}65%{transform:translateY(-5px) scale(1.12) rotate(3deg);filter:blur(0);opacity:1}100%{transform:translateY(0) scale(1) rotate(0)}}
+@keyframes v74MythicPulse{from{box-shadow:0 0 28px rgba(244,114,182,.18),0 24px 80px rgba(0,0,0,.65)}to{box-shadow:0 0 58px rgba(244,114,182,.38),0 24px 80px rgba(0,0,0,.65)}}
+@media(max-width:620px){.v74-showcase-tools{grid-template-columns:1fr 1fr}.v74-search-wrap{grid-column:1/-1}#vitrinaModal{padding:8px!important}#vitrinaModal>div{padding:13px!important;margin:5px auto!important}.v74-showcase-progress-top{font-size:10px}}
+@media(prefers-reduced-motion:reduce){#modalBox.v74-reveal-mitico{animation:none!important}#modalBox .modal-icon{animation:none!important}.v74-showcase-track span{transition:none!important}}
+
+button:not(:disabled):hover{filter:brightness(1.07)}
+button:disabled{cursor:not-allowed;filter:saturate(.55);opacity:.62}
+.stat-card,.vitrina-card,.collector-mission-card{backface-visibility:hidden}
+@media(hover:hover){.stat-card{transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease}.stat-card:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(0,0,0,.18)}}
+
+/* Update 75 — thematic collections */
+#vitrinaModal .v75-theme-card{position:relative;overflow:hidden;min-height:145px;padding:16px;border-radius:15px;border:1px solid var(--theme-color,#475569);background:linear-gradient(145deg,rgba(30,41,59,.98),rgba(15,23,42,.98));text-align:left;color:#f8fafc;cursor:pointer;display:flex;flex-direction:column;gap:7px;transition:transform .18s,border-color .18s,box-shadow .18s}
+#vitrinaModal .v75-theme-card:hover{transform:translateY(-3px);box-shadow:0 12px 28px rgba(0,0,0,.25)}
+#vitrinaModal .v75-theme-icon{font-size:30px;line-height:1.1}
+#vitrinaModal .v75-theme-title{font-size:14px;font-weight:900}
+#vitrinaModal .v75-theme-desc{font-size:11px;color:#aebbd0;line-height:1.4}
+#vitrinaModal .v75-theme-progress{height:6px;background:#334155;border-radius:99px;overflow:hidden;margin-top:auto}
+#vitrinaModal .v75-theme-progress span{display:block;height:100%;background:var(--theme-color,#fbbf24);border-radius:99px}
+#vitrinaModal .v75-theme-meta{display:flex;justify-content:space-between;gap:8px;color:#cbd5e1;font-size:10px;font-weight:800}
+#vitrinaModal .v75-theme-back{padding:8px 12px;margin:0 0 10px;border:1px solid #64748b;border-radius:9px;background:#1e293b;color:#fff;font-weight:800;cursor:pointer}
+#vitrinaModal .v75-theme-heading{display:flex;align-items:center;gap:12px;margin:4px 0 12px;padding:12px;border:1px solid #334155;border-radius:12px;background:#111827}
+#vitrinaModal .v75-theme-heading-icon{font-size:30px}
+#vitrinaModal .v75-theme-heading small{display:block;color:#94a3b8;margin-top:3px}
+@media(prefers-reduced-motion:reduce){#vitrinaModal .v75-theme-card{transition:none}}
+
+</style>
 </head>
 <body>
 <!-- SPLASH SCREEN -->
@@ -3971,10 +4013,13 @@
     <div class="splash-content">
         <div class="splash-icon">🏆</div>
         <div style="margin-bottom:12px;padding:9px 16px;border:1px solid rgba(244,63,94,0.4);border-radius:12px;background:rgba(244,63,94,0.08);max-width:560px;width:calc(100% - 28px);box-sizing:border-box;text-align:left;">
-            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#f43f5e;letter-spacing:2px;text-align:center;margin-bottom:7px;">🆕 NOVEDADES DE LA VERSIÓN #73 v2</div>
-            <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:#e2e8f0;line-height:1.32;">
-                • <b>Dos cofres nuevos:</b> Tabla Periódica y Bob Esponja, con 10 objetos nuevos y recompensas hasta míticas.<br>
-                • <b>Títulos y rangos:</b> progresa mediante cofres, míticos, ventas, fusiones, subastas, póker y mascotas.<br>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;color:#f43f5e;letter-spacing:2px;text-align:center;margin-bottom:7px;">🆕 NOVEDADES DE LA VERSIÓN #76</div>
+            <div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:#e2e8f0;line-height:1.38;">
+                • <b>Expediciones:</b> envía equipos a distintas regiones y reclama hallazgos cuando regresen.<br>
+                • <b>Encargos especiales:</b> entrega objetos concretos para ganar experiencia y reputación.<br>
+                • <b>Recompensas temáticas:</b> completa las 10 colecciones al 100 % y desbloquea títulos exclusivos.<br>
+                • <b>Estadísticas ampliadas:</b> consulta expediciones, encargos, reputación y colecciones dominadas.<br>
+                • <b>Pulido general:</b> mejoras de interacción, accesibilidad, feedback visual y adaptación móvil.<br>
             </div>
         </div>
         <div class="splash-title">THE BEST<br><span>COLLECTOR</span></div>
@@ -3989,9 +4034,9 @@
         </div>
         <button class="splash-play-btn" id="playBtn">▶ &nbsp;JUGAR</button>
         <div class="splash-by">Empieza con <span>2.000 monedas</span></div>
-        <div style="margin-top:12px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">📅 ACTUALIZACIÓN: 04/11/2026</div>
-        <div style="margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">🔧 PRÓXIMA ACTUALIZACIÓN: 11/11/2026</div>
-        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #73 v2</div>
+        <div style="margin-top:12px;font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">📅 ACTUALIZACIÓN: 16/11/2026</div>
+        <div style="margin-top:4px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:1.5px;">🔧 NUEVA ACTUALIZACIÓN: 16/11/2026</div>
+        <div style="margin-top:8px;font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:#f43f5e;letter-spacing:2px;">Versión Del Juego Actual #76</div>
     </div>
 </div>
 
@@ -4079,7 +4124,15 @@
         <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><div><h2 style="margin:0;color:#fbbf24">🏆 Vitrina</h2><p id="vitrinaSummary" style="margin:6px 0;color:#94a3b8">Colecciona todos los objetos del juego.</p></div><button id="vitrinaCloseBtn" type="button" style="padding:8px 14px;border-radius:8px;border:1px solid #475569;background:#1e293b;color:white;cursor:pointer">Cerrar ✕</button></div>
         <div id="vitrinaRewardStatus" style="margin:14px 0;padding:12px;background:#111827;border-radius:10px"></div>
         <div id="vitrinaTabs" style="display:flex;gap:8px;flex-wrap:wrap;margin:12px 0"></div>
+        <div id="v75ThemePanel" hidden style="margin:10px 0 14px"></div>
+        <div class="v74-showcase-tools">
+          <label class="v74-search-wrap"><span>⌕</span><input id="v74VitrinaSearch" type="search" autocomplete="off" placeholder="Buscar objetos..." aria-label="Buscar objetos"></label>
+          <select id="v74VitrinaRarity" aria-label="Filtrar por rareza"><option value="all">Todas las rarezas</option><option value="comun">Común</option><option value="especial">Especial</option><option value="epico">Épico</option><option value="legendario">Legendario</option><option value="mitico">Mítico</option></select>
+          <select id="v74VitrinaStatus" aria-label="Filtrar por estado"><option value="all">Todos los objetos</option><option value="found">Descubiertos</option><option value="missing">Sin descubrir</option></select>
+        </div>
+        <div class="v74-showcase-progress"><div class="v74-showcase-progress-top"><strong id="v74VitrinaProgressLabel">Colección normal</strong><b id="v74VitrinaProgressText">0 / 160 · 0%</b></div><div class="v74-showcase-track"><span id="v74VitrinaProgressFill"></span></div></div>
         <div id="vitrinaGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:10px"></div>
+        <p id="v74VitrinaEmpty" class="v74-empty-state" hidden>No hay objetos que coincidan con esos filtros.</p>
       </div>
     </div>
 
@@ -4762,6 +4815,9 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         <div class="stat-row"><span class="stat-row-label">Items Fabricados</span><span class="stat-row-val purple" id="ds_crafted">0</span></div>
         <div class="stat-row"><span class="stat-row-label">Fragmentos de Prestigio</span><span class="stat-row-val purple" id="ds_prestige">0</span></div>
         <div class="stat-row"><span class="stat-row-label">Valor Inventario</span><span class="stat-row-val green" id="ds_invVal">0 $</span></div>
+        <div class="stat-row"><span class="stat-row-label">Objetos en inventario</span><span class="stat-row-val blue" id="v74_ds_inventory">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Objetos míticos obtenidos</span><span class="stat-row-val purple" id="v74_ds_mythics">0</span></div>
+        <div class="stat-row"><span class="stat-row-label">Tiempo total jugado</span><span class="stat-row-val" id="v74_ds_time">0 min</span></div>
       </div>
     </div>
 
@@ -5320,6 +5376,7 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         <div class="modal-glow" id="modalGlow"></div>
         <div class="modal-rarity-bar" id="modalBar"></div>
         <div class="modal-rarity-label" id="modalRarity">RAREZA</div>
+        <div class="v74-reveal-context" id="v74RevealContext">OBJETO DESCUBIERTO</div>
         <div class="modal-icon" id="modalIcon">✨</div>
         <div class="modal-name" id="modalName">Nombre</div>
         <div id="modalMutation" class="modal-mutation-badge" style="display:none;"></div>
@@ -5933,6 +5990,10 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
     state.anunciosEspanaSpins = 0;
     state.dailyLogin = { streak:0, lastClaimDate:null, missedStreak:0, recoveryLocked:false, lastRewardAmount:0 };
     state.blackjackRound = { phase:'bet', deck:[], player:[], dealer:[], bet:0, doubled:false, outcome:'', message:'', payout:0 };
+    state.expeditions = { active:[], completed:0 };
+    state.contracts = { active:null, completed:0, refreshAt:0 };
+    state.themeRewardsClaimed = [];
+    state.collectorReputation = 0;
     const WIN_GOAL = 200000000000000000;
     const CERAVE_SPIN_COST = 2000000000000000;
     const CERAVE_REQUIRED_LEVEL = 1000;
@@ -6173,7 +6234,7 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
     let vitrinaData = { normal: [], roto: [], radiactivo: [], cosmico: [], universal: [], claimed: [] };
     function vitrinaCatalog() {
         const list = [];
-        Object.entries(boxes).forEach(([boxKey, box]) => box.items.forEach(item => list.push({ id: 'box:' + boxKey + ':' + item.name, name:item.name, icon:item.icon, rarity:item.rarity, source:box.title })));
+        Object.entries(boxes).forEach(([boxKey, box]) => box.items.forEach(item => list.push({ id: 'box:' + boxKey + ':' + item.name, boxKey, name:item.name, icon:item.icon, rarity:item.rarity, price:item.price, source:box.title })));
         if (typeof superMiticos !== 'undefined' && Array.isArray(superMiticos)) superMiticos.forEach(item => list.push({id:'super:'+item.name,name:item.name,icon:item.icon||'🎁',rarity:'mitico',source:'Súper Ruleta Mítica'}));
         if (typeof hyperMiticos !== 'undefined' && Array.isArray(hyperMiticos)) hyperMiticos.forEach(item => list.push({id:'hyper:'+item.name,name:item.name,icon:item.icon||'🎁',rarity:'mitico',source:'Ruleta Hyper Mítica'}));
         if (typeof idiotaItems !== 'undefined') idiotaItems.forEach(item => list.push({id:'idiota:'+item.name,name:item.name,icon:item.icon||'🎁',rarity:'mitico',source:'Ruleta de Idiotas'}));
@@ -6231,67 +6292,107 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         });
         saveVitrinaData(); saveGame();
     }
+    let v74VitrinaSearch = '';
+    let v74VitrinaRarity = 'all';
+    let v74VitrinaStatus = 'all';
+    let vitrinaThemeSelection = null;
+    const VITRINA_THEMES = [
+        {id:'science',icon:'⚗️',color:'#14b8a6',boxes:['tabla_periodica','tech'],es:'Ciencia y tecnología',en:'Science & technology',fr:'Science et technologie',descEs:'Elementos, inventos y avances tecnológicos.',descEn:'Elements, inventions and technological advances.',descFr:'Éléments, inventions et progrès technologiques.'},
+        {id:'space',icon:'🌌',color:'#8b5cf6',boxes:['espacial','cosmico'],es:'Espacio y cosmos',en:'Space & cosmos',fr:'Espace et cosmos',descEs:'Planetas, estrellas y misterios del universo.',descEn:'Planets, stars and mysteries of the universe.',descFr:'Planètes, étoiles et mystères de l’univers.'},
+        {id:'games',icon:'🎮',color:'#f43f5e',boxes:['gaming','roblox','supercell'],es:'Videojuegos',en:'Video games',fr:'Jeux vidéo',descEs:'Consolas, mundos y universos de videojuegos.',descEn:'Consoles, worlds and video game universes.',descFr:'Consoles, mondes et univers de jeux vidéo.'},
+        {id:'anime',icon:'⛩️',color:'#ec4899',boxes:['anime','solo_leveling','jojo','pokemon'],es:'Anime y criaturas',en:'Anime & creatures',fr:'Anime et créatures',descEs:'Héroes, criaturas y personajes de animación.',descEn:'Heroes, creatures and animated characters.',descFr:'Héros, créatures et personnages animés.'},
+        {id:'machines',icon:'🤖',color:'#06b6d4',boxes:['pacific_rim','transformers'],es:'Robots y máquinas',en:'Robots & machines',fr:'Robots et machines',descEs:'Robots gigantes, transformaciones y tecnología mecánica.',descEn:'Giant robots, transformations and mechanical technology.',descFr:'Robots géants, transformations et technologie mécanique.'},
+        {id:'pop',icon:'🎭',color:'#a855f7',boxes:['bob_esponja','celebridades','villanos'],es:'Personajes y cultura pop',en:'Characters & pop culture',fr:'Personnages et culture pop',descEs:'Personajes conocidos, villanos y mundos de ficción.',descEn:'Famous characters, villains and fictional worlds.',descFr:'Personnages connus, méchants et univers fictifs.'},
+        {id:'lifestyle',icon:'💎',color:'#f59e0b',boxes:['joyeria','coches','casas','cerave'],es:'Lujo y estilo de vida',en:'Luxury & lifestyle',fr:'Luxe et art de vivre',descEs:'Joyas, vehículos, hogares y objetos premium.',descEn:'Jewelry, vehicles, homes and premium items.',descFr:'Bijoux, véhicules, maisons et objets haut de gamme.'},
+        {id:'nature',icon:'🌿',color:'#22c55e',boxes:['nature','paises'],es:'Naturaleza y mundo',en:'Nature & world',fr:'Nature et monde',descEs:'Naturaleza, países y maravillas del planeta.',descEn:'Nature, countries and wonders of the planet.',descFr:'Nature, pays et merveilles de la planète.'},
+        {id:'food',icon:'🍬',color:'#f472b6',boxes:['sweet','airfryer'],es:'Dulces y cocina',en:'Sweets & cooking',fr:'Gourmandises et cuisine',descEs:'Dulces, comida y objetos de cocina.',descEn:'Sweets, food and kitchen items.',descFr:'Friandises, nourriture et objets de cuisine.'},
+        {id:'internet',icon:'🤡',color:'#9333ea',boxes:['memes'],es:'Memes e internet',en:'Memes & internet',fr:'Mèmes et Internet',descEs:'Fenómenos virales y cultura de internet.',descEn:'Viral phenomena and internet culture.',descFr:'Phénomènes viraux et culture Internet.'}
+    ];
+    function v75Lang(es,en,fr){return tbcLanguage==='en'?en:tbcLanguage==='fr'?fr:es;}
+    function v75ThemeText(theme,field){if(!field)return theme[tbcLanguage==='en'?'en':tbcLanguage==='fr'?'fr':'es'];return theme[field+(tbcLanguage==='en'?'En':tbcLanguage==='fr'?'Fr':'Es')];}
+    function v74FormatMoney(value) { return Math.round(Number(value)||0).toLocaleString(tbcLanguage==='en'?'en-US':tbcLanguage==='fr'?'fr-FR':'es-ES') + ' $'; }
+    function v74RarityLabel(rarity) {
+        const labels={comun:['Común','Common','Commun'],especial:['Especial','Special','Spécial'],epico:['Épico','Epic','Épique'],legendario:['Legendario','Legendary','Légendaire'],mitico:['Mítico','Mythic','Mythique']};
+        const row=labels[rarity]||[rarity||'—',rarity||'—',rarity||'—'];return row[tbcLanguage==='en'?1:tbcLanguage==='fr'?2:0];
+    }
     function renderVitrina() {
-        const catalog = vitrinaCatalog();
-        const tabs = document.getElementById('vitrinaTabs');
-        const grid = document.getElementById('vitrinaGrid'); if (!tabs || !grid) return;
-        const tr = (es, en, fr) => tbcLanguage === 'en' ? en : tbcLanguage === 'fr' ? fr : es;
-        const sourceLabels = {
-            'Súper Ruleta Mítica': tr('Súper Ruleta Mítica','Super Mythic Roulette','Super roulette mythique'),
-            'Ruleta Hyper Mítica': tr('Ruleta Hyper Mítica','Hyper Mythic Roulette','Roulette hyper mythique'),
-            'Ruleta de Idiotas': tr('Ruleta de Idiotas','Idiots Roulette','Roulette des idiots'),
-            'Anuncios España': tr('Anuncios España','Spain Ads','Publicités Espagne'),
-            'CeraVe Trascendencia': tr('CeraVe Trascendencia','CeraVe Transcendence','Transcendance CeraVe')
+        const catalog=vitrinaCatalog(),tabs=document.getElementById('vitrinaTabs'),grid=document.getElementById('vitrinaGrid');
+        if(!tabs||!grid)return;
+        const tr=v75Lang;
+        const sourceLabels={
+            'Súper Ruleta Mítica':tr('Súper Ruleta Mítica','Super Mythic Roulette','Super roulette mythique'),
+            'Ruleta Hyper Mítica':tr('Ruleta Hyper Mítica','Hyper Mythic Roulette','Roulette hyper mythique'),
+            'Ruleta de Idiotas':tr('Ruleta de Idiotas','Idiots Roulette','Roulette des idiots'),
+            'Anuncios España':tr('Anuncios España','Spain Ads','Publicités Espagne'),
+            'CeraVe Trascendencia':tr('CeraVe Trascendencia','CeraVe Transcendence','Transcendance CeraVe')
         };
-        const mutationNames = {
-            normal: tr('Objetos normales','Normal items','Objets normaux'),
-            roto: tr('Roto','Broken','Cassé'),
-            radiactivo: tr('Radiactivo','Radioactive','Radioactif'),
-            cosmico: tr('Cósmico','Cosmic','Cosmique'),
-            universal: tr('Universal','Universal','Universel')
-        };
-        const labels = {normal:'⬜ '+mutationNames.normal,roto:'💔 '+mutationNames.roto,radiactivo:'☢️ '+mutationNames.radiactivo,cosmico:'🌌 '+mutationNames.cosmico,universal:'✨ '+mutationNames.universal};
-        tabs.innerHTML = '';
-        VITRINA_MUTATIONS.forEach(m => {
-            const b=document.createElement('button'); b.type='button'; b.textContent=labels[m];
-            b.className='vitrina-tab'+(vitrinaSection===m?' is-active':'');
-            b.setAttribute('aria-pressed',String(vitrinaSection===m));
-            b.onclick=()=>{vitrinaSection=m;renderVitrina();}; tabs.appendChild(b);
-        });
-        const ids = new Set(vitrinaData[vitrinaSection]);
-        const count = catalog.filter(x=>ids.has(x.id)).length;
-        grid.innerHTML = '';
-        catalog.forEach(item => {
-            const got=ids.has(item.id), card=document.createElement('div');
-            card.className='vitrina-card'+(got?' is-found':' is-unknown');
-            const icon=document.createElement('div'); icon.className='vitrina-card-icon'; icon.textContent=got?(item.icon||'🎁'):'❔';
-            const name=document.createElement('div'); name.className='vitrina-card-name';
-            name.textContent=got?tbcTranslateText(item.name):tr('Objeto desconocido','Unknown item','Objet inconnu');
-            const source=document.createElement('div'); source.className='vitrina-card-source';
-            source.textContent=got?(sourceLabels[item.source]||tbcTranslateText(item.source)): '???';
-            card.append(icon,name,source); grid.appendChild(card);
-        });
-        const normalCount=vitrinaNormalCount();
-        document.getElementById('vitrinaSummary').textContent = `${count} / ${catalog.length} ${tr('descubiertos en esta sección. Colección normal:','discovered in this section. Normal collection:','découverts dans cette section. Collection normale :')} ${normalCount} / 160.`;
-        document.getElementById('vitrinaProgressTop').textContent = normalCount+'/160';
-        const rewards = [
-            {n:25,es:'×2 suerte · 5 min',en:'×2 luck · 5 min',fr:'×2 chance · 5 min'},
-            {n:50,es:'×2 dinero · 10 min',en:'×2 money · 10 min',fr:'×2 argent · 10 min'},
-            {n:100,es:'×2 suerte y ×2 dinero · 20 min',en:'×2 luck and ×2 money · 20 min',fr:'×2 chance et ×2 argent · 20 min'},
-            {n:160,es:'×2 suerte · 60 min + ×2 dinero · 30 min',en:'×2 luck · 60 min + ×2 money · 30 min',fr:'×2 chance · 60 min + ×2 argent · 30 min'}
-        ];
-        const rewardText = rewards.map(r=>{
-            const unlocked=normalCount>=r.n, claimed=vitrinaData.claimed.includes(r.n);
-            const status=claimed?tr('Reclamada','Claimed','Réclamée'):unlocked?tr('Disponible','Available','Disponible'):tr('Bloqueada','Locked','Verrouillée');
-            const reward=tbcLanguage==='en'?r.en:tbcLanguage==='fr'?r.fr:r.es;
-            return `<div class="vitrina-reward-row"><span>${unlocked?'✅':'🔒'} <b>${r.n} ${tr('objetos base','base items','objets de base')}:</b> ${reward}</span><strong>${status}</strong></div>`;
-        }).join('');
-        document.getElementById('vitrinaRewardStatus').innerHTML = `<b>${tr('Progreso de recompensas (solo objetos base, sin mutaciones)','Reward progress (base items only, no mutations)','Progression des récompenses (objets de base uniquement, sans mutations)')}</b>${rewardText}`;
+        const mutationNames={normal:tr('Objetos normales','Normal items','Objets normaux'),roto:tr('Roto','Broken','Cassé'),radiactivo:tr('Radiactivo','Radioactive','Radioactif'),cosmico:tr('Cósmico','Cosmic','Cosmique'),universal:tr('Universal','Universal','Universel')};
+        const labels={normal:'⬜ '+mutationNames.normal,roto:'💔 '+mutationNames.roto,radiactivo:'☢️ '+mutationNames.radiactivo,cosmico:'🌌 '+mutationNames.cosmico,universal:'✨ '+mutationNames.universal};
+        tabs.innerHTML='';
+        VITRINA_MUTATIONS.forEach(m=>{const b=document.createElement('button');b.type='button';b.textContent=labels[m];b.className='vitrina-tab'+(vitrinaSection===m?' is-active':'');b.setAttribute('aria-pressed',String(vitrinaSection===m));b.onclick=()=>{vitrinaSection=m;vitrinaThemeSelection=null;renderVitrina();};tabs.appendChild(b);});
+        const themeButton=document.createElement('button');themeButton.type='button';themeButton.textContent='🗂️ '+tr('Colecciones temáticas','Themed collections','Collections thématiques');themeButton.className='vitrina-tab'+(vitrinaSection==='tematicas'?' is-active':'');themeButton.setAttribute('aria-pressed',String(vitrinaSection==='tematicas'));themeButton.onclick=()=>{vitrinaSection='tematicas';vitrinaThemeSelection=null;renderVitrina();};tabs.appendChild(themeButton);
+        const themePanel=document.getElementById('v75ThemePanel');
+        const tools=document.querySelector('#vitrinaModal .v74-showcase-tools');
+        const progress=document.querySelector('#vitrinaModal .v74-showcase-progress');
+        const rewardStatus=document.getElementById('vitrinaRewardStatus');
+        const normalIds=new Set(vitrinaData.normal||[]);
+        if(vitrinaSection==='tematicas'){
+            if(themePanel)themePanel.hidden=false;
+            if(tools)tools.style.display=vitrinaThemeSelection?'grid':'none';
+            if(progress)progress.style.display=vitrinaThemeSelection?'':'none';
+            if(rewardStatus)rewardStatus.style.display='none';
+            if(!vitrinaThemeSelection){
+                if(themePanel)themePanel.innerHTML=`<div style="color:#cbd5e1;font-size:12px;margin:0 0 12px">${tr('Completa grupos de objetos relacionados. El progreso cuenta los descubrimientos normales, sin mutaciones.','Complete groups of related items. Progress counts normal discoveries, without mutations.','Complétez des groupes d’objets liés. La progression compte les découvertes normales, sans mutations.')}</div>`;
+                grid.innerHTML='';
+                VITRINA_THEMES.forEach(theme=>{
+                    const items=catalog.filter(x=>theme.boxes.includes(x.boxKey)),found=items.filter(x=>normalIds.has(x.id)).length,pct=items.length?Math.round(found/items.length*100):0;
+                    const card=document.createElement('button');card.type='button';card.className='v75-theme-card';card.style.setProperty('--theme-color',theme.color);
+                    const icon=document.createElement('span');icon.className='v75-theme-icon';icon.textContent=theme.icon;
+                    const title=document.createElement('span');title.className='v75-theme-title';title.textContent=v75ThemeText(theme,'');
+                    const desc=document.createElement('span');desc.className='v75-theme-desc';desc.textContent=v75ThemeText(theme,'desc');
+                    const meta=document.createElement('span');meta.className='v75-theme-meta';meta.innerHTML=`<span>${found} / ${items.length} ${tr('objetos','items','objets')}</span><span>${pct}%</span>`;
+                    const bar=document.createElement('span');bar.className='v75-theme-progress';const fill=document.createElement('span');fill.style.width=pct+'%';bar.appendChild(fill);
+                    card.append(icon,title,desc,meta,bar);card.addEventListener('click',()=>{vitrinaThemeSelection=theme.id;v74VitrinaSearch='';v74VitrinaRarity='all';v74VitrinaStatus='all';renderVitrina();});grid.appendChild(card);
+                });
+                const empty=document.getElementById('v74VitrinaEmpty');if(empty)empty.hidden=true;
+                const summary=document.getElementById('vitrinaSummary');if(summary)summary.textContent=tr('Descubre objetos relacionados y completa cada colección temática.','Discover related items and complete each themed collection.','Découvrez des objets liés et complétez chaque collection thématique.');
+                return;
+            }
+            const theme=VITRINA_THEMES.find(x=>x.id===vitrinaThemeSelection)||VITRINA_THEMES[0];
+            const items=catalog.filter(x=>theme.boxes.includes(x.boxKey));
+            const found=items.filter(x=>normalIds.has(x.id)).length,pct=items.length?Math.round(found/items.length*100):0;
+            if(themePanel)themePanel.innerHTML=`<button type="button" class="v75-theme-back" id="v75ThemeBack">← ${tr('Todas las colecciones','All collections','Toutes les collections')}</button><div class="v75-theme-heading"><span class="v75-theme-heading-icon">${theme.icon}</span><div><b>${v75ThemeText(theme,'')}</b><small>${v75ThemeText(theme,'desc')} · ${found}/${items.length} ${tr('objetos descubiertos','items discovered','objets découverts')}</small></div></div>`;
+            document.getElementById('v75ThemeBack')?.addEventListener('click',()=>{vitrinaThemeSelection=null;renderVitrina();});
+            const filtered=items.filter(item=>{const got=normalIds.has(item.id),q=v74VitrinaSearch.toLocaleLowerCase();const name=tbcTranslateText(item.name).toLocaleLowerCase();return(!q||name.includes(q))&&(v74VitrinaRarity==='all'||item.rarity===v74VitrinaRarity)&&(v74VitrinaStatus==='all'||(v74VitrinaStatus==='found'?got:!got));});
+            const searchEl=document.getElementById('v74VitrinaSearch'),rarityEl=document.getElementById('v74VitrinaRarity'),statusEl=document.getElementById('v74VitrinaStatus');
+            if(searchEl&&searchEl.value!==v74VitrinaSearch)searchEl.value=v74VitrinaSearch;if(rarityEl)rarityEl.value=v74VitrinaRarity;if(statusEl)statusEl.value=v74VitrinaStatus;
+            grid.innerHTML='';
+            filtered.forEach(item=>{const got=normalIds.has(item.id),card=document.createElement('div');card.className='vitrina-card'+(got?' is-found':' is-unknown');card.setAttribute('aria-label',got?tbcTranslateText(item.name):tr('Objeto sin descubrir','Undiscovered item','Objet non découvert'));const icon=document.createElement('div');icon.className='vitrina-card-icon';icon.textContent=got?(item.icon||'🎁'):'❔';const name=document.createElement('div');name.className='vitrina-card-name';name.textContent=got?tbcTranslateText(item.name):tr('Objeto desconocido','Unknown item','Objet inconnu');const rarity=document.createElement('div');rarity.className='v74-card-rarity';rarity.style.color=got?(rarities[item.rarity]?.color||'#cbd5e1'):'#64748b';rarity.textContent=got?v74RarityLabel(item.rarity):'???';const price=document.createElement('div');price.className='v74-card-price';price.textContent=got&&Number.isFinite(Number(item.price))?v74FormatMoney(item.price):'—';const source=document.createElement('div');source.className='vitrina-card-source';source.textContent=got?(sourceLabels[item.source]||tbcTranslateText(item.source)):'???';card.append(icon,name,rarity,price,source);grid.appendChild(card);});
+            const empty=document.getElementById('v74VitrinaEmpty');if(empty)empty.hidden=filtered.length>0;
+            const pText=document.getElementById('v74VitrinaProgressText');if(pText)pText.textContent=`${found} / ${items.length} · ${pct}%`;const pFill=document.getElementById('v74VitrinaProgressFill');if(pFill)pFill.style.width=pct+'%';const pLabel=document.getElementById('v74VitrinaProgressLabel');if(pLabel)pLabel.textContent=v75ThemeText(theme,'');
+            const summary=document.getElementById('vitrinaSummary');if(summary)summary.textContent=`${found} / ${items.length} ${tr('objetos descubiertos en esta colección.','items discovered in this collection.','objets découverts dans cette collection.')}`;
+            return;
+        }
+        if(themePanel)themePanel.hidden=true;if(tools)tools.style.display='grid';if(progress)progress.style.display='';if(rewardStatus)rewardStatus.style.display='';
+        const ids=new Set(vitrinaData[vitrinaSection]||[]),count=catalog.filter(x=>ids.has(x.id)).length;
+        const searchEl=document.getElementById('v74VitrinaSearch'),rarityEl=document.getElementById('v74VitrinaRarity'),statusEl=document.getElementById('v74VitrinaStatus');
+        if(searchEl&&searchEl.value!==v74VitrinaSearch)searchEl.value=v74VitrinaSearch;if(rarityEl)rarityEl.value=v74VitrinaRarity;if(statusEl)statusEl.value=v74VitrinaStatus;
+        const filtered=catalog.filter(item=>{const got=ids.has(item.id),q=v74VitrinaSearch.toLocaleLowerCase(),name=tbcTranslateText(item.name).toLocaleLowerCase(),source=(sourceLabels[item.source]||tbcTranslateText(item.source)||'').toLocaleLowerCase();return(!q||name.includes(q)||source.includes(q))&&(v74VitrinaRarity==='all'||item.rarity===v74VitrinaRarity)&&(v74VitrinaStatus==='all'||(v74VitrinaStatus==='found'?got:!got));});
+        grid.innerHTML='';
+        filtered.forEach(item=>{const got=ids.has(item.id),card=document.createElement('div');card.className='vitrina-card'+(got?' is-found':' is-unknown');card.setAttribute('aria-label',got?tbcTranslateText(item.name):tr('Objeto sin descubrir','Undiscovered item','Objet non découvert'));const icon=document.createElement('div');icon.className='vitrina-card-icon';icon.textContent=got?(item.icon||'🎁'):'❔';const name=document.createElement('div');name.className='vitrina-card-name';name.textContent=got?tbcTranslateText(item.name):tr('Objeto desconocido','Unknown item','Objet inconnu');const rarity=document.createElement('div');rarity.className='v74-card-rarity';rarity.style.color=got?(rarities[item.rarity]?.color||'#cbd5e1'):'#64748b';rarity.textContent=got?v74RarityLabel(item.rarity):'???';const price=document.createElement('div');price.className='v74-card-price';price.textContent=got&&Number.isFinite(Number(item.price))?v74FormatMoney(item.price):'—';const source=document.createElement('div');source.className='vitrina-card-source';source.textContent=got?(sourceLabels[item.source]||tbcTranslateText(item.source)):'???';card.append(icon,name,rarity,price,source);grid.appendChild(card);});
+        const empty=document.getElementById('v74VitrinaEmpty');if(empty)empty.hidden=filtered.length>0;
+        const normalCount=vitrinaNormalCount(),pct=Math.min(100,Math.round(normalCount/160*100));const summary=document.getElementById('vitrinaSummary');if(summary)summary.textContent=`${count} / ${catalog.length} ${tr('descubiertos en esta sección. Colección normal:','discovered in this section. Normal collection:','découverts dans cette section. Collection normale :')} ${normalCount} / 160.`;const top=document.getElementById('vitrinaProgressTop');if(top)top.textContent=normalCount+'/160';const pText=document.getElementById('v74VitrinaProgressText');if(pText)pText.textContent=`${normalCount} / 160 · ${pct}%`;const pFill=document.getElementById('v74VitrinaProgressFill');if(pFill)pFill.style.width=pct+'%';const pLabel=document.getElementById('v74VitrinaProgressLabel');if(pLabel)pLabel.textContent=tr('Colección normal','Normal collection','Collection normale');
+        const rewards=[{n:25,es:'×2 suerte · 5 min',en:'×2 luck · 5 min',fr:'×2 chance · 5 min'},{n:50,es:'×2 dinero · 10 min',en:'×2 money · 10 min',fr:'×2 argent · 10 min'},{n:100,es:'×2 suerte y ×2 dinero · 20 min',en:'×2 luck and ×2 money · 20 min',fr:'×2 chance et ×2 argent · 20 min'},{n:160,es:'×2 suerte · 60 min + ×2 dinero · 30 min',en:'×2 luck · 60 min + ×2 money · 30 min',fr:'×2 chance · 60 min + ×2 argent · 30 min'}];
+        const rewardText=rewards.map(r=>{const unlocked=normalCount>=r.n,claimed=vitrinaData.claimed.includes(r.n),status=claimed?tr('Reclamada','Claimed','Réclamée'):unlocked?tr('Disponible','Available','Disponible'):tr('Bloqueada','Locked','Verrouillée'),reward=tbcLanguage==='en'?r.en:tbcLanguage==='fr'?r.fr:r.es;return `<div class="vitrina-reward-row"><span>${unlocked?'✅':'🔒'} <b>${r.n} ${tr('objetos base','base items','objets de base')}:</b> ${reward}</span><strong>${status}</strong></div>`;}).join('');
+        document.getElementById('vitrinaRewardStatus').innerHTML=`<b>${tr('Progreso de recompensas (solo objetos base, sin mutaciones)','Reward progress (base items only, no mutations)','Progression des récompenses (objets de base uniquement, sans mutations)')}</b>${rewardText}`;
     }
     function updateVitrinaUI() { const top=document.getElementById('vitrinaProgressTop'); if(top) top.textContent=vitrinaNormalCount()+'/160'; claimVitrinaRewards(); if(document.getElementById('vitrinaModal')?.style.display==='block') renderVitrina(); }
     loadVitrinaData();
-    document.getElementById('vitrinaOpenBtn').addEventListener('click',()=>{restoreVitrinaBuffs();syncVitrinaFromInventory();renderVitrina();document.getElementById('vitrinaModal').style.display='block';completeGameTutorialAction(2);});
+    document.getElementById('vitrinaOpenBtn').addEventListener('click',()=>{vitrinaSection='normal';vitrinaThemeSelection=null;restoreVitrinaBuffs();syncVitrinaFromInventory();renderVitrina();document.getElementById('vitrinaModal').style.display='block';completeGameTutorialAction(2);});
     document.getElementById('vitrinaCloseBtn').addEventListener('click',()=>document.getElementById('vitrinaModal').style.display='none');
+    document.getElementById('v74VitrinaSearch')?.addEventListener('input',e=>{v74VitrinaSearch=e.target.value||'';renderVitrina();});
+    document.getElementById('v74VitrinaRarity')?.addEventListener('change',e=>{v74VitrinaRarity=e.target.value||'all';renderVitrina();});
+    document.getElementById('v74VitrinaStatus')?.addEventListener('change',e=>{v74VitrinaStatus=e.target.value||'all';renderVitrina();});
     document.getElementById('vitrinaModal').addEventListener('click',e=>{if(e.target.id==='vitrinaModal')e.currentTarget.style.display='none';});
 
     function getMutation() {
@@ -7146,6 +7247,10 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
 
     function showModal(item) {
         const rar = rarities[item.rarity];
+        const revealBox=document.getElementById('modalBox');
+        if(revealBox){revealBox.classList.remove('v74-reveal-common','v74-reveal-especial','v74-reveal-epico','v74-reveal-legendario','v74-reveal-mitico');revealBox.classList.add('v74-reveal-'+(item.rarity||'common'));}
+        const revealContext=document.getElementById('v74RevealContext');
+        if(revealContext){const label=tbcLanguage==='en'?'NEW DISCOVERY':tbcLanguage==='fr'?'NOUVELLE DÉCOUVERTE':'NUEVO DESCUBRIMIENTO';const chest=item.source==='chest'&&boxes[currentKey]?boxes[currentKey].title:'';revealContext.textContent=chest?`${label} · ${tbcTranslateText(chest)}`:label;}
         document.getElementById('modalRarity').textContent = rar.label;
         document.getElementById('modalRarity').style.color = rar.color;
         document.getElementById('modalBar').style.background = rar.color;
@@ -7624,7 +7729,11 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
                 qolSettings: state.qolSettings||{},
                 chestRarityStats: state.chestRarityStats||{},
                 dailyLogin: state.dailyLogin||{streak:0,lastClaimDate:null,missedStreak:0,recoveryLocked:false,lastRewardAmount:0},
-                blackjackRound: state.blackjackRound||{phase:'bet',deck:[],player:[],dealer:[],bet:0,doubled:false,outcome:'',message:'',payout:0}
+                blackjackRound: state.blackjackRound||{phase:'bet',deck:[],player:[],dealer:[],bet:0,doubled:false,outcome:'',message:'',payout:0},
+                expeditions: state.expeditions||{active:[],completed:0},
+                contracts: state.contracts||{active:null,completed:0,refreshAt:0},
+                themeRewardsClaimed: state.themeRewardsClaimed||[],
+                collectorReputation: state.collectorReputation||0
             },
             inventory: inventory,
             museumSlots: museumSlots,
@@ -8070,7 +8179,7 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
             'ownedPets', 'equippedPet', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed',
             'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'loan', 'xp', 'level',
             'skillPoints', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
-            'collectorPotionEnds', 'vitrinaBuffEnds', 'anunciosEspanaSpins', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'blackjackRound'
+            'collectorPotionEnds', 'vitrinaBuffEnds', 'anunciosEspanaSpins', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'blackjackRound', 'expeditions', 'contracts', 'themeRewardsClaimed', 'collectorReputation'
         ]);
         const numericStateKeys = new Set([
             'balance', 'spent', 'invValue', 'opened', 'best', 'commonCount', 'miticoCount',
@@ -8078,12 +8187,12 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
             'miticosForRuleta', 'superRuletaCharges', 'miticosForSuperRuleta', 'hyperRuletaCharges',
             'superSpinsForHyper', 'auctionWins', 'universalCount', 'potionsBought', 'pityCount',
             'silenceCharges', 'prestige', 'sold', 'earned', 'crafted', 'maxBalance', 'pokerPlayed', 'anunciosEspanaSpins',
-            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'xp', 'level', 'skillPoints'
+            'pokerWon', 'pokerProfit', 'pokerMaxWin', 'playTime', 'xp', 'level', 'skillPoints', 'collectorReputation'
         ]);
         const booleanStateKeys = new Set(['lastWasmitico', 'gotSuerteMax']);
         const objectStateKeys = new Set([
             'ownedPets', 'loan', 'blackMarket', 'collectorSkillLevels', 'collectorMissionProgress',
-            'collectorPotionEnds', 'vitrinaBuffEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'prestigeUpgrades'
+            'collectorPotionEnds', 'vitrinaBuffEnds', 'qolSettings', 'chestRarityStats', 'dailyLogin', 'prestigeUpgrades', 'expeditions', 'contracts'
         ]);
         const safeState = {};
 
@@ -8105,6 +8214,9 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
                 safeState[key] = sanitizeDailyLoginState(value);
             } else if (key === 'blackjackRound') {
                 safeState[key] = sanitizeBlackjackRound(value);
+            } else if (key === 'themeRewardsClaimed') {
+                if (!Array.isArray(value) || value.length > 100 || value.some(x => typeof x !== 'string' || x.length > 40)) throw new Error('Recompensas temáticas inválidas');
+                safeState[key] = [...new Set(value)];
             } else if (objectStateKeys.has(key)) {
                 if (key === 'ownedPets') {
                     if (!Array.isArray(value) || value.some(pet => typeof pet !== 'string')) {
@@ -8211,12 +8323,12 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
     const TBC_TRANSLATIONS = {
       en: {
         '🌐 Selecciona el idioma':'🌐 Choose your language','▶ &nbsp;JUGAR':'▶ &nbsp;PLAY','Empieza con ':'Start with ',
-        'monedas':'coins','NOVEDADES DE LA VERSIÓN #73 v2':'VERSION #73 v2 NEWS','Dos cofres nuevos:':'Two new chests:','Tabla Periódica y Bob Esponja, con 10 objetos nuevos y recompensas hasta míticas.':'Periodic Table and SpongeBob, with 10 new items and rewards up to Mythic.','Títulos y rangos:':'Titles and ranks:','progresa mediante cofres, míticos, ventas, fusiones, subastas, póker y mascotas.':'progress through chests, Mythics, sales, fusions, auctions, poker and pets.',
+        'monedas':'coins','NOVEDADES DE LA VERSIÓN #76':'VERSION #76 NEWS','Dos cofres nuevos:':'Two new chests:','Tabla Periódica y Bob Esponja, con 10 objetos nuevos y recompensas hasta míticas.':'Periodic Table and SpongeBob, with 10 new items and rewards up to Mythic.','Títulos y rangos:':'Titles and ranks:','progresa mediante cofres, míticos, ventas, fusiones, subastas, póker y mascotas.':'progress through chests, Mythics, sales, fusions, auctions, poker and pets.',
         'JUGAR':'PLAY','CERRAR':'CLOSE','CERRAR TIENDA':'CLOSE SHOP','CANCELAR':'CANCEL','GUARDAR Y CERRAR':'SAVE & CLOSE','COLECCIONAR':'COLLECT','COLECCIONAR ⚡':'COLLECT ⚡','COLECCIONAR ✨':'COLLECT ✨','COLECCIONAR 🇪🇸':'COLLECT 🇪🇸','COLECCIONAR 🔥':'COLLECT 🔥','COLECCIONAR 🤡':'COLLECT 🤡','COLECCIONAR 🧴':'COLLECT 🧴',
         'ABRIR COFRE':'OPEN CHEST','AUTO ABRIR':'AUTO OPEN','Comprar':'Buy','Comprar y equipar':'Buy and equip','Comprar':'Buy','Equipar':'Equip','Desequipar':'Unequip','Cofres Abiertos':'Chests Opened','Ganado Vendiendo':'Earned from Sales','Derrotas':'Losses','Apuesta':'Bet','DOBLAR':'DOUBLE','CARGA(S)':'CHARGE(S)','ACTIVO':'ACTIVE','EQUIPADA':'EQUIPPED','EQUIPADA:':'EQUIPPED:',
         'Común':'Common','Especial':'Special','Épico':'Epic','Legendario':'Legendary','Mítico':'Mythic','Cósmico':'Cosmic','FRAGMENTOS':'FRAGMENTS','Fragmentos de Prestigio':'Prestige Fragments','AL ASCENDER':'ON ASCENSION','EN LA RUINA':'BROKE','CRUPIER':'DEALER','HYPER MÍTICO':'HYPER MYTHIC',
         'Filtrar por mutación':'Filter by mutation','Filtrar por precio':'Filter by price','Filtrar por rareza':'Filter by rarity','Balance Actual':'Current Balance','Balance Neto Póker':'Poker Net Balance','Elige una apuesta para empezar.':'Choose a bet to start.','Apuesta tus monedas · ¡Prueba tu suerte!':'Bet your coins · Try your luck!','Adivina el número exacto · Premio x55':'Guess the exact number · x55 prize',
-        'Abre cofres para conseguir objetos.':'Open chests to get items.','Colecciona todos los objetos del juego.':'Collect every item in the game.','Completa objetivos distintos cada día y cada semana para conseguir recompensas.':'Complete different objectives every day and week to earn rewards.','Entra cada día para mantener la racha y aumentar tu recompensa.':'Log in every day to keep your streak and increase your reward.','Gasta puntos de habilidad para mejorar las ventajas permanentes de tu partida.':'Spend skill points to improve your permanent upgrades.','Controla la música de fondo.':'Control background music.','Controla los sonidos de acciones y recompensas.':'Control action and reward sounds.','Desactiva las sacudidas visuales de las recompensas.':'Disable reward screen shake.','Evita nuevas infecciones y detiene los parásitos activos.':'Prevent new infections and stop active parasites.','Cantidad rápida (vacío = todos)':'Quick amount (blank = all)','Costo: --':'Cost: --','Cargando...':'Loading...','Cargando música...':'Loading music...','Cerrar ✕':'Close ✕','GUÍA INICIAL · PASO 1 DE 8':'STARTER GUIDE · STEP 1 OF 8','By Aritz':'By Aritz','NIVEL':'LEVEL','FORTUNA':'WEALTH','Tu Fortuna':'Your Wealth','Próxima actualización':'Next update','🔧 PRÓXIMA ACTUALIZACIÓN: 11/11/2026':'🔧 NEXT UPDATE: 11/11/2026','📅 ACTUALIZACIÓN: 04/11/2026':'📅 UPDATE: 04/11/2026','Versión Del Juego Actual #73 v2':'Current Game Version #73 v2','Actualización':'Update',
+        'Abre cofres para conseguir objetos.':'Open chests to get items.','Colecciona todos los objetos del juego.':'Collect every item in the game.','Completa objetivos distintos cada día y cada semana para conseguir recompensas.':'Complete different objectives every day and week to earn rewards.','Entra cada día para mantener la racha y aumentar tu recompensa.':'Log in every day to keep your streak and increase your reward.','Gasta puntos de habilidad para mejorar las ventajas permanentes de tu partida.':'Spend skill points to improve your permanent upgrades.','Controla la música de fondo.':'Control background music.','Controla los sonidos de acciones y recompensas.':'Control action and reward sounds.','Desactiva las sacudidas visuales de las recompensas.':'Disable reward screen shake.','Evita nuevas infecciones y detiene los parásitos activos.':'Prevent new infections and stop active parasites.','Cantidad rápida (vacío = todos)':'Quick amount (blank = all)','Costo: --':'Cost: --','Cargando...':'Loading...','Cargando música...':'Loading music...','Cerrar ✕':'Close ✕','GUÍA INICIAL · PASO 1 DE 8':'STARTER GUIDE · STEP 1 OF 8','By Aritz':'By Aritz','NIVEL':'LEVEL','FORTUNA':'WEALTH','Tu Fortuna':'Your Wealth','Próxima actualización':'Next update','🔧 NUEVA ACTUALIZACIÓN: 16/11/2026':'🔧 NEXT UPDATE: 11/11/2026','📅 ACTUALIZACIÓN: 16/11/2026':'📅 UPDATE: 16/11/2026','Versión Del Juego Actual #73 v2':'Current Game Version #73 v2','Actualización':'Update',
         'TIRADAS':'SPINS','Tirada':'Spin','Tiradas':'Spins','tirada':'spin','tiradas':'spins',
         'Requisitos':'Requirements','requisitos':'requirements','REQUISITOS':'REQUIREMENTS',
         'HECHO':'DONE','Hecho':'Done','hecho':'done',
@@ -8256,9 +8368,69 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         'ABRIR COFRE':'OUVRIR LE COFFRE','AUTO ABRIR':'OUVERTURE AUTO','Comprar':'Acheter','Comprar y equipar':'Acheter et équiper','Equipar':'Équiper','Desequipar':'Déséquiper','Cofres Abiertos':'Coffres ouverts','Ganado Vendiendo':'Gains des ventes','Derrotas':'Défaites','Apuesta':'Mise','DOBLAR':'DOUBLER','CARGA(S)':'CHARGE(S)','ACTIVO':'ACTIF','EQUIPADA':'ÉQUIPÉE','EQUIPADA:':'ÉQUIPÉE :',
         'Común':'Commun','Especial':'Spécial','Épico':'Épique','Legendario':'Légendaire','Mítico':'Mythique','Cósmico':'Cosmique','FRAGMENTOS':'FRAGMENTS','Fragmentos de Prestigio':'Fragments de prestige','AL ASCENDER':'À L’ASCENSION','EN LA RUINA':'RUINÉ','CRUPIER':'CROUPIER','HYPER MÍTICO':'HYPER MYTHIQUE',
         'Filtrar por mutación':'Filtrer par mutation','Filtrar por precio':'Filtrer par prix','Filtrar por rareza':'Filtrer par rareté','Balance Actual':'Solde actuel','Balance Neto Póker':'Solde net du poker','Elige una apuesta para empezar.':'Choisissez une mise pour commencer.','Apuesta tus monedas · ¡Prueba tu suerte!':'Misez vos pièces · Tentez votre chance !','Adivina el número exacto · Premio x55':'Devinez le nombre exact · Gain x55',
-        'Abre cofres para conseguir objetos.':'Ouvrez des coffres pour obtenir des objets.','Colecciona todos los objetos del juego.':'Collectionnez tous les objets du jeu.','Completa objetivos distintos cada día y cada semana para conseguir recompensas.':'Accomplissez des objectifs quotidiens et hebdomadaires pour gagner des récompenses.','Entra cada día para mantener la racha y aumentar tu recompensa.':'Connectez-vous chaque jour pour conserver votre série et augmenter votre récompense.','Gasta puntos de habilidad para mejorar las ventajas permanentes de tu partida.':'Dépensez des points de compétence pour améliorer vos bonus permanents.','Controla la música de fondo.':'Contrôlez la musique de fond.','Controla los sonidos de acciones y recompensas.':'Contrôlez les sons des actions et des récompenses.','Desactiva las sacudidas visuales de las recompensas.':'Désactivez les secousses visuelles des récompenses.','Evita nuevas infecciones y detiene los parásitos activos.':'Empêche les nouvelles infections et arrête les parasites actifs.','Cantidad rápida (vacío = todos)':'Quantité rapide (vide = tout)','Costo: --':'Coût : --','Cargando...':'Chargement...','Cargando música...':'Chargement de la musique...','Cerrar ✕':'Fermer ✕','GUÍA INICIAL · PASO 1 DE 8':'GUIDE DE DÉMARRAGE · ÉTAPE 1 SUR 8','By Aritz':'Par Aritz','NIVEL':'NIVEAU','Tu Fortuna':'Votre fortune','Próxima actualización':'Prochaine mise à jour','🔧 PRÓXIMA ACTUALIZACIÓN: 11/11/2026':'🔧 PROCHAINE MISE À JOUR : 11/11/2026','📅 ACTUALIZACIÓN: 04/11/2026':'📅 MISE À JOUR : 04/11/2026','Versión Del Juego Actual #73 v2':'Version actuelle du jeu #73 v2','Actualización':'Mise à jour'
+        'Abre cofres para conseguir objetos.':'Ouvrez des coffres pour obtenir des objets.','Colecciona todos los objetos del juego.':'Collectionnez tous les objets du jeu.','Completa objetivos distintos cada día y cada semana para conseguir recompensas.':'Accomplissez des objectifs quotidiens et hebdomadaires pour gagner des récompenses.','Entra cada día para mantener la racha y aumentar tu recompensa.':'Connectez-vous chaque jour pour conserver votre série et augmenter votre récompense.','Gasta puntos de habilidad para mejorar las ventajas permanentes de tu partida.':'Dépensez des points de compétence pour améliorer vos bonus permanents.','Controla la música de fondo.':'Contrôlez la musique de fond.','Controla los sonidos de acciones y recompensas.':'Contrôlez les sons des actions et des récompenses.','Desactiva las sacudidas visuales de las recompensas.':'Désactivez les secousses visuelles des récompenses.','Evita nuevas infecciones y detiene los parásitos activos.':'Empêche les nouvelles infections et arrête les parasites actifs.','Cantidad rápida (vacío = todos)':'Quantité rapide (vide = tout)','Costo: --':'Coût : --','Cargando...':'Chargement...','Cargando música...':'Chargement de la musique...','Cerrar ✕':'Fermer ✕','GUÍA INICIAL · PASO 1 DE 8':'GUIDE DE DÉMARRAGE · ÉTAPE 1 SUR 8','By Aritz':'Par Aritz','NIVEL':'NIVEAU','Tu Fortuna':'Votre fortune','Próxima actualización':'Prochaine mise à jour','🔧 NUEVA ACTUALIZACIÓN: 16/11/2026':'🔧 PROCHAINE MISE À JOUR : 11/11/2026','📅 ACTUALIZACIÓN: 16/11/2026':'📅 MISE À JOUR : 16/11/2026','Versión Del Juego Actual #73 v2':'Version actuelle du jeu #73 v2','Actualización':'Mise à jour'
       }
     };
+    Object.assign(TBC_TRANSLATIONS.en, {
+      '🔧 NUEVA ACTUALIZACIÓN: 16/11/2026':'🔧 NEW UPDATE: 16/11/2026',
+      'Versión Del Juego Actual #76':'Current Game Version #76',
+      'Expediciones:':'Expeditions:','envía equipos a distintas regiones y reclama hallazgos cuando regresen.':'send teams to different regions and claim discoveries when they return.',
+      'Encargos especiales:':'Special contracts:','entrega objetos concretos para ganar experiencia y reputación.':'deliver specific items to earn experience and reputation.',
+      'Recompensas temáticas:':'Themed rewards:','completa las 10 colecciones al 100 % y desbloquea títulos exclusivos.':'complete all 10 collections to 100% and unlock exclusive titles.',
+      'consulta expediciones, encargos, reputación y colecciones dominadas.':'track expeditions, contracts, reputation and mastered collections.',
+      'Pulido general:':'Overall polish:','mejoras de interacción, accesibilidad, feedback visual y adaptación móvil.':'improvements to interaction, accessibility, visual feedback and mobile support.'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+      '🔧 NUEVA ACTUALIZACIÓN: 16/11/2026':'🔧 NOUVELLE MISE À JOUR : 16/11/2026',
+      'Versión Del Juego Actual #76':'Version actuelle du jeu #76',
+      'Expediciones:':'Expéditions :','envía equipos a distintas regiones y reclama hallazgos cuando regresen.':'envoyez des équipes dans différentes régions et récupérez leurs découvertes à leur retour.',
+      'Encargos especiales:':'Commandes spéciales :','entrega objetos concretos para ganar experiencia y reputación.':'livrez des objets précis pour gagner de l’expérience et de la réputation.',
+      'Recompensas temáticas:':'Récompenses thématiques :','completa las 10 colecciones al 100 % y desbloquea títulos exclusivos.':'complétez les 10 collections à 100 % et débloquez des titres exclusifs.',
+      'consulta expediciones, encargos, reputación y colecciones dominadas.':'suivez les expéditions, les commandes, la réputation et les collections maîtrisées.',
+      'Pulido general:':'Finitions générales :','mejoras de interacción, accesibilidad, feedback visual y adaptación móvil.':'améliorations de l’interaction, de l’accessibilité, du retour visuel et de l’adaptation mobile.'
+    });
+    Object.assign(TBC_TRANSLATIONS.en, {
+      'NOVEDADES DE LA VERSIÓN #76':'VERSION #76 NEWS',
+      'Aperturas mejoradas:':'Enhanced chest openings:',
+      'revelaciones y efectos visuales especiales según la rareza.':'special reveals and visual effects based on item rarity.',
+      'Vitrina avanzada:':'Advanced Showcase:',
+      'búsqueda, filtros por rareza, estado y progreso de colección.':'search, rarity and status filters, and collection progress.',
+      'Colecciones temáticas:':'Themed collections:',
+      'agrupa objetos relacionados y consulta el progreso de cada colección.':'group related items and track the progress of each collection.',
+      'Estadísticas ampliadas:':'Expanded statistics:',
+      'inventario, míticos y tiempo total de juego.':'inventory, Mythics, and total play time.',
+      'Experiencia pulida:':'Polished experience:',
+      'controles más claros, mejor respuesta visual y misiones diarias/semanales.':'clearer controls, stronger visual feedback, and daily/weekly missions.'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+      'NOVEDADES DE LA VERSIÓN #76':'ACTUALITÉS DE LA VERSION #76',
+      'Aperturas mejoradas:':'Ouvertures de coffres améliorées :',
+      'revelaciones y efectos visuales especiales según la rareza.':'révélations et effets visuels spéciaux selon la rareté.',
+      'Vitrina avanzada:':'Vitrine avancée :',
+      'búsqueda, filtros por rareza, estado y progreso de colección.':'recherche, filtres par rareté et statut, et progression de la collection.',
+      'Colecciones temáticas:':'Collections thématiques :',
+      'agrupa objetos relacionados y consulta el progreso de cada colección.':'regroupent les objets liés et permettent de suivre la progression de chaque collection.',
+      'Estadísticas ampliadas:':'Statistiques enrichies :',
+      'inventario, míticos y tiempo total de juego.':'inventaire, objets mythiques et temps de jeu total.',
+      'Experiencia pulida:':'Expérience peaufinée :',
+      'controles más claros, mejor respuesta visual y misiones diarias/semanales.':'commandes plus claires, meilleur retour visuel et missions quotidiennes/hebdomadaires.'
+    });
+
+    Object.assign(TBC_TRANSLATIONS.en, {
+      'Buscar objetos...':'Search items...', 'Todas las rarezas':'All rarities', 'Todos los objetos':'All items',
+      'Descubiertos':'Discovered', 'Sin descubrir':'Undiscovered',
+      'No hay objetos que coincidan con esos filtros.':'No items match these filters.',
+      'Colección normal':'Normal collection', 'Objetos en inventario':'Items in inventory',
+      'Objetos míticos obtenidos':'Mythic items obtained', 'Tiempo total jugado':'Total play time'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+      'Buscar objetos...':'Rechercher des objets...', 'Todas las rarezas':'Toutes les raretés', 'Todos los objetos':'Tous les objets',
+      'Descubiertos':'Découverts', 'Sin descubrir':'Non découverts',
+      'No hay objetos que coincidan con esos filtros.':'Aucun objet ne correspond à ces filtres.',
+      'Colección normal':'Collection normale', 'Objetos en inventario':'Objets dans l’inventaire',
+      'Objetos míticos obtenidos':'Objets mythiques obtenus', 'Tiempo total jugado':'Temps de jeu total'
+    });
+
     // Diccionario ampliado: interfaz, tutorial, sistemas, economía, casino y mensajes frecuentes.
     // Los nombres propios y nombres de objetos se conservan cuando no existe una traducción definida.
     const TBC_MORE_TRANSLATIONS = {
@@ -13304,6 +13476,12 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         document.getElementById('ds_crafted').textContent  = fmt(state.crafted);
         document.getElementById('ds_prestige').textContent = fmt(state.prestige) + ' fragmentos';
         document.getElementById('ds_invVal').textContent   = fmtM(state.invValue);
+        const invEl=document.getElementById('v74_ds_inventory');if(invEl)invEl.textContent=fmt(inventory.length);
+        const mythicEl=document.getElementById('v74_ds_mythics');if(mythicEl)mythicEl.textContent=fmt(state.miticoCount||0);
+        const elapsed=Math.max(0,Math.round((Date.now()-(state.sessionStart||Date.now()))/1000));
+        const totalSeconds=Math.max(0,(state.playTime||0)+elapsed),timeEl=document.getElementById('v74_ds_time');
+        if(timeEl){const h=Math.floor(totalSeconds/3600),m=Math.floor((totalSeconds%3600)/60);timeEl.textContent=tbcLanguage==='en'?(h?`${h} hr ${m} min`:`${m} min`):h?`${h} h ${m} min`:`${m} min`;}
+        saveGame();
 
         // DINERO
         const total = (state.balance||0) + (state.invValue||0);
@@ -14697,6 +14875,239 @@ button:focus-visible{outline:2px solid #fbbf24;outline-offset:3px}
         });
     }
     // ═══════════════════ FIN CALIDAD DE VIDA ═══════════════════
+
+
+    // ═══════════════════ ACTUALIZACIÓN #76 · SISTEMAS DE PROGRESIÓN ═══════════════════
+    // Expediciones, encargos, recompensas temáticas y pulido de interfaz.
+    (() => {
+        const tr76 = (es,en,fr) => tbcLanguage === 'en' ? en : tbcLanguage === 'fr' ? fr : es;
+        const safe76 = () => {
+            if (!state.expeditions || typeof state.expeditions !== 'object') state.expeditions={active:[],completed:0};
+            if (!Array.isArray(state.expeditions.active)) state.expeditions.active=[];
+            if (!state.contracts || typeof state.contracts !== 'object') state.contracts={active:null,completed:0,refreshAt:0};
+            if (!Array.isArray(state.themeRewardsClaimed)) state.themeRewardsClaimed=[];
+            state.collectorReputation=Math.max(0,Number(state.collectorReputation)||0);
+        };
+        safe76();
+
+        const destinations = [
+            {id:'science',icon:'⚗️',name:['Laboratorio perdido','Lost laboratory','Laboratoire perdu'],desc:['Busca prototipos y elementos raros.','Search for prototypes and rare elements.','Cherchez des prototypes et des éléments rares.'],boxes:['tabla_periodica','tech'],seconds:90},
+            {id:'space',icon:'🚀',name:['Frontera espacial','Space frontier','Frontière spatiale'],desc:['Explora mundos lejanos y trae hallazgos cósmicos.','Explore distant worlds and bring back cosmic finds.','Explorez des mondes lointains et rapportez des trouvailles cosmiques.'],boxes:['espacial','cosmico'],seconds:180},
+            {id:'games',icon:'🎮',name:['Dimensión arcade','Arcade dimension','Dimension arcade'],desc:['Recupera reliquias de universos de videojuegos.','Recover relics from video game universes.','Récupérez des reliques d’univers de jeux vidéo.'],boxes:['gaming','roblox','supercell'],seconds:240},
+            {id:'pop',icon:'🎭',name:['Metrópolis pop','Pop metropolis','Métropole pop'],desc:['Investiga personajes y objetos de cultura pop.','Investigate pop culture characters and items.','Enquêtez sur les personnages et objets pop.'],boxes:['bob_esponja','celebridades','villanos'],seconds:300}
+        ];
+        const fmt76 = ms => { const sec=Math.max(0,Math.ceil(ms/1000)); return `${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`; };
+        const notify76 = msg => {
+            const el=document.createElement('div'); el.className='tbc76-toast'; el.textContent=msg;
+            document.body.appendChild(el); setTimeout(()=>{el.classList.add('out');setTimeout(()=>el.remove(),350);},2800);
+        };
+        const catalog76 = () => Object.entries(boxes).flatMap(([key,box]) => (box.items||[]).map(item=>({...item,_boxKey:key})));
+        const getRandom76 = list => list[Math.floor(Math.random()*list.length)];
+        const addRewardItem76 = item => {
+            if(!item)return false;
+            const reward={...item,price:Number(item.price)||0,favorite:false,mutation:'normal',_id:Date.now()+Math.floor(Math.random()*999999)};
+            inventory.push(reward); state.invValue=(Number(state.invValue)||0)+reward.price;
+            if(reward.price>(state.best||0))state.best=reward.price;
+            registerVitrinaItem(reward); renderInventory(); updateStats(); checkAchievements(); saveGame();
+            return reward;
+        };
+        const themeProgress76 = theme => {
+            const ids=new Set(vitrinaData.normal||[]);
+            const items=vitrinaCatalog().filter(x=>theme.boxes.includes(x.boxKey));
+            return {found:items.filter(x=>ids.has(x.id)).length,total:items.length,items};
+        };
+        const themeReady76 = theme => {
+            const p=themeProgress76(theme); return p.total>0&&p.found===p.total;
+        };
+
+        function ensureContract76() {
+            safe76();
+            if(state.contracts.active && state.contracts.active.expiresAt>Date.now())return;
+            const choices=catalog76().filter(x=>x.rarity!=='mitico');
+            if(!choices.length)return;
+            const target=getRandom76(choices);
+            state.contracts.active={id:'c'+Date.now(),name:target.name,icon:target.icon||'📦',rarity:target.rarity,boxKey:target._boxKey,createdAt:Date.now(),expiresAt:Date.now()+24*60*60*1000};
+        }
+        function render76() {
+            safe76();
+            const host=document.getElementById('tbc76Content'); if(!host)return;
+            const tab=document.querySelector('.tbc76-tab.is-active')?.dataset.tab||'expeditions';
+            host.innerHTML='';
+            if(tab==='expeditions'){
+                const intro=document.createElement('p');intro.className='tbc76-intro';intro.textContent=tr76('Envía expediciones para conseguir objetos exclusivos de sus regiones. El tiempo sigue avanzando aunque cierres el juego.','Send expeditions to find items from each region. Time keeps passing while the game is closed.','Envoyez des expéditions pour trouver des objets de chaque région. Le temps continue même lorsque le jeu est fermé.');host.appendChild(intro);
+                const grid=document.createElement('div');grid.className='tbc76-grid';
+                destinations.forEach(dest=>{
+                    const active=state.expeditions.active.find(x=>x.destination===dest.id);
+                    const card=document.createElement('article');card.className='tbc76-card';
+                    const title=document.createElement('h3');title.textContent=`${dest.icon} ${dest.name[tbcLanguage==='en'?1:tbcLanguage==='fr'?2:0]}`;
+                    const desc=document.createElement('p');desc.textContent=dest.desc[tbcLanguage==='en'?1:tbcLanguage==='fr'?2:0];
+                    const status=document.createElement('div');status.className='tbc76-status';
+                    const btn=document.createElement('button');btn.className='tbc76-action';
+                    if(active){
+                        const remaining=active.endsAt-Date.now();
+                        if(remaining<=0){status.textContent=tr76('¡Expedición lista para reclamar!','Expedition ready to claim!','Expédition prête à récupérer !');btn.textContent=tr76('RECLAMAR HALLAZGO','CLAIM FIND','RÉCUPÉRER');btn.onclick=()=>claimExpedition76(active.id);}
+                        else{status.textContent=tr76('Regreso estimado: ','Estimated return: ','Retour estimé : ')+fmt76(remaining);btn.textContent=tr76('EN CURSO','IN PROGRESS','EN COURS');btn.disabled=true;}
+                    }else{status.textContent=tr76('Duración: ','Duration: ','Durée : ')+fmt76(dest.seconds*1000);btn.textContent=tr76('ENVIAR EQUIPO','SEND TEAM','ENVOYER L’ÉQUIPE');btn.onclick=()=>startExpedition76(dest);}
+                    card.append(title,desc,status,btn);grid.appendChild(card);
+                });
+                host.appendChild(grid);
+                const count=document.createElement('p');count.className='tbc76-foot';count.textContent=tr76('Expediciones completadas: ','Completed expeditions: ','Expéditions terminées : ')+state.expeditions.completed;host.appendChild(count);
+            } else if(tab==='contracts'){
+                ensureContract76();
+                const c=state.contracts.active;
+                const card=document.createElement('article');card.className='tbc76-contract';
+                if(c){
+                    const owned=inventory.find(x=>x.name===c.name&&!x.favorite);
+                    card.innerHTML=`<div class="tbc76-contract-kicker">${tr76('ENCARGO DEL COLECCIONISTA','COLLECTOR CONTRACT','COMMANDE DU COLLECTIONNEUR')}</div><div class="tbc76-contract-icon">${c.icon}</div><h3></h3><p></p><div class="tbc76-status"></div><button class="tbc76-action" id="tbc76Deliver"></button>`;
+                    card.querySelector('h3').textContent=c.name;
+                    card.querySelector('p').textContent=tr76('Entrega este objeto para completar el encargo y ganar experiencia y reputación.','Deliver this item to complete the contract and earn XP and reputation.','Livrez cet objet pour terminer la commande et gagner de l’XP et de la réputation.');
+                    card.querySelector('.tbc76-status').textContent=owned?tr76('Objeto disponible en tu inventario','Item available in your inventory','Objet disponible dans votre inventaire'):tr76('Todavía no tienes este objeto.','You do not own this item yet.','Vous ne possédez pas encore cet objet.');
+                    const deliver=card.querySelector('#tbc76Deliver');deliver.textContent=owned?tr76('ENTREGAR OBJETO','DELIVER ITEM','LIVRER L’OBJET'):tr76('OBJETO PENDIENTE','ITEM NEEDED','OBJET MANQUANT');deliver.disabled=!owned;deliver.onclick=()=>deliverContract76();
+                }else card.textContent=tr76('No hay encargos disponibles ahora.','No contracts are available right now.','Aucune commande disponible pour le moment.');
+                host.appendChild(card);
+                const info=document.createElement('p');info.className='tbc76-foot';info.textContent=tr76('Los encargos no modifican los precios ni las probabilidades de los cofres.','Contracts do not change chest prices or drop rates.','Les commandes ne modifient ni les prix ni les probabilités des coffres.');host.appendChild(info);
+            } else if(tab==='collections'){
+                const intro=document.createElement('p');intro.className='tbc76-intro';intro.textContent=tr76('Completa una colección temática al 100 % para desbloquear un título exclusivo y experiencia.','Complete a themed collection to 100% to unlock an exclusive title and XP.','Complétez une collection thématique à 100 % pour débloquer un titre exclusif et de l’XP.');host.appendChild(intro);
+                const grid=document.createElement('div');grid.className='tbc76-grid';
+                VITRINA_THEMES.forEach(theme=>{
+                    const p=themeProgress76(theme),claimed=state.themeRewardsClaimed.includes(theme.id),ready=p.total>0&&p.found===p.total;
+                    const card=document.createElement('article');card.className='tbc76-card';
+                    const name=theme[tbcLanguage==='en'?'en':tbcLanguage==='fr'?'fr':'es'];
+                    const title=document.createElement('h3');title.textContent=`${theme.icon} ${name}`;
+                    const desc=document.createElement('p');desc.textContent=`${p.found} / ${p.total} · ${p.total?Math.round(p.found/p.total*100):0}%`;
+                    const bar=document.createElement('div');bar.className='tbc76-bar';const fill=document.createElement('span');fill.style.width=(p.total?p.found/p.total*100:0)+'%';bar.appendChild(fill);
+                    const btn=document.createElement('button');btn.className='tbc76-action';btn.textContent=claimed?tr76('RECOMPENSA OBTENIDA','REWARD CLAIMED','RÉCOMPENSE OBTENUE'):ready?tr76('RECLAMAR TÍTULO + XP','CLAIM TITLE + XP','RÉCUPÉRER TITRE + XP'):tr76('EN PROGRESO','IN PROGRESS','EN COURS');btn.disabled=!ready||claimed;btn.onclick=()=>claimThemeReward76(theme);
+                    card.append(title,desc,bar,btn);grid.appendChild(card);
+                });
+                host.appendChild(grid);
+                const owned=document.createElement('p');owned.className='tbc76-foot';owned.textContent=tr76('Títulos temáticos obtenidos: ','Themed titles earned: ','Titres thématiques obtenus : ')+(state.themeRewardsClaimed.length);host.appendChild(owned);
+            } else {
+                const statGrid=document.createElement('div');statGrid.className='tbc76-grid';
+                const stats=[
+                    [tr76('Expediciones completadas','Expeditions completed','Expéditions terminées'),state.expeditions.completed],
+                    [tr76('Encargos completados','Contracts completed','Commandes terminées'),state.contracts.completed||0],
+                    [tr76('Reputación','Reputation','Réputation'),state.collectorReputation],
+                    [tr76('Colecciones dominadas','Collections mastered','Collections maîtrisées'),state.themeRewardsClaimed.length+'/'+VITRINA_THEMES.length],
+                    [tr76('Objetos descubiertos','Items discovered','Objets découverts'),vitrinaNormalCount()],
+                    [tr76('Objetos en inventario','Items in inventory','Objets dans l’inventaire'),inventory.length]
+                ];
+                stats.forEach(([label,value])=>{const c=document.createElement('article');c.className='tbc76-stat';const l=document.createElement('span');l.textContent=label;const v=document.createElement('b');v.textContent=Number.isFinite(value)?Number(value).toLocaleString():value;c.append(l,v);statGrid.appendChild(c);});
+                host.appendChild(statGrid);
+                const titlePanel=document.createElement('section');titlePanel.className='tbc76-contract';titlePanel.style.marginTop='12px';
+                const titleHead=document.createElement('h3');titleHead.textContent=tr76('TÍTULOS DESBLOQUEADOS','UNLOCKED TITLES','TITRES DÉBLOQUÉS');titlePanel.appendChild(titleHead);
+                const titleList=document.createElement('div');titleList.style.cssText='display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:12px';
+                state.themeRewardsClaimed.forEach(id=>{const theme=VITRINA_THEMES.find(x=>x.id===id);if(!theme)return;const badge=document.createElement('span');badge.style.cssText='border:1px solid #a78bfa;background:#4c1d9533;color:#ddd6fe;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:800';badge.textContent=theme.icon+' '+theme[tbcLanguage==='en'?'en':tbcLanguage==='fr'?'fr':'es'];titleList.appendChild(badge);});
+                if(!titleList.children.length){const empty=document.createElement('p');empty.className='tbc76-foot';empty.textContent=tr76('Aún no has desbloqueado títulos. Completa una colección temática al 100 %.','No titles unlocked yet. Complete a themed collection to 100%.','Aucun titre débloqué. Complétez une collection thématique à 100 %.');titleList.appendChild(empty);}
+                titlePanel.appendChild(titleList);host.appendChild(titlePanel);
+                const note=document.createElement('p');note.className='tbc76-foot';note.textContent=tr76('Tus estadísticas se guardan automáticamente junto con la partida.','Your stats are saved automatically with your game.','Vos statistiques sont sauvegardées automatiquement avec votre partie.');host.appendChild(note);
+            }
+        }
+        function startExpedition76(dest){
+            safe76();if(state.over||state.spinning)return;
+            if(state.expeditions.active.some(x=>x.destination===dest.id)){notify76(tr76('Ya hay un equipo en esa expedición.','A team is already on that expedition.','Une équipe est déjà en expédition.'));return;}
+            state.expeditions.active.push({id:'e'+Date.now(),destination:dest.id,startedAt:Date.now(),endsAt:Date.now()+dest.seconds*1000});
+            saveGame();render76();notify76(tr76('¡Equipo enviado!','Team dispatched!','Équipe envoyée !'));
+        }
+        function claimExpedition76(id){
+            const idx=state.expeditions.active.findIndex(x=>x.id===id);if(idx<0)return;
+            const exp=state.expeditions.active[idx];if(exp.endsAt>Date.now())return;
+            const dest=destinations.find(x=>x.id===exp.destination)||destinations[0];
+            const candidates=catalog76().filter(x=>dest.boxes.includes(x._boxKey));
+            const found=getRandom76(candidates.length?candidates:catalog76());if(!found)return;
+            state.expeditions.active.splice(idx,1);state.expeditions.completed=(state.expeditions.completed||0)+1;
+            const reward=addRewardItem76(found);
+            addXP(Math.max(100,Math.floor((Number(found.price)||0)/100000)));
+            state.collectorReputation+=5;saveGame();render76();
+            notify76(tr76('Hallazgo recuperado: ','Discovery recovered: ','Découverte récupérée : ')+(reward?.name||found.name));
+        }
+        function deliverContract76(){
+            const c=state.contracts.active;if(!c)return;
+            const item=inventory.find(x=>x.name===c.name&&!x.favorite);if(!item)return;
+            inventory=inventory.filter(x=>x!==item);if(item._id)cleanMuseumSlot(item._id);
+            state.invValue=Math.max(0,(Number(state.invValue)||0)-(Number(item.price)||0));
+            state.contracts.active=null;state.contracts.completed=(state.contracts.completed||0)+1;
+            state.collectorReputation+=10;addXP(Math.max(250,Math.floor((Number(item.price)||0)/50000)));
+            renderInventory();updateStats();saveGame();ensureContract76();render76();
+            notify76(tr76('Encargo completado: +10 reputación y experiencia.','Contract completed: +10 reputation and XP.','Commande terminée : +10 réputation et XP.'));
+        }
+        function claimThemeReward76(theme){
+            if(!themeReady76(theme)||state.themeRewardsClaimed.includes(theme.id))return;
+            state.themeRewardsClaimed.push(theme.id);state.collectorReputation+=25;addXP(2500);
+            saveGame();render76();
+            notify76(tr76('¡Colección dominada! Título desbloqueado: ','Collection mastered! Title unlocked: ','Collection maîtrisée ! Titre débloqué : ')+theme[tbcLanguage==='en'?'en':tbcLanguage==='fr'?'fr':'es']);
+        }
+
+        const css=document.createElement('style');
+        css.textContent=`
+          .tbc76-launch{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin:8px auto 18px;padding:0 12px}
+          .tbc76-launch button{border:1px solid #475569;background:linear-gradient(145deg,#172554,#312e81);color:#e2e8f0;border-radius:11px;padding:10px 14px;font:700 12px 'Rajdhani',sans-serif;letter-spacing:.7px;cursor:pointer;transition:transform .18s,border-color .18s,filter .18s}
+          .tbc76-launch button:hover{transform:translateY(-2px);border-color:#fbbf24;filter:brightness(1.15)}
+          #tbc76Modal{position:fixed;inset:0;z-index:10070;background:rgba(2,6,23,.94);backdrop-filter:blur(10px);overflow:auto;padding:18px;display:none}
+          #tbc76Modal.open{display:block}
+          .tbc76-shell{max-width:1050px;margin:18px auto;background:linear-gradient(145deg,#0f172a,#111827);border:1px solid #475569;border-radius:20px;padding:clamp(14px,3vw,26px);color:#e2e8f0;box-shadow:0 24px 80px #0009}
+          .tbc76-head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+          .tbc76-head h2{margin:0;color:#fbbf24;font:30px 'Bebas Neue',sans-serif;letter-spacing:1px}
+          .tbc76-tabs{display:flex;gap:7px;flex-wrap:wrap;margin:16px 0}
+          .tbc76-tab{border:1px solid #334155;background:#1e293b;color:#cbd5e1;padding:9px 12px;border-radius:9px;font-weight:800;cursor:pointer}
+          .tbc76-tab.is-active{background:linear-gradient(135deg,#713f12,#92400e);border-color:#fbbf24;color:#fff}
+          .tbc76-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:12px}
+          .tbc76-card,.tbc76-contract,.tbc76-stat{background:linear-gradient(145deg,#172033,#111827);border:1px solid #334155;border-radius:14px;padding:16px;min-width:0}
+          .tbc76-card{display:flex;flex-direction:column;gap:9px}
+          .tbc76-card h3,.tbc76-contract h3{margin:0;color:#f8fafc;font-size:17px}
+          .tbc76-card p,.tbc76-contract p,.tbc76-intro,.tbc76-foot{color:#94a3b8;font-size:13px;line-height:1.5;margin:0}
+          .tbc76-status{color:#fbbf24;font-size:12px;font-weight:800;margin-top:auto;min-height:18px}
+          .tbc76-action{border:1px solid #d97706;background:linear-gradient(135deg,#92400e,#b45309);color:#fff;padding:10px 12px;border-radius:9px;font-weight:900;cursor:pointer}
+          .tbc76-action:disabled{opacity:.45;cursor:not-allowed;filter:grayscale(.7)}
+          .tbc76-contract{text-align:center;max-width:560px;margin:0 auto}
+          .tbc76-contract-icon{font-size:64px;margin:10px}
+          .tbc76-contract-kicker{font-size:11px;letter-spacing:2px;color:#fbbf24;font-weight:900}
+          .tbc76-bar{height:8px;border-radius:20px;background:#334155;overflow:hidden}.tbc76-bar span{display:block;height:100%;background:linear-gradient(90deg,#0ea5e9,#a78bfa);border-radius:20px}
+          .tbc76-stat{display:flex;flex-direction:column;gap:10px}.tbc76-stat span{font-size:12px;color:#94a3b8}.tbc76-stat b{font:26px 'Bebas Neue',sans-serif;color:#fbbf24}
+          .tbc76-foot{margin-top:14px}
+          .tbc76-toast{position:fixed;z-index:10100;left:50%;bottom:24px;transform:translateX(-50%);background:#0f172a;border:1px solid #fbbf24;color:#fff;padding:12px 18px;border-radius:12px;box-shadow:0 10px 40px #0009;font-weight:800;text-align:center;max-width:min(90vw,600px);transition:opacity .3s,transform .3s}
+          .tbc76-toast.out{opacity:0;transform:translate(-50%,12px)}
+          button:focus-visible{outline:3px solid #fbbf24!important;outline-offset:3px}
+          #gameWrapper button:not(:disabled){transition:filter .16s ease,transform .16s ease,box-shadow .16s ease}
+          #gameWrapper button:not(:disabled):hover{filter:brightness(1.08)}
+          #gameWrapper button:not(:disabled):active{transform:scale(.985)}
+          #gameWrapper button:disabled{cursor:not-allowed;opacity:.58}
+          #gameWrapper input:focus-visible,#gameWrapper select:focus-visible,#gameWrapper textarea:focus-visible{outline:2px solid #fbbf24;outline-offset:2px}
+          #gameWrapper .vitrina-card{transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease}
+          #gameWrapper .vitrina-card:hover{transform:translateY(-3px);border-color:#64748b;box-shadow:0 10px 24px #0005}
+          #gameWrapper .tabs-scroll{scrollbar-width:thin;scrollbar-color:#475569 transparent}
+          @media(max-width:600px){#gameWrapper button{max-width:100%}}
+          @media(prefers-reduced-motion:reduce){#gameWrapper button:not(:disabled),#gameWrapper .vitrina-card{transition:none!important;transform:none!important}}
+          @media(max-width:600px){.tbc76-launch{gap:6px}.tbc76-launch button{flex:1 1 42%;padding:10px 7px;font-size:11px}#tbc76Modal{padding:8px}.tbc76-shell{margin:5px auto}}
+          @media(prefers-reduced-motion:reduce){.tbc76-launch button{transition:none}}
+        `;
+        document.head.appendChild(css);
+        const launch=document.createElement('div');launch.className='tbc76-launch';
+        launch.innerHTML=`<button type="button" data-open76>🧭 ${tr76('EXPEDICIONES','EXPEDITIONS','EXPÉDITIONS')}</button><button type="button" data-open76>📜 ${tr76('ENCARGOS','CONTRACTS','COMMANDES')}</button><button type="button" data-open76>🏅 ${tr76('RECOMPENSAS','REWARDS','RÉCOMPENSES')}</button><button type="button" data-open76>📊 ${tr76('ESTADÍSTICAS+','STATS+','STATS+')}</button>`;
+        const vitrina=document.getElementById('vitrinaOpenBtn');
+        if(vitrina?.parentElement)vitrina.parentElement.insertAdjacentElement('afterend',launch);
+        const modal=document.createElement('div');modal.id='tbc76Modal';modal.innerHTML=`<section class="tbc76-shell" role="dialog" aria-modal="true" aria-labelledby="tbc76Title"><header class="tbc76-head"><h2 id="tbc76Title">✨ ${tr76('CENTRO DEL COLECCIONISTA · #76','COLLECTOR HUB · #76','CENTRE DU COLLECTIONNEUR · #76')}</h2><button type="button" class="tbc76-tab" id="tbc76Close">${tr76('CERRAR ✕','CLOSE ✕','FERMER ✕')}</button></header><nav class="tbc76-tabs"><button class="tbc76-tab is-active" data-tab="expeditions">${tr76('Expediciones','Expeditions','Expéditions')}</button><button class="tbc76-tab" data-tab="contracts">${tr76('Encargos','Contracts','Commandes')}</button><button class="tbc76-tab" data-tab="collections">${tr76('Colecciones','Collections','Collections')}</button><button class="tbc76-tab" data-tab="stats">${tr76('Estadísticas','Statistics','Statistiques')}</button></nav><div id="tbc76Content"></div></section>`;
+        document.body.appendChild(modal);
+        function open76(index=0){modal.classList.add('open');const tabs=[...modal.querySelectorAll('.tbc76-tab[data-tab]')];tabs.forEach((b,i)=>b.classList.toggle('is-active',i===index));render76();}
+        launch.querySelectorAll('[data-open76]').forEach((b,i)=>b.addEventListener('click',()=>open76(i)));
+        modal.querySelector('#tbc76Close').addEventListener('click',()=>modal.classList.remove('open'));
+        modal.addEventListener('click',e=>{if(e.target===modal)modal.classList.remove('open');});
+        modal.querySelectorAll('.tbc76-tab[data-tab]').forEach(b=>b.addEventListener('click',()=>{modal.querySelectorAll('.tbc76-tab[data-tab]').forEach(x=>x.classList.toggle('is-active',x===b));render76();}));
+        document.addEventListener('keydown',e=>{if(e.key==='Escape'&&modal.classList.contains('open'))modal.classList.remove('open');});
+        window.setInterval(()=>{if(!modal.classList.contains('open'))return;const active=document.querySelector('.tbc76-tab.is-active')?.dataset.tab;if(active==='expeditions'||active==='contracts')render76();},1000);
+        // Actualizar las pantallas de progreso cuando se descubre un objeto.
+        const previousUpdateVitrinaUI=updateVitrinaUI;
+        updateVitrinaUI=function(){previousUpdateVitrinaUI();if(modal.classList.contains('open')&&document.querySelector('.tbc76-tab.is-active')?.dataset.tab==='collections')render76();};
+        window.addEventListener('beforeunload',()=>{try{saveGame();}catch(e){}});
+    })();
+    Object.assign(TBC_TRANSLATIONS.en, {
+        '🧭 EXPEDICIONES':'🧭 EXPEDITIONS','📜 ENCARGOS':'📜 CONTRACTS','🏅 RECOMPENSAS':'🏅 REWARDS','📊 ESTADÍSTICAS+':'📊 STATS+',
+        'CENTRO DEL COLECCIONISTA · #76':'COLLECTOR HUB · #76','CERRAR ✕':'CLOSE ✕','Expediciones':'Expeditions','Encargos':'Contracts','Colecciones':'Collections','Estadísticas':'Statistics'
+    });
+    Object.assign(TBC_TRANSLATIONS.fr, {
+        '🧭 EXPEDICIONES':'🧭 EXPÉDITIONS','📜 ENCARGOS':'📜 COMMANDES','🏅 RECOMPENSAS':'🏅 RÉCOMPENSES','📊 ESTADÍSTICAS+':'📊 STATS+',
+        'CENTRO DEL COLECCIONISTA · #76':'CENTRE DU COLLECTIONNEUR · #76','CERRAR ✕':'FERMER ✕','Expediciones':'Expéditions','Encargos':'Commandes','Colecciones':'Collections','Estadísticas':'Statistiques'
+    });
+    // ═══════════════════ FIN ACTUALIZACIÓN #76 ═══════════════════
 
 </script>
 </body>
